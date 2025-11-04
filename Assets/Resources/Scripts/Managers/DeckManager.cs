@@ -36,8 +36,29 @@ public class DeckManager : MonoBehaviour
 
     private void LoadAllCards()
     {
-        allCards = new List<CardSO>(Resources.LoadAll<CardSO>("Cards"));
-        Debug.Log($"Loaded {allCards.Count} cards from Resources/Cards");
+        allCards = new List<CardSO>();
+
+        // Load all hero subfolders in Resources/Cards
+        var heroesFolder = Path.Combine(Application.dataPath, "Resources/Cards");
+
+        if (!Directory.Exists(heroesFolder))
+        {
+            Debug.LogWarning("No Resources/Cards folder found!");
+            return;
+        }
+
+        var heroFolders = Directory.GetDirectories(heroesFolder);
+        foreach (var folder in heroFolders)
+        {
+            string heroName = Path.GetFileName(folder);
+            string resourcePath = $"Cards/{heroName}";
+            var cards = Resources.LoadAll<CardSO>(resourcePath);
+
+            allCards.AddRange(cards);
+            Debug.Log($"Loaded {cards.Length} cards from {resourcePath}");
+        }
+
+        Debug.Log($"Total cards loaded: {allCards.Count}");
     }
     private void LoadAllHeroes()
     {

@@ -12,15 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fbcb7cc5899f564487bb9f73b147b33, type: 3}
   m_Name: Rerver
   m_EditorClassIdentifier: Assembly-CSharp::HeroSO
-  heroId: hero_hiroshi
-  heroName: Hiroshi
+  heroId: hero_rerver
+  heroName: Rerver
   description: 
-  portrait: {fileID: 0}
+  portrait: {fileID: -3601748135498599393, guid: 99ee9a7e0d49b4241a45521c75d084c0, type: 3}
   themeColor: {r: 0, g: 0, b: 0, a: 0}
   baseHealth: 20
-  resourceType: 0
-  resourceStart: 0
+  resourceStart: 1
   resourceMax: 10
-  defaultCards: []
   heroCard: {fileID: 0}
   generalCards: []

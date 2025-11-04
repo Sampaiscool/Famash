@@ -7,6 +7,7 @@ public class MenuManager : MonoBehaviour
     public DeckData currentDeck;
 
     private MenuSceneUiManager menuUiManager;
+    private DefaultUi defaultUi;
 
     void Awake()
     {
@@ -23,9 +24,11 @@ public class MenuManager : MonoBehaviour
 
         Debug.Log($"Selected deck: {deck.deckName}");
 
+        defaultUi = FindFirstObjectByType<DefaultUi>();
         menuUiManager = FindFirstObjectByType<MenuSceneUiManager>();
         if (menuUiManager != null)
         {
+            defaultUi.LoadSelectedDeck();
             menuUiManager.ShowPage("Default");
         }
     }

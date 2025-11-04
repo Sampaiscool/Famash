@@ -13,8 +13,7 @@ public class HeroSO : ScriptableObject
 
     [Header("Gameplay")]
     public int baseHealth = 20;
-    public ResourceType resourceType;  // e.g. Mana, Souls, Lifeforce
-    public int resourceStart = 0;
+    public int resourceStart = 1;
     public int resourceMax = 10;
 
     [Header("Hero Deck")]

@@ -14,6 +14,8 @@ public class DeckEntryUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     private DeckData deckData;
 
+    private CreateDeckUI createDeckUI;
+
     void Start()
     {
         buttonsContainer.SetActive(false);
@@ -53,7 +55,8 @@ public class DeckEntryUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     private void OnOpenClicked()
     {
-        CreateDeckUI.Instance.OpenWithDeck(deckData);
+        createDeckUI = FindFirstObjectByType<CreateDeckUI>();
+        createDeckUI.OpenWithDeck(deckData);
     }
 
     public void OnPointerEnter(PointerEventData eventData)

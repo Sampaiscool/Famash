@@ -3,16 +3,38 @@ using UnityEngine;
 [System.Serializable]
 public class CardRuntime
 {
+    public string instanceId;
     public CardSO cardData;
+
     public int currentHealth;
     public int currentAttack;
-    public bool isOnField;
+    public bool isExhausted;
+    public bool isInPlay;
+    public bool isDead;
 
-    public CardRuntime(CardSO data)
+    [System.NonSerialized]
+    public GameObject cardUI;  // reference to the spawned UI prefab
+
+    public CardRuntime(CardSO source)
     {
-        cardData = data;
-        currentHealth = data.health;
-        currentAttack = data.attack;
+        instanceId = System.Guid.NewGuid().ToString();
+        cardData = source;
+        currentHealth = source.health;
+        currentAttack = source.attack;
+        isExhausted = false;
+        isInPlay = false;
+        isDead = false;
+        cardUI = null;
+    }
+
+    public void TakeDamage(int amount)
+    {
+        currentHealth -= amount;
+        if (currentHealth <= 0)
+        {
+            currentHealth = 0;
+            isDead = true;
+        }
     }
 
     public void Play()

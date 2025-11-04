@@ -1,18 +1,23 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class DefaultUi : MonoBehaviour
 {
     public Image deckImage;
     public TMP_Text deckNameText;
+    public Button debugBattleButton;
+
+    private DeckData selectedDeck;
 
     void Start()
     {
         LoadSelectedDeck();
+        debugBattleButton.onClick.AddListener(OnDebugBattleClicked);
     }
 
-    void LoadSelectedDeck()
+    public void LoadSelectedDeck()
     {
         if (!PlayerPrefs.HasKey("SelectedDeckId"))
         {
@@ -21,35 +26,39 @@ public class DefaultUi : MonoBehaviour
         }
 
         string deckId = PlayerPrefs.GetString("SelectedDeckId");
-        if (DeckManager.Instance == null)
-        {
-            Debug.LogError("DeckManager.Instance is null!");
-            return;
-        }
-
         DeckData deck = DeckManager.Instance.GetDeck(deckId);
+
         if (deck == null)
         {
             Debug.LogWarning($"No deck found with ID {deckId}");
             return;
         }
 
-        if (deck.heroIds.Count == 0)
-        {
-            Debug.LogWarning("Deck has no heroes assigned.");
-            return;
-        }
+        selectedDeck = deck;
 
-        var hero = DeckManager.Instance.GetHeroById(deck.heroIds[0]);
-        if (hero == null)
+        if (deck.heroIds.Count > 0)
         {
-            Debug.LogWarning($"Hero with ID {deck.heroIds[0]} not found.");
-            return;
+            var hero = DeckManager.Instance.GetHeroById(deck.heroIds[0]);
+            if (hero != null)
+            {
+                deckImage.sprite = hero.portrait;
+                deckNameText.text = deck.deckName;
+            }
         }
-
-        deckImage.sprite = hero.portrait;
-        deckNameText.text = deck.deckName;
     }
 
+    void OnDebugBattleClicked()
+    {
+        if (selectedDeck == null)
+        {
+            Debug.LogWarning("No deck selected!");
+            return;
+        }
 
+        // Pass both player and opponent decks (same one)
+        BattleLoader.Instance.PreparePlayerDeck(selectedDeck);
+        BattleLoader.Instance.PrepareEnemyDeck(selectedDeck);
+
+        SceneManager.LoadScene("BattleScene");
+    }
 }
