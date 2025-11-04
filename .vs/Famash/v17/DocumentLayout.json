@@ -3,12 +3,76 @@
   "WorkspaceRootPath": "C:\\Users\\semva\\Projects_Unity\\Famash\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|c:\\users\\semva\\projects_unity\\famash\\assets\\resources\\scripts\\uii\\menusceneuimanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\uii\\menusceneuimanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\ui\\deckentryui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\ui\\deckentryui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Uii\\MenuSceneUiiManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Resources\\Scripts\\Uii\\MenuSceneUiiManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\data\\deckdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\data\\deckdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\managers\\deckmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\managers\\deckmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|c:\\users\\semva\\projects_unity\\famash\\assets\\resources\\scripts\\ui\\defaultui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\ui\\defaultui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\ui\\decksscrollui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\ui\\decksscrollui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\ui\\createdeckui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\ui\\createdeckui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\managers\\menusceneuimanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\managers\\menusceneuimanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\enums\\cardtrigger.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\enums\\cardtrigger.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|c:\\users\\semva\\projects_unity\\famash\\assets\\resources\\scripts\\managers\\menumanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\managers\\menumanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\publicclasses\\card\\cardselectentry.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\publicclasses\\card\\cardselectentry.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\publicclasses\\card\\cardui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\publicclasses\\card\\cardui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\publicclasses\\card\\carddetailui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\publicclasses\\card\\carddetailui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\data\\cardso.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\data\\cardso.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\data\\heroso.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\data\\heroso.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\publicclasses\\card\\cardruntime.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\publicclasses\\card\\cardruntime.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\managers\\gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\managers\\gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\publicclasses\\gameconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\publicclasses\\gameconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\cardlogic\\effectsobase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\cardlogic\\effectsobase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,8 +82,22 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 18,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "DefaultUi.cs",
+              "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Ui\\DefaultUi.cs",
+              "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\Ui\\DefaultUi.cs",
+              "ToolTip": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Ui\\DefaultUi.cs",
+              "RelativeToolTip": "Assets\\Resources\\Scripts\\Ui\\DefaultUi.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAQwC0AAAA5AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-04T02:30:35.725Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
@@ -38,28 +116,215 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "MenuSceneUiManager.cs",
-              "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Uii\\MenuSceneUiManager.cs",
-              "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\Uii\\MenuSceneUiManager.cs",
-              "ToolTip": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Uii\\MenuSceneUiManager.cs",
-              "RelativeToolTip": "Assets\\Resources\\Scripts\\Uii\\MenuSceneUiManager.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "DocumentIndex": 7,
+              "Title": "CardTrigger.cs",
+              "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Enums\\CardTrigger.cs",
+              "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\Enums\\CardTrigger.cs",
+              "ToolTip": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Enums\\CardTrigger.cs",
+              "RelativeToolTip": "Assets\\Resources\\Scripts\\Enums\\CardTrigger.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-03T14:42:43.272Z",
+              "WhenOpened": "2025-11-04T01:29:47.952Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "CardSelectEntry.cs",
+              "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\PublicClasses\\Card\\CardSelectEntry.cs",
+              "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\PublicClasses\\Card\\CardSelectEntry.cs",
+              "ToolTip": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\PublicClasses\\Card\\CardSelectEntry.cs",
+              "RelativeToolTip": "Assets\\Resources\\Scripts\\PublicClasses\\Card\\CardSelectEntry.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAAwCQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-04T01:11:17.723Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "GameConfig.cs",
+              "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\PublicClasses\\GameConfig.cs",
+              "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\PublicClasses\\GameConfig.cs",
+              "ToolTip": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\PublicClasses\\GameConfig.cs",
+              "RelativeToolTip": "Assets\\Resources\\Scripts\\PublicClasses\\GameConfig.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-04T01:02:56.63Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "HeroSO.cs",
+              "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Data\\HeroSO.cs",
+              "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\Data\\HeroSO.cs",
+              "ToolTip": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Data\\HeroSO.cs",
+              "RelativeToolTip": "Assets\\Resources\\Scripts\\Data\\HeroSO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-03T22:10:32.028Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "CardDetailUI.cs",
+              "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\PublicClasses\\Card\\CardDetailUI.cs",
+              "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\PublicClasses\\Card\\CardDetailUI.cs",
+              "ToolTip": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\PublicClasses\\Card\\CardDetailUI.cs",
+              "RelativeToolTip": "Assets\\Resources\\Scripts\\PublicClasses\\Card\\CardDetailUI.cs",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAqwBsAAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-04T00:00:23.113Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "CardUI.cs",
+              "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\PublicClasses\\Card\\CardUI.cs",
+              "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\PublicClasses\\Card\\CardUI.cs",
+              "ToolTip": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\PublicClasses\\Card\\CardUI.cs",
+              "RelativeToolTip": "Assets\\Resources\\Scripts\\PublicClasses\\Card\\CardUI.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAAwA4AAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-03T22:59:03.932Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "EffectSOBase.cs",
+              "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\CardLogic\\EffectSOBase.cs",
+              "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\CardLogic\\EffectSOBase.cs",
+              "ToolTip": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\CardLogic\\EffectSOBase.cs",
+              "RelativeToolTip": "Assets\\Resources\\Scripts\\CardLogic\\EffectSOBase.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-03T22:49:34.056Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "CardRuntime.cs",
+              "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\PublicClasses\\Card\\CardRuntime.cs",
+              "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\PublicClasses\\Card\\CardRuntime.cs",
+              "ToolTip": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\PublicClasses\\Card\\CardRuntime.cs",
+              "RelativeToolTip": "Assets\\Resources\\Scripts\\PublicClasses\\Card\\CardRuntime.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-04T00:31:57.649Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "MenuSceneUiManager.cs",
+              "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Managers\\MenuSceneUiManager.cs",
+              "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\Managers\\MenuSceneUiManager.cs",
+              "ToolTip": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Managers\\MenuSceneUiManager.cs",
+              "RelativeToolTip": "Assets\\Resources\\Scripts\\Managers\\MenuSceneUiManager.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-03T22:40:36.221Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "GameManager.cs",
+              "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Managers\\GameManager.cs",
+              "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\Managers\\GameManager.cs",
+              "ToolTip": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Managers\\GameManager.cs",
+              "RelativeToolTip": "Assets\\Resources\\Scripts\\Managers\\GameManager.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-03T22:27:06.8Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "MenuManager.cs",
+              "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Managers\\MenuManager.cs",
+              "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\Managers\\MenuManager.cs",
+              "ToolTip": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Managers\\MenuManager.cs",
+              "RelativeToolTip": "Assets\\Resources\\Scripts\\Managers\\MenuManager.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-03T22:25:47.919Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "CreateDeckUI.cs",
+              "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Ui\\CreateDeckUI.cs",
+              "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\Ui\\CreateDeckUI.cs",
+              "ToolTip": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Ui\\CreateDeckUI.cs",
+              "RelativeToolTip": "Assets\\Resources\\Scripts\\Ui\\CreateDeckUI.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAPwAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-03T22:24:37.983Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "DecksScrollUI.cs",
+              "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Ui\\DecksScrollUI.cs",
+              "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\Ui\\DecksScrollUI.cs",
+              "ToolTip": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Ui\\DecksScrollUI.cs",
+              "RelativeToolTip": "Assets\\Resources\\Scripts\\Ui\\DecksScrollUI.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAzwAoAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-03T22:24:10.449Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "DeckEntryUI.cs",
+              "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Ui\\DeckEntryUI.cs",
+              "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\Ui\\DeckEntryUI.cs",
+              "ToolTip": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Ui\\DeckEntryUI.cs",
+              "RelativeToolTip": "Assets\\Resources\\Scripts\\Ui\\DeckEntryUI.cs",
+              "ViewState": "AgIAADcAAAAAAAAAAAAkwEsAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-03T22:22:36.838Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "DeckManager.cs",
+              "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Managers\\DeckManager.cs",
+              "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\Managers\\DeckManager.cs",
+              "ToolTip": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Managers\\DeckManager.cs",
+              "RelativeToolTip": "Assets\\Resources\\Scripts\\Managers\\DeckManager.cs",
+              "ViewState": "AgIAAFsAAAAAAAAAAAAkwHIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-03T22:15:45.809Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "MenuSceneUiiManager.cs",
-              "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Uii\\MenuSceneUiiManager.cs",
-              "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\Uii\\MenuSceneUiiManager.cs",
-              "ToolTip": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Uii\\MenuSceneUiiManager.cs",
-              "RelativeToolTip": "Assets\\Resources\\Scripts\\Uii\\MenuSceneUiiManager.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA==",
+              "Title": "DeckData.cs",
+              "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Data\\DeckData.cs",
+              "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\Data\\DeckData.cs",
+              "ToolTip": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Data\\DeckData.cs",
+              "RelativeToolTip": "Assets\\Resources\\Scripts\\Data\\DeckData.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-03T14:41:17.884Z"
+              "WhenOpened": "2025-11-03T22:14:32.7Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "CardSO.cs",
+              "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Data\\CardSO.cs",
+              "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\Data\\CardSO.cs",
+              "ToolTip": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Data\\CardSO.cs",
+              "RelativeToolTip": "Assets\\Resources\\Scripts\\Data\\CardSO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-03T22:11:26.08Z"
             }
           ]
         }

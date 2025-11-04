@@ -61,7 +61,26 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.2.6f2\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Resources\Scripts\Ui\MenuSceneUiManager.cs" />
+    <Compile Include="Assets\Resources\Scripts\Enums\ResourceType.cs" />
+    <Compile Include="Assets\Resources\Scripts\Managers\GameManager.cs" />
+    <Compile Include="Assets\Resources\Scripts\Managers\MenuSceneUiManager.cs" />
+    <Compile Include="Assets\Resources\Scripts\Managers\DeckManager.cs" />
+    <Compile Include="Assets\Resources\Scripts\PublicClasses\Card\CardDetailUI.cs" />
+    <Compile Include="Assets\Resources\Scripts\Data\CardSO.cs" />
+    <Compile Include="Assets\Resources\Scripts\Ui\DecksScrollUI.cs" />
+    <Compile Include="Assets\Resources\Scripts\CardLogic\EffectSOBase.cs" />
+    <Compile Include="Assets\Resources\Scripts\Ui\DefaultUi.cs" />
+    <Compile Include="Assets\Resources\Scripts\PublicClasses\Card\CardUI.cs" />
+    <Compile Include="Assets\Resources\Scripts\PublicClasses\GameConfig.cs" />
+    <Compile Include="Assets\Resources\Scripts\Enums\CardTrigger.cs" />
+    <Compile Include="Assets\Resources\Scripts\Ui\DeckEntryUI.cs" />
+    <Compile Include="Assets\Resources\Scripts\Data\HeroSO.cs" />
+    <Compile Include="Assets\Resources\Scripts\Data\DeckData.cs" />
+    <Compile Include="Assets\Resources\Scripts\Enums\CardType.cs" />
+    <Compile Include="Assets\Resources\Scripts\PublicClasses\Card\CardRuntime.cs" />
+    <Compile Include="Assets\Resources\Scripts\Ui\CreateDeckUI.cs" />
+    <Compile Include="Assets\Resources\Scripts\Managers\MenuManager.cs" />
+    <Compile Include="Assets\Resources\Scripts\PublicClasses\Card\CardSelectEntry.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

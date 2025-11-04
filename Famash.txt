@@ -1,0 +1,11 @@
+--- Famash
+
+From menu to Journey with a new deck:
+	1. click "Decks"
+	2. click "Create new Deck"
+	3. in the form fill out the data
+		-Name of the Deck
+		-Doobie
+		-Cards
+		-Deck Cover
+
