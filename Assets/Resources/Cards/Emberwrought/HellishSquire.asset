@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac933d3f2cf941c488493d1d1bd8522e, type: 3}
+  m_Name: HellishSquire
+  m_EditorClassIdentifier: Assembly-CSharp::CardSO
+  cardId: unit_hellish_squire
+  cardName: Hellish Squire
+  description: bang bang
+  artwork: {fileID: 0}
+  frame: {fileID: 0}
+  cost: 1
+  cardType: 0
+  attack: 1
+  health: 1
+  isHeroCard: 0
+  region: {fileID: 11400000, guid: 8f4b41c1658fdb34a8b76ff388eb9833, type: 2}

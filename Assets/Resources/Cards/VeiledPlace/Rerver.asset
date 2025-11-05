@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac933d3f2cf941c488493d1d1bd8522e, type: 3}
+  m_Name: Rerver
+  m_EditorClassIdentifier: Assembly-CSharp::CardSO
+  cardId: unit_rerver
+  cardName: Rerver
+  description: Laced lace shoe
+  artwork: {fileID: -3601748135498599393, guid: 99ee9a7e0d49b4241a45521c75d084c0, type: 3}
+  frame: {fileID: 0}
+  cost: 3
+  cardType: 0
+  attack: 5
+  health: 3
+  isHeroCard: 0
+  region: {fileID: 11400000, guid: 1980c659f73d76b4b94187cf6baadac4, type: 2}

@@ -80,13 +80,13 @@
     <Compile Include="Assets\Resources\Scripts\PublicClasses\GameConfig.cs" />
     <Compile Include="Assets\Resources\Scripts\Enums\CardTrigger.cs" />
     <Compile Include="Assets\Resources\Scripts\Ui\DeckEntryUI.cs" />
-    <Compile Include="Assets\Resources\Scripts\Data\HeroSO.cs" />
     <Compile Include="Assets\Resources\Scripts\Data\DeckData.cs" />
     <Compile Include="Assets\Resources\Scripts\Managers\Combat\BattleManager.cs" />
     <Compile Include="Assets\Resources\Scripts\PublicClasses\Card\CardInGame.cs" />
     <Compile Include="Assets\Resources\Scripts\Enums\CardType.cs" />
     <Compile Include="Assets\Resources\Scripts\PublicClasses\Card\CardRuntime.cs" />
     <Compile Include="Assets\Resources\Scripts\Ui\CreateDeckUI.cs" />
+    <Compile Include="Assets\Resources\Scripts\Data\RegionSO.cs" />
     <Compile Include="Assets\Resources\Scripts\Managers\MenuManager.cs" />
     <Compile Include="Assets\Resources\Scripts\Managers\Combat\BattleUIManager.cs" />
     <Compile Include="Assets\Resources\Scripts\PublicClasses\Card\CardSelectEntry.cs" />

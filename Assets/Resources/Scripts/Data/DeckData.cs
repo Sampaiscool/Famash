@@ -1,17 +1,11 @@
-using System;
 using System.Collections.Generic;
 
-[Serializable]
+[System.Serializable]
 public class DeckData
 {
     public string deckId;
     public string deckName;
-    public List<string> heroIds;  // Now stores multiple heroes
-    public List<string> cardIds;
-
-    public DeckData()
-    {
-        heroIds = new List<string>();
-        cardIds = new List<string>();
-    }
+    public string mainRegionId;
+    public string secondaryRegionId;
+    public List<string> cardIds = new();
 }

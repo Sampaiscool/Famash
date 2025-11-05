@@ -10,19 +10,18 @@ public class CreateDeckUI : MonoBehaviour
 
     [Header("Form Fields")]
     public TMP_InputField deckNameInput;
-    public TMP_Dropdown hero1Dropdown;
-    public TMP_Dropdown hero2Dropdown; // optional second hero
+    public TMP_Dropdown mainRegionDropdown;
+    public TMP_Dropdown secondaryRegionDropdown;
     public RectTransform cardsContent;
-    public GameObject cardEntryPrefab; // CardSelectEntry prefab
+    public GameObject cardEntryPrefab;
     public TMP_Text deckCountText;
     public Button saveButton;
     public Button cancelButton;
     public Button deleteButton;
 
     private DeckData editingDeck;
-    private Dictionary<string, int> deckCounts = new(); // cardId -> count
+    private Dictionary<string, int> deckCounts = new();
     private List<CardSelectEntry> entries = new();
-
     private MenuSceneUiManager menuManager;
 
     void Awake() => Instance = this;
@@ -32,25 +31,35 @@ public class CreateDeckUI : MonoBehaviour
         saveButton.onClick.AddListener(OnSaveClicked);
         cancelButton.onClick.AddListener(Close);
 
-        PopulateHeroes();
+        PopulateRegions();
 
-        // Optional: refresh cards whenever hero dropdown changes
-        hero1Dropdown.onValueChanged.AddListener(_ => PopulateCards());
-        hero2Dropdown?.onValueChanged.AddListener(_ => PopulateCards());
+        mainRegionDropdown.onValueChanged.AddListener(_ => PopulateCards());
+        secondaryRegionDropdown?.onValueChanged.AddListener(_ => PopulateCards());
+    }
+
+    private void PopulateRegions()
+    {
+        mainRegionDropdown.ClearOptions();
+        secondaryRegionDropdown.ClearOptions();
+
+        var options = new List<string>();
+        foreach (var r in DeckManager.Instance.allRegions)
+            options.Add(r.regionName);
+
+        mainRegionDropdown.AddOptions(options);
+        secondaryRegionDropdown.AddOptions(options);
     }
 
     public void OpenNew()
     {
         editingDeck = null;
         deckNameInput.text = "";
-        hero1Dropdown.value = 0;
-        hero2Dropdown.value = 0;
+        mainRegionDropdown.value = 0;
+        secondaryRegionDropdown.value = 0;
         deckCounts.Clear();
         PopulateCards();
         UpdateDeckCount();
-
         deleteButton.gameObject.SetActive(false);
-
         gameObject.SetActive(true);
     }
 
@@ -58,33 +67,30 @@ public class CreateDeckUI : MonoBehaviour
     {
         editingDeck = deck;
         deckNameInput.text = deck.deckName;
-
-        // Show and wire delete button
         deleteButton.gameObject.SetActive(true);
-        deleteButton.onClick.RemoveAllListeners(); // clear old listeners
+
+        deleteButton.onClick.RemoveAllListeners();
         deleteButton.onClick.AddListener(() =>
         {
             DeckManager.Instance.RemoveDeck(deck.deckId);
             Close();
-
-            // Refresh the scroll list
-            var scrollUI = FindFirstObjectByType<DecksScrollUI>();
-            scrollUI?.Refresh();
+            FindFirstObjectByType<DecksScrollUI>()?.Refresh();
         });
 
-        // select heroes
-        if (deck.heroIds.Count > 0)
+        // Match dropdowns with saved regions
+        if (!string.IsNullOrEmpty(deck.mainRegionId))
         {
-            int idx1 = DeckManager.Instance.allHeroes.FindIndex(h => h.heroId == deck.heroIds[0]);
-            hero1Dropdown.value = Mathf.Max(0, idx1);
-        }
-        if (deck.heroIds.Count > 1 && hero2Dropdown != null)
-        {
-            int idx2 = DeckManager.Instance.allHeroes.FindIndex(h => h.heroId == deck.heroIds[1]);
-            hero2Dropdown.value = Mathf.Max(0, idx2);
+            int idx1 = DeckManager.Instance.allRegions.FindIndex(r => r.regionId == deck.mainRegionId);
+            mainRegionDropdown.value = Mathf.Max(0, idx1);
         }
 
-        // build deck counts
+        if (!string.IsNullOrEmpty(deck.secondaryRegionId))
+        {
+            int idx2 = DeckManager.Instance.allRegions.FindIndex(r => r.regionId == deck.secondaryRegionId);
+            secondaryRegionDropdown.value = Mathf.Max(0, idx2);
+        }
+
+        // Build deck counts
         deckCounts.Clear();
         foreach (var cid in deck.cardIds)
         {
@@ -99,57 +105,31 @@ public class CreateDeckUI : MonoBehaviour
         menuManager?.ShowPage("CreateDeck");
     }
 
-    private void PopulateHeroes()
+    private (string main, string secondary) GetSelectedRegionIds()
     {
-        hero1Dropdown.ClearOptions();
-        hero2Dropdown?.ClearOptions();
-        var options = new List<string>();
-        foreach (var h in DeckManager.Instance.allHeroes) options.Add(h.heroName);
-        hero1Dropdown.AddOptions(options);
-        hero2Dropdown?.AddOptions(options);
-    }
-
-    private List<string> GetSelectedHeroIds()
-    {
-        List<string> ids = new List<string>();
-        if (DeckManager.Instance.allHeroes.Count == 0) return ids;
-
-        // primary hero
-        int idx1 = Mathf.Clamp(hero1Dropdown.value, 0, DeckManager.Instance.allHeroes.Count - 1);
-        ids.Add(DeckManager.Instance.allHeroes[idx1].heroId);
-
-        // optional second hero
-        if (hero2Dropdown != null)
-        {
-            int idx2 = Mathf.Clamp(hero2Dropdown.value, 0, DeckManager.Instance.allHeroes.Count - 1);
-            string id2 = DeckManager.Instance.allHeroes[idx2].heroId;
-            if (!ids.Contains(id2)) ids.Add(id2);
-        }
-
-        return ids;
+        var regions = DeckManager.Instance.allRegions;
+        string mainId = regions[Mathf.Clamp(mainRegionDropdown.value, 0, regions.Count - 1)].regionId;
+        string secondaryId = regions[Mathf.Clamp(secondaryRegionDropdown.value, 0, regions.Count - 1)].regionId;
+        if (mainId == secondaryId) secondaryId = null;
+        return (mainId, secondaryId);
     }
 
     void PopulateCards()
     {
-        // clear old entries
         foreach (Transform t in cardsContent) Destroy(t.gameObject);
         entries.Clear();
 
-        var selectedHeroIds = GetSelectedHeroIds();
+        var (mainId, secondaryId) = GetSelectedRegionIds();
+        var validCards = new List<CardSO>();
 
-        // gather all allowed cards
-        List<CardSO> validCards = new List<CardSO>();
         foreach (var c in DeckManager.Instance.allCards)
         {
-            // show general cards or those belonging to selected heroes
-            if (c.hero == null || selectedHeroIds.Contains(c.hero.heroId))
+            if (c.region == null) continue;
+            if (c.region.regionId == mainId || c.region.regionId == secondaryId)
                 validCards.Add(c);
         }
 
-        // sort alphabetically by name
         validCards.Sort((a, b) => string.Compare(a.cardName, b.cardName));
-
-        // spawn entries
         foreach (var card in validCards)
         {
             var go = Instantiate(cardEntryPrefab, cardsContent);
@@ -177,63 +157,27 @@ public class CreateDeckUI : MonoBehaviour
     private void OnSaveClicked()
     {
         var name = deckNameInput.text.Trim();
-        if (string.IsNullOrEmpty(name)) { Debug.LogWarning("Deck needs a name"); return; }
+        if (string.IsNullOrEmpty(name))
+        {
+            Debug.LogWarning("Deck needs a name");
+            return;
+        }
 
-        var selectedHeroIds = GetSelectedHeroIds();
-        if (selectedHeroIds.Count > 2) { Debug.LogWarning("At most 2 heroes per deck."); return; }
+        var (mainId, secondaryId) = GetSelectedRegionIds();
 
-        // build selected cardIds
-        List<string> selectedCardIds = new List<string>();
+        List<string> selectedCardIds = new();
         foreach (var kv in deckCounts)
             for (int i = 0; i < kv.Value; i++)
                 selectedCardIds.Add(kv.Key);
 
-        // validation
         if (selectedCardIds.Count < 40 || selectedCardIds.Count > 60)
-        {
             Debug.LogWarning("Deck must be 40–60 cards.");
-            //return;
-        }
 
-        var counts = new Dictionary<string, int>();
-        foreach (var cid in selectedCardIds)
-        {
-            if (!counts.ContainsKey(cid)) counts[cid] = 0;
-            counts[cid]++;
-            if (counts[cid] > 3)
-            {
-                var card = DeckManager.Instance.GetCardById(cid);
-                Debug.LogWarning($"Card {card?.cardName ?? cid} exceeds 3 copies.");
-                return;
-            }
-
-            var cardData = DeckManager.Instance.GetCardById(cid);
-            if (cardData.hero != null && !selectedHeroIds.Contains(cardData.hero.heroId))
-            {
-                Debug.LogWarning($"Card {cardData.cardName} belongs to hero {cardData.hero.heroName}, not in selected heroes.");
-                return;
-            }
-        }
-
-        // hero card enforcement: exactly 3 copies
-        foreach (var heroId in selectedHeroIds)
-        {
-            var hero = DeckManager.Instance.GetHeroById(heroId);
-            if (hero != null && hero.heroCard != null)
-            {
-                counts.TryGetValue(hero.heroCard.cardId, out int present);
-                if (present != 3)
-                {
-                    Debug.LogWarning($"Hero {hero.heroName} requires exactly 3 copies of {hero.heroCard.cardName}. Found {present}");
-                    return;
-                }
-            }
-        }
-
-        // save deck
+        // save
         var deck = editingDeck ?? new DeckData();
         deck.deckName = name;
-        deck.heroIds = selectedHeroIds;
+        deck.mainRegionId = mainId;
+        deck.secondaryRegionId = secondaryId;
         deck.cardIds = selectedCardIds;
 
         if (editingDeck == null)
@@ -241,9 +185,7 @@ public class CreateDeckUI : MonoBehaviour
         else
             DeckManager.Instance.SaveDecks();
 
-        var scrollUI = FindFirstObjectByType<DecksScrollUI>();
-        scrollUI?.Refresh();
-
+        FindFirstObjectByType<DecksScrollUI>()?.Refresh();
         Close();
     }
 

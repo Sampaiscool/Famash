@@ -11,14 +11,18 @@ public class MenuManager : MonoBehaviour
 
     void Awake()
     {
-        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         Instance = this;
     }
 
     public void SetCurrentDeck(DeckData deck)
     {
         currentDeck = deck;
-
         PlayerPrefs.SetString("SelectedDeckId", deck.deckId);
         PlayerPrefs.Save();
 
@@ -26,6 +30,7 @@ public class MenuManager : MonoBehaviour
 
         defaultUi = FindFirstObjectByType<DefaultUi>();
         menuUiManager = FindFirstObjectByType<MenuSceneUiManager>();
+
         if (menuUiManager != null)
         {
             defaultUi.LoadSelectedDeck();
@@ -33,30 +38,24 @@ public class MenuManager : MonoBehaviour
         }
     }
 
-    public void OnClickHome()
-    {
-        // show home panel; you can load scenes or toggle panels
-        Debug.Log("Home clicked");
-    }
-
     public void OnClickJourney()
     {
-        if (currentDeck == null) { Debug.LogWarning("No deck selected"); return; }
+        if (currentDeck == null)
+        {
+            Debug.LogWarning("No deck selected");
+            return;
+        }
 
-        // Prepare GameConfig, pass to GameManager and load battle scene
         var cfg = new GameConfig()
         {
             deckId = currentDeck.deckId,
-            heroIds = currentDeck.heroIds,  // Use heroIds, which is a list now
-            seed = UnityEngine.Random.Range(0, int.MaxValue)
+            mainRegionId = currentDeck.mainRegionId,
+            secondaryRegionId = currentDeck.secondaryRegionId,
+            seed = Random.Range(0, int.MaxValue)
         };
 
         GameManager.Instance.StartJourney(cfg);
     }
 
-
-    public Canvas FindUiCanvas()
-    {
-        return FindFirstObjectByType<Canvas>();
-    }
+    public Canvas FindUiCanvas() => FindFirstObjectByType<Canvas>();
 }

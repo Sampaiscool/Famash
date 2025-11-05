@@ -34,7 +34,7 @@ public abstract class BaseController : MonoBehaviour
         controllerName = runtimeDeck.deckName;
         hero = runtimeDeck.hero;
 
-        Debug.Log($"{controllerName} loaded deck with {deckRuntime.runtimeCards.Count} runtime cards and hero {hero.heroData.heroName}");
+        Debug.Log($"{controllerName} loaded deck with {deckRuntime.runtimeCards.Count} runtime cards and region: {hero.mainRegion}");
     }
 
     public virtual void StartTurn(bool drawCard = true)

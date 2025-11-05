@@ -389,16 +389,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db61cf1f5bbb8fd4a8f6ef741e25a2b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BattleLoader
-  playerDeck:
+  playerDeckData:
     deckId: 
     deckName: 
-    heroIds: []
+    mainRegionId: 
+    secondaryRegionId: 
     cardIds: []
-  enemyDeck:
+  enemyDeckData:
     deckId: 
     deckName: 
-    heroIds: []
+    mainRegionId: 
+    secondaryRegionId: 
     cardIds: []
+  playerDeckRuntime:
+    deckId: 
+    deckName: 
+    hero:
+      mainRegion: {fileID: 0}
+      currentHealth: 0
+      currentMana: 0
+      maxMana: 0
+    mainRegion: {fileID: 0}
+    secondaryRegion: {fileID: 0}
+    baseCards: []
+    runtimeCards: []
+  enemyDeckRuntime:
+    deckId: 
+    deckName: 
+    hero:
+      mainRegion: {fileID: 0}
+      currentHealth: 0
+      currentMana: 0
+      maxMana: 0
+    mainRegion: {fileID: 0}
+    secondaryRegion: {fileID: 0}
+    baseCards: []
+    runtimeCards: []
 --- !u!4 &82624911
 Transform:
   m_ObjectHideFlags: 0
@@ -1220,7 +1246,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4281479730
   m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -1233,7 +1259,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -2593,14 +2619,14 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 14
+  m_fontSize: 30
   m_fontSizeBase: 14
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_fontSizeMax: 30
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -2727,8 +2753,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 880866783}
   m_HandleRect: {fileID: 880866782}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 0.2
+  m_Value: 1
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3509,7 +3535,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -18, y: 0}
+  m_SizeDelta: {x: -17, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &714954091
 MonoBehaviour:
@@ -3731,7 +3757,7 @@ RectTransform:
   m_Father: {fileID: 1339718155}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 0.2}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -4180,14 +4206,14 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 14
+  m_fontSize: 30
   m_fontSizeBase: 14
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_fontSizeMax: 30
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -6400,7 +6426,7 @@ GameObject:
   - component: {fileID: 1496562159}
   - component: {fileID: 1496562158}
   m_Layer: 5
-  m_Name: Hero2Text
+  m_Name: OtherRegionText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6422,8 +6448,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -552, y: 60}
-  m_SizeDelta: {x: 173.23, y: 50}
+  m_AnchoredPosition: {x: -554.2917, y: 60}
+  m_SizeDelta: {x: 192.327, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1496562158
 MonoBehaviour:
@@ -6445,7 +6471,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Hero 2:'
+  m_text: 'Other Region:'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -6472,8 +6498,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50
-  m_fontSizeBase: 50
+  m_fontSize: 30
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -6724,7 +6750,7 @@ GameObject:
   - component: {fileID: 1598707415}
   - component: {fileID: 1598707414}
   m_Layer: 5
-  m_Name: Hero1Text
+  m_Name: MainRegionText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6746,8 +6772,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -551.85, y: 170}
-  m_SizeDelta: {x: 173.23, y: 50}
+  m_AnchoredPosition: {x: -554.29, y: 170}
+  m_SizeDelta: {x: 192.32, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1598707414
 MonoBehaviour:
@@ -6769,7 +6795,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Hero 1:'
+  m_text: 'Main Region:'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -6796,15 +6822,15 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50
-  m_fontSizeBase: 50
+  m_fontSize: 30
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -6861,7 +6887,7 @@ GameObject:
   - component: {fileID: 1613802722}
   - component: {fileID: 1613802724}
   m_Layer: 5
-  m_Name: Hero1Dropdown
+  m_Name: MainRegionDropdown
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7354,8 +7380,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CreateDeckUI
   deckNameInput: {fileID: 940644448}
-  hero1Dropdown: {fileID: 1613802724}
-  hero2Dropdown: {fileID: 2113217072}
+  mainRegionDropdown: {fileID: 1613802724}
+  secondaryRegionDropdown: {fileID: 2113217072}
   cardsContent: {fileID: 2143225547}
   cardEntryPrefab: {fileID: 5023115623056164623, guid: c7342f92379521942abc38c82349b38d, type: 3}
   deckCountText: {fileID: 1052092921}
@@ -7466,7 +7492,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e85cc6121ff30e43846895804e76f51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DeckManager
-  allHeroes: []
+  allRegions: []
   allCards: []
   decks: []
 --- !u!4 &1786396327
@@ -7593,7 +7619,8 @@ MonoBehaviour:
   currentDeck:
     deckId: 
     deckName: 
-    heroIds: []
+    mainRegionId: 
+    secondaryRegionId: 
     cardIds: []
 --- !u!4 &1807279793
 Transform:
@@ -7644,8 +7671,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -548.35, y: 286.51}
-  m_SizeDelta: {x: 166.225, y: 50}
+  m_AnchoredPosition: {x: -554.29, y: 286.51}
+  m_SizeDelta: {x: 192.32, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1873372827
 MonoBehaviour:
@@ -7694,15 +7721,15 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50
-  m_fontSizeBase: 50
+  m_fontSize: 30
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -8196,8 +8223,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   CurrentConfig:
     deckId: 
-    heroIds: []
     seed: 0
+    mainRegionId: 
+    secondaryRegionId: 
 --- !u!4 &2073396756
 Transform:
   m_ObjectHideFlags: 0
@@ -8262,7 +8290,7 @@ GameObject:
   - component: {fileID: 2113217073}
   - component: {fileID: 2113217072}
   m_Layer: 5
-  m_Name: Hero2Dropdown
+  m_Name: OtherRegionDropdown
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

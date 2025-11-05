@@ -68,10 +68,10 @@ public class BattleUIManager : MonoBehaviour
     public void UpdateHeroUI()
     {
         playerHealthText.text = $"HP: {player.hero.currentHealth}";
-        playerManaText.text = $"Mana: {player.hero.currentMana}/{player.hero.heroData.resourceMax}";
+        playerManaText.text = $"Mana: {player.hero.currentMana}/{player.hero.maxMana}";
 
         opponentHealthText.text = $"HP: {opponent.hero.currentHealth}";
-        opponentManaText.text = $"Mana: {opponent.hero.currentMana}/{opponent.hero.heroData.resourceMax}";
+        opponentManaText.text = $"Mana: {opponent.hero.currentMana}/{opponent.hero.maxMana}";
     }
 
     public void SpawnCardUI(BaseController owner, CardRuntime card, Transform parent)

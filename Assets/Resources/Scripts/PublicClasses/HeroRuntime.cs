@@ -3,42 +3,41 @@ using UnityEngine;
 [System.Serializable]
 public class HeroRuntime
 {
-    public HeroSO heroData;
+    public RegionSO mainRegion;
     public int currentHealth;
     public int currentMana;
     public int maxMana;
 
-    public HeroRuntime(HeroSO data)
+    private const int BASE_HEALTH = 20;
+    private const int START_MANA = 1;
+    private const int MAX_MANA_CAP = 10;
+
+    public HeroRuntime(RegionSO region)
     {
-        heroData = data;
-        currentHealth = data.baseHealth;
-        currentMana = data.resourceStart;
-        maxMana = data.resourceStart;
+        mainRegion = region;
+        currentHealth = BASE_HEALTH;
+        currentMana = START_MANA;
+        maxMana = START_MANA;
     }
 
-    // Method to increase current mana
     public void GainMana(int amount)
     {
         currentMana = Mathf.Min(maxMana, currentMana + amount);
     }
 
-    // Method to reduce current mana when a card is played
     public void SpendMana(int amount)
     {
         currentMana = Mathf.Max(0, currentMana - amount);
     }
 
-    // Check if the hero can afford the card's cost
     public bool CanAfford(CardSO card)
     {
         return currentMana >= card.cost;
     }
 
-    // At the start of each turn, refresh the mana and increase max mana
     public void StartTurn()
     {
+        maxMana = Mathf.Min(MAX_MANA_CAP, maxMana + 1);
         currentMana = maxMana;
-
-        maxMana = Mathf.Min(heroData.resourceMax, maxMana + 1);
     }
 }

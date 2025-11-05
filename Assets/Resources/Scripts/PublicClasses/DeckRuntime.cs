@@ -7,26 +7,27 @@ public class DeckRuntime
     public string deckId;
     public string deckName;
 
-    public HeroRuntime hero;              // active hero in this battle
-    public List<CardSO> baseCards = new(); // static references for info
-    public List<CardRuntime> runtimeCards = new(); // mutable state
+    public HeroRuntime hero;              // still used for combat stats (HP/mana)
+    public RegionSO mainRegion;            // main region bonus
+    public RegionSO secondaryRegion;       // optional secondary region
+    public List<CardSO> baseCards = new();
+    public List<CardRuntime> runtimeCards = new();
 
     public DeckRuntime(DeckData data)
     {
         deckId = data.deckId;
         deckName = data.deckName;
 
-        // Grab hero (for now assume only first heroId is used)
-        if (data.heroIds.Count > 0)
-        {
-            var heroSo = DeckManager.Instance.GetHeroById(data.heroIds[0]);
-            if (heroSo != null)
-                hero = new HeroRuntime(heroSo);
-            else
-                Debug.LogWarning($"Hero with id {data.heroIds[0]} not found for deck {data.deckName}");
-        }
+        // Assign regions
+        mainRegion = DeckManager.Instance.GetRegionById(data.mainRegionId);
+        if (!string.IsNullOrEmpty(data.secondaryRegionId))
+            secondaryRegion = DeckManager.Instance.GetRegionById(data.secondaryRegionId);
 
-        // Load cards by ID
+        // Create hero runtime (generic stats)
+        hero = new HeroRuntime(mainRegion); // now stats are universal, no HeroSO needed
+        hero.mainRegion = mainRegion;
+
+        // Load cards
         foreach (var id in data.cardIds)
         {
             var card = DeckManager.Instance.GetCardById(id);
@@ -41,6 +42,7 @@ public class DeckRuntime
 
         Shuffle();
     }
+
     public void Shuffle()
     {
         for (int i = runtimeCards.Count - 1; i > 0; i--)

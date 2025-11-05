@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -10,10 +9,9 @@ public class DeckEntryUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public TMP_Text deckNameText;
     public Button selectButton;
     public Button openButton;
-    public GameObject buttonsContainer; // assign the group with Select & Edit
+    public GameObject buttonsContainer;
 
     private DeckData deckData;
-
     private CreateDeckUI createDeckUI;
 
     void Start()
@@ -26,30 +24,18 @@ public class DeckEntryUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         deckData = data;
         deckNameText.text = data.deckName;
 
-        // Update to support multiple heroes
-        var heroNames = new List<string>();
-        foreach (var heroId in data.heroIds)
-        {
-            var hero = DeckManager.Instance.GetHeroById(heroId);
-            if (hero != null)
-                heroNames.Add(hero.heroName);
-        }
-
         selectButton.onClick.RemoveAllListeners();
-        selectButton.onClick.AddListener(() => OnSelectClicked());
+        selectButton.onClick.AddListener(OnSelectClicked);
 
         openButton.onClick.RemoveAllListeners();
-        openButton.onClick.AddListener(() => OnOpenClicked());
+        openButton.onClick.AddListener(OnOpenClicked);
 
         UpdatePreview(deckData);
     }
 
-
     public void OnSelectClicked()
     {
         MenuManager.Instance.SetCurrentDeck(deckData);
-
-        // Update UI immediately
         UpdatePreview(deckData);
     }
 
@@ -68,18 +54,15 @@ public class DeckEntryUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         buttonsContainer.SetActive(false);
     }
-    void UpdatePreview(DeckData deck)
-    {
-        if (deck.heroIds == null || deck.heroIds.Count == 0) return;
-        if (DeckManager.Instance == null || DeckManager.Instance.allHeroes == null) return;
 
-        var hero = DeckManager.Instance.GetHeroById(deck.heroIds[0]);
-        if (hero != null && hero.portrait != null)
-        {
-            deckImage.sprite = hero.portrait;
-        }
+    private void UpdatePreview(DeckData deck)
+    {
+        if (DeckManager.Instance == null) return;
+
+        var mainRegion = DeckManager.Instance.GetRegionById(deck.mainRegionId);
+        //if (mainRegion != null && mainRegion.regionIcon != null)
+        //    deckImage.sprite = mainRegion.regionIcon;
 
         deckNameText.text = deck.deckName;
     }
-
 }

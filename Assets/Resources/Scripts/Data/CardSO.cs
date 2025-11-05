@@ -15,13 +15,13 @@ public class CardSO : ScriptableObject
 
     [Header("Gameplay")]
     public int cost;
-    public CardType cardType;    // Unit, Spell, Field, Secret, Hero
+    public CardType cardType; // Unit, Spell, Field, Secret, Hero
     public int attack;
     public int health;
-    public bool isHeroCard;
+    public bool isHeroCard; // Champions in your case
 
-    [Header("Ownership")]
-    public HeroSO hero;          // null = general card; non-null = hero-specific
+    [Header("Region Ownership")]
+    public RegionSO region; // New system
 
     [Header("Triggers")]
     public List<CardEffectTrigger> triggers;

@@ -7,63 +7,46 @@ public class DeckManager : MonoBehaviour
 {
     public static DeckManager Instance { get; private set; }
 
-    // Data sources you assign in inspector
-    public List<HeroSO> allHeroes;
+    [Header("Data Sources")]
+    public List<RegionSO> allRegions;
     public List<CardSO> allCards;
 
-    // runtime
-    public List<DeckData> decks = new List<DeckData>();
+    public List<DeckData> decks = new();
 
     private string savePath;
 
     private void Awake()
     {
-        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        // Make sure the folder exists (optional, but safe)
         string folder = Application.persistentDataPath;
-        if (!System.IO.Directory.Exists(folder))
-            System.IO.Directory.CreateDirectory(folder);
+        if (!Directory.Exists(folder))
+            Directory.CreateDirectory(folder);
 
-        savePath = System.IO.Path.Combine(folder, "decks.json");
+        savePath = Path.Combine(folder, "decks.json");
 
         LoadAllCards();
-        LoadAllHeroes();
+        LoadAllRegions();
         LoadDecks();
     }
 
     private void LoadAllCards()
     {
-        allCards = new List<CardSO>();
-
-        // Load all hero subfolders in Resources/Cards
-        var heroesFolder = Path.Combine(Application.dataPath, "Resources/Cards");
-
-        if (!Directory.Exists(heroesFolder))
-        {
-            Debug.LogWarning("No Resources/Cards folder found!");
-            return;
-        }
-
-        var heroFolders = Directory.GetDirectories(heroesFolder);
-        foreach (var folder in heroFolders)
-        {
-            string heroName = Path.GetFileName(folder);
-            string resourcePath = $"Cards/{heroName}";
-            var cards = Resources.LoadAll<CardSO>(resourcePath);
-
-            allCards.AddRange(cards);
-            Debug.Log($"Loaded {cards.Length} cards from {resourcePath}");
-        }
-
-        Debug.Log($"Total cards loaded: {allCards.Count}");
+        allCards = new List<CardSO>(Resources.LoadAll<CardSO>("Cards"));
+        Debug.Log($"Loaded {allCards.Count} cards from Resources/Cards");
     }
-    private void LoadAllHeroes()
+
+    private void LoadAllRegions()
     {
-        allHeroes = new List<HeroSO>(Resources.LoadAll<HeroSO>("Heroes"));
-        Debug.Log($"Loaded {allHeroes.Count} heroes from Resources/Heroes");
+        allRegions = new List<RegionSO>(Resources.LoadAll<RegionSO>("Regions"));
+        Debug.Log($"Loaded {allRegions.Count} regions from Resources/Regions");
     }
 
     #region Persistence
@@ -74,9 +57,8 @@ public class DeckManager : MonoBehaviour
     {
         try
         {
-            var container = new DeckCollection { decks = decks };
-            var json = JsonUtility.ToJson(container, true);
-            System.IO.File.WriteAllText(savePath, json);
+            var json = JsonUtility.ToJson(new DeckCollection { decks = decks }, true);
+            File.WriteAllText(savePath, json);
             Debug.Log($"Saved {decks.Count} decks to {savePath}");
         }
         catch (Exception e)
@@ -84,20 +66,44 @@ public class DeckManager : MonoBehaviour
             Debug.LogError("SaveDecks error: " + e);
         }
     }
+    public void AddDeck(DeckData newDeck)
+    {
+        // Assign unique ID if missing
+        if (string.IsNullOrEmpty(newDeck.deckId))
+            newDeck.deckId = Guid.NewGuid().ToString();
+
+        // Add and save
+        decks.Add(newDeck);
+        SaveDecks();
+        Debug.Log($"Added new deck: {newDeck.deckName}");
+    }
+
+    public void RemoveDeck(string deckId)
+    {
+        int before = decks.Count;
+        decks.RemoveAll(d => d.deckId == deckId);
+        if (decks.Count < before)
+        {
+            SaveDecks();
+            Debug.Log($"Removed deck {deckId}");
+        }
+        else
+        {
+            Debug.LogWarning($"Tried to remove deck {deckId}, but it wasn't found.");
+        }
+    }
 
 
     public void LoadDecks()
     {
         decks.Clear();
-        if (!System.IO.File.Exists(savePath)) return;
+        if (!File.Exists(savePath)) return;
 
         try
         {
-            string json = System.IO.File.ReadAllText(savePath);
+            var json = File.ReadAllText(savePath);
             var container = JsonUtility.FromJson<DeckCollection>(json);
-            if (container != null && container.decks != null)
-                decks = container.decks;
-
+            decks = container?.decks ?? new List<DeckData>();
             Debug.Log($"Loaded {decks.Count} decks from {savePath}");
         }
         catch (Exception e)
@@ -105,31 +111,17 @@ public class DeckManager : MonoBehaviour
             Debug.LogError("LoadDecks error: " + e);
         }
     }
-
-    #endregion
-
-    #region CRUD
-    public void AddDeck(DeckData d)
-    {
-        if (string.IsNullOrEmpty(d.deckId)) d.deckId = Guid.NewGuid().ToString();
-        decks.Add(d);
-        SaveDecks();
-    }
-
-    public void RemoveDeck(string deckId)
-    {
-        decks.RemoveAll(x => x.deckId == deckId);
-        SaveDecks();
-    }
-
-    public DeckData GetDeck(string deckId)
-    {
-        return decks.Find(d => d.deckId == deckId);
-    }
     #endregion
 
     #region Helpers
-    public HeroSO GetHeroById(string id) => allHeroes.Find(h => h != null && h.heroId == id);
-    public CardSO GetCardById(string id) => allCards.Find(c => c != null && c.cardId == id);
+    public RegionSO GetRegionById(string id) =>
+        allRegions.Find(r => r != null && r.regionId == id);
+
+    public CardSO GetCardById(string id) =>
+        allCards.Find(c => c != null && c.cardId == id);
+    public DeckData GetDeck(string deckId)
+    {
+        return decks.Find(d => d != null && d.deckId == deckId);
+    }
     #endregion
 }

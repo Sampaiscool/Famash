@@ -19,43 +19,26 @@ public class DefaultUi : MonoBehaviour
 
     public void LoadSelectedDeck()
     {
-        if (!PlayerPrefs.HasKey("SelectedDeckId"))
-        {
-            Debug.Log("No selected deck saved in PlayerPrefs.");
-            return;
-        }
+        if (!PlayerPrefs.HasKey("SelectedDeckId")) return;
 
         string deckId = PlayerPrefs.GetString("SelectedDeckId");
         DeckData deck = DeckManager.Instance.GetDeck(deckId);
 
-        if (deck == null)
-        {
-            Debug.LogWarning($"No deck found with ID {deckId}");
-            return;
-        }
-
+        if (deck == null) return;
         selectedDeck = deck;
 
-        if (deck.heroIds.Count > 0)
-        {
-            var hero = DeckManager.Instance.GetHeroById(deck.heroIds[0]);
-            if (hero != null)
-            {
-                deckImage.sprite = hero.portrait;
-                deckNameText.text = deck.deckName;
-            }
-        }
+        deckNameText.text = deck.deckName;
+
+        // Show main region icon instead of hero portrait
+        var mainRegion = DeckManager.Instance.GetRegionById(deck.mainRegionId);
+        //if (mainRegion != null && mainRegion.regionIcon != null)
+        //    deckImage.sprite = mainRegion.regionIcon;
     }
 
     void OnDebugBattleClicked()
     {
-        if (selectedDeck == null)
-        {
-            Debug.LogWarning("No deck selected!");
-            return;
-        }
+        if (selectedDeck == null) return;
 
-        // Pass both player and opponent decks (same one)
         BattleLoader.Instance.PreparePlayerDeck(selectedDeck);
         BattleLoader.Instance.PrepareEnemyDeck(selectedDeck);
 
