@@ -7,7 +7,7 @@ public class CardUI : MonoBehaviour
     public Image artwork;
     public TMP_Text nameText;
     public Button cardButton;
-    public GameObject cardDetailPrefab;  // Assign this in the inspector
+    public GameObject cardDetailPrefab;
 
     private CardRuntime runtimeCard;
     private Canvas UICanvas;

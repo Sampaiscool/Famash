@@ -23,6 +23,19 @@ public class BattleUIManager : MonoBehaviour
     public Transform[] playerFieldSlots = new Transform[5];
     public Transform[] opponentFieldSlots = new Transform[5];
 
+    [Header("Turn Panels")]
+    public Image playerTurnPanel;
+    public Image opponentTurnPanel;
+
+    [Header("Turn Panel Colors")]
+    public Color activeTurnColor = Color.white;
+    public Color inactiveTurnColor = new Color(0.3f, 0.3f, 0.3f, 1f);
+
+    [Header("Turn Highlight Settings")]
+    public float fadeDuration = 0.3f; // seconds
+    private Coroutine panelFadeRoutine;
+
+
     [Header("Prefabs")]
     public GameObject cardPrefab;
 
@@ -74,7 +87,7 @@ public class BattleUIManager : MonoBehaviour
         opponentManaText.text = $"Mana: {opponent.hero.currentMana}/{opponent.hero.maxMana}";
     }
 
-    public void SpawnCardUI(BaseController owner, CardRuntime card, Transform parent)
+    public GameObject SpawnCardUI(BaseController owner, CardRuntime card, Transform parent)
     {
         GameObject cardObj = Instantiate(cardPrefab, parent);
         var ui = cardObj.GetComponent<CardInGame>();
@@ -85,6 +98,8 @@ public class BattleUIManager : MonoBehaviour
         }
         else
             Debug.LogError("Card prefab missing CardInGame component!");
+
+        return cardObj;
     }
 
     public void RefreshHandUI(BaseController controller)
@@ -95,8 +110,28 @@ public class BattleUIManager : MonoBehaviour
         foreach (var card in controller.hand)
             SpawnCardUI(controller, card, controller.handParent);
     }
+    public void UpdateTurnHighlight(BaseController currentTurn)
+    {
+        // Reset both first
+        playerHealthText.color = Color.gray;
+        playerManaText.color = Color.gray;
+        opponentHealthText.color = Color.gray;
+        opponentManaText.color = Color.gray;
 
-
+        // Highlight current turn
+        if (currentTurn == player)
+        {
+            playerHealthText.color = Color.white;
+            playerManaText.color = Color.white;
+            SetEndTurnButtonLabel("End Turn");
+        }
+        else if (currentTurn == opponent)
+        {
+            opponentHealthText.color = Color.white;
+            opponentManaText.color = Color.white;
+            SetEndTurnButtonLabel("Waiting...");
+        }
+    }
 
     public void HighlightAvailableSlots(BaseController owner)
     {
@@ -104,8 +139,6 @@ public class BattleUIManager : MonoBehaviour
 
         for (int i = 0; i < slots.Length; i++)
         {
-            Debug.Log($"Slot {i} is {(owner.fieldSlots[i] == null ? "empty" : "occupied")}");
-
             var img = slots[i].GetComponent<Image>();
             img.color = Color.white; // reset first
 
@@ -141,4 +174,12 @@ public class BattleUIManager : MonoBehaviour
         if (endTurnButton != null)
             endTurnButton.SetActive(active);
     }
+    public void SetEndTurnButtonLabel(string text)
+    {
+        var tmp = endTurnButton.GetComponentInChildren<TMPro.TMP_Text>();
+        if (tmp != null)
+            tmp.text = text;
+    }
+
+
 }

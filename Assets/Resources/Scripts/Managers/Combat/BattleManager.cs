@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
 public class BattleManager : MonoBehaviour
@@ -10,32 +10,23 @@ public class BattleManager : MonoBehaviour
 
     private BaseController turnPlayer;
     private BaseController otherPlayer;
-
     private bool firstTurn = true;
 
-    void Awake() => Instance = this;
+    private bool waitingForResponse = false;
+    public BaseController currentResponder;
 
-    void Start()
-    {
-        Instance = this;
-    }
+    void Awake() => Instance = this;
 
     public void SetupBattle()
     {
         turnPlayer = player;
         otherPlayer = opponent;
 
-        // Initial draw 5 cards each
-        for (int i = 0; i < 5; i++)
-        {
-            player.DrawCard();
-            opponent.DrawCard();
-        }
+        player.DrawCards(5);
+        opponent.DrawCards(5);
 
-        //Setup Field
         for (int i = 0; i < player.fieldSlots.Length; i++)
             player.fieldSlots[i] = null;
-
         for (int i = 0; i < opponent.fieldSlots.Length; i++)
             opponent.fieldSlots[i] = null;
 
@@ -46,14 +37,11 @@ public class BattleManager : MonoBehaviour
     {
         while (true)
         {
-            StartTurn(turnPlayer);
+            // Highlight whose turn it is
+            BattleUIManager.Instance.UpdateTurnHighlight(turnPlayer);
 
-            // Wait until turn player ends turn
-            yield return new WaitUntil(() => turnPlayer.IsTurnDone);
+            yield return StartCoroutine(TakeTurn(turnPlayer));
 
-            EndTurn(turnPlayer);
-
-            // Swap turn player
             var temp = turnPlayer;
             turnPlayer = otherPlayer;
             otherPlayer = temp;
@@ -62,38 +50,119 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    void StartTurn(BaseController playerController)
+    IEnumerator TakeTurn(BaseController active)
     {
-        playerController.IsTurnDone = false;
-        playerController.HasAttack = true;
-        playerController.HasPerformedAction = false;
-        playerController.CanRespond = false;
-
         if (!firstTurn)
-            playerController.DrawCard();
+            turnPlayer.DrawCards(1);
 
-        playerController.StartTurn();
-
-        // Enable end-turn button only for local player
-        BattleUIManager.Instance.SetEndTurnButtonActive(playerController.isPlayer);
+        StartTurn(active);
+        yield return new WaitUntil(() => active.IsTurnDone);
+        EndTurn(active);
     }
 
-    void EndTurn(BaseController playerController)
+    void StartTurn(BaseController controller)
     {
-        playerController.IsTurnDone = true;
-        playerController.HasAttack = false;
-        playerController.HasPerformedAction = false;
-        playerController.CanRespond = false;
+        controller.StartTurn(!firstTurn);
+        BattleUIManager.Instance.SetEndTurnButtonActive(controller.isPlayer);
 
-        BattleUIManager.Instance.SetEndTurnButtonActive(false);
-
-        playerController.EndTurn();
+        // Refresh highlight (important if last response was different)
+        BattleUIManager.Instance.UpdateTurnHighlight(controller);
     }
 
-    // Called by end-turn button
+    void EndTurn(BaseController controller)
+    {
+        controller.EndTurn();
+        BattleUIManager.Instance.SetEndTurnButtonActive(false);
+    }
+
+    // Player clicks End Turn button
     public void OnEndTurnButtonClicked()
     {
-        if (turnPlayer.isPlayer)
-            turnPlayer.IsTurnDone = true;
+        // 1️ Cancel placement mode
+        if (player.IsPlacingCard)
+        {
+            player.CancelPlacementMode();
+            return;
+        }
+
+        // 2️ End current response window
+        if (waitingForResponse && currentResponder == player)
+        {
+            EndResponseWindow();
+            return;
+        }
+
+        // 3️ End turn normally
+        if (turnPlayer == player)
+        {
+            player.IsTurnDone = true;
+            return;
+        }
+    }
+
+    public void StartResponseWindow(BaseController responder)
+    {
+        currentResponder = responder;
+        waitingForResponse = true;
+
+        // Update highlight — show who’s acting now
+        BattleUIManager.Instance.UpdateTurnHighlight(responder);
+
+        if (responder.isPlayer)
+        {
+            BattleUIManager.Instance.SetEndTurnButtonActive(true);
+            BattleUIManager.Instance.SetEndTurnButtonLabel("Pass");
+        }
+        else
+        {
+            StartCoroutine(AIResponseLoop(responder));
+        }
+    }
+
+    public void EndResponseWindow()
+    {
+        waitingForResponse = false;
+        currentResponder = null;
+
+        // Return highlight to the current turn player
+        BattleUIManager.Instance.UpdateTurnHighlight(turnPlayer);
+
+        BattleUIManager.Instance.SetEndTurnButtonLabel("End Turn");
+        BattleUIManager.Instance.SetEndTurnButtonActive(turnPlayer.isPlayer);
+    }
+
+    public bool IsPlayerAllowedToAct(PlayerController pc)
+    {
+        return (turnPlayer == pc && !waitingForResponse) ||
+               (waitingForResponse && currentResponder == pc);
+    }
+
+    private IEnumerator AIResponseLoop(BaseController ai)
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        // Find a playable card
+        CardRuntime cardToPlay = null;
+        foreach (var c in ai.hand)
+        {
+            if (ai.hero.CanAfford(c.cardData))
+            {
+                cardToPlay = c;
+                break;
+            }
+        }
+
+        if (cardToPlay != null)
+        {
+            ai.TryPlayCard(cardToPlay);
+            yield return new WaitForSeconds(0.5f);
+
+            // After AI acts, give player a response
+            StartResponseWindow(player);
+        }
+        else
+        {
+            EndResponseWindow(); // nothing to play, pass back
+        }
     }
 }

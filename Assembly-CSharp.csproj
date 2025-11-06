@@ -74,6 +74,7 @@
     <Compile Include="Assets\Resources\Scripts\Managers\Combat\BaseController.cs" />
     <Compile Include="Assets\Resources\Scripts\Ui\DecksScrollUI.cs" />
     <Compile Include="Assets\Resources\Scripts\Managers\Combat\BattleLoader.cs" />
+    <Compile Include="Assets\Resources\Scripts\PublicClasses\Card\CardInfoPopup.cs" />
     <Compile Include="Assets\Resources\Scripts\CardLogic\EffectSOBase.cs" />
     <Compile Include="Assets\Resources\Scripts\Ui\DefaultUi.cs" />
     <Compile Include="Assets\Resources\Scripts\PublicClasses\Card\CardUI.cs" />

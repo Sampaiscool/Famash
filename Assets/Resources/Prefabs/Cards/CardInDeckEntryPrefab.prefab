@@ -110,7 +110,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.0000019073, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 250, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1900821765835298397
@@ -279,7 +279,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1459822818754619138}
-  - component: {fileID: 7653062432441291722}
   - component: {fileID: 4829347137356414858}
   m_Layer: 5
   m_Name: CardInDeckEntryPrefab
@@ -300,11 +299,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 8265939501989706318}
   - {fileID: 5896982543209845010}
   - {fileID: 7464289415572086383}
   - {fileID: 5994099605404262312}
   - {fileID: 322844818578820462}
-  - {fileID: 8265939501989706318}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -312,22 +311,6 @@ RectTransform:
   m_AnchoredPosition: {x: -313.29, y: 206.74}
   m_SizeDelta: {x: 250, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &7653062432441291722
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5023115623056164623}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50d43fc0ba7b28c4583028a2af948f2b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CardUI
-  artwork: {fileID: 2698174019397908126}
-  nameText: {fileID: 3015850785704095107}
-  cardButton: {fileID: 9147918063327895039}
-  cardDetailPrefab: {fileID: 7682849475130370157, guid: 0b13fe9ec8a48024a843d48f44b9c49d, type: 3}
 --- !u!114 &4829347137356414858
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -342,9 +325,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CardSelectEntry
   artwork: {fileID: 2698174019397908126}
   nameText: {fileID: 3015850785704095107}
-  costText: {fileID: 0}
   countText: {fileID: 7626745386104326380}
   cardData: {fileID: 0}
+  cardInfoPopupPrefab: {fileID: 7682849475130370157, guid: 0b13fe9ec8a48024a843d48f44b9c49d, type: 3}
 --- !u!1 &6694106541574817160
 GameObject:
   m_ObjectHideFlags: 0

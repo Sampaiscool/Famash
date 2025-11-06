@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,8 +19,14 @@ public abstract class BaseController : MonoBehaviour
     public bool CanRespond { get; set; }          // non-turn player response
     public bool HasAttack { get; set; }           // turn player attack allowed
 
+    public delegate IEnumerator ResponseWindowDelegate(BaseController actor, CardRuntime playedCard);
+    public static event ResponseWindowDelegate OnResponseWindow;
+
     [HideInInspector] public bool isPlayer;
     [HideInInspector] public Transform handParent;
+
+    private bool isDrawing = false;
+    private int pendingDraws = 0;
 
     // Build deck from DeckData
     public virtual void LoadDeck(DeckRuntime runtimeDeck)
@@ -46,9 +53,6 @@ public abstract class BaseController : MonoBehaviour
         // Gain mana (refresh and increase max mana)
         hero.StartTurn();  // This ensures both player and AI's mana are refreshed
 
-        if (drawCard)
-            DrawCard();
-
         BattleUIManager.Instance.UpdateHeroUI();
     }
 
@@ -60,73 +64,67 @@ public abstract class BaseController : MonoBehaviour
         CanRespond = false;
     }
 
-    public virtual void DrawCard()
+    public void DrawCards(int amount)
     {
-        if (deckRuntime == null)
-        {
-            Debug.LogWarning($"{controllerName} has no deck runtime assigned!");
-            return;
-        }
+        if (amount <= 0) return;
+        pendingDraws += amount;
 
-        CardRuntime drawn = deckRuntime.DrawCard();
-        if (drawn == null) return;
-
-        hand.Add(drawn);
-        BattleUIManager.Instance.SpawnCardUI(this, drawn, handParent);
-
-        Debug.Log($"{controllerName} drew {drawn.cardData.cardName}");
+        if (!isDrawing)
+            StartCoroutine(DrawCardsRoutine());
     }
+
 
     public virtual bool TryPlayCard(CardRuntime card)
     {
-        if (card == null) return false;
-        if (!hero.CanAfford(card.cardData))
-        {
-            Debug.Log($"{controllerName} can’t afford {card.cardData.cardName}");
+        if (card == null || !hero.CanAfford(card.cardData))
             return false;
+
+        // For player units: wait for placement instead of instant play
+        if (isPlayer && card.cardData.cardType == CardType.Unit)
+        {
+            PrepareUnitPlacement(card);
+            return false; // Wait for placement
         }
 
         hero.SpendMana(card.cardData.cost);
 
-        // Remove from hand ONLY if it’s a unit card placed on the field
-        if (card.cardData.cardType == CardType.Unit)
-        {
-            hand.Remove(card);
-        }
-
         switch (card.cardData.cardType)
         {
             case CardType.Unit:
-                PrepareUnitPlacement(card);
+                hand.Remove(card);
+                for (int i = 0; i < fieldSlots.Length; i++)
+                {
+                    if (fieldSlots[i] == null)
+                    {
+                        PlaceUnitInSlot(card, i);
+                        break;
+                    }
+                }
                 break;
-
             case CardType.Spell:
-                // ResolveSpell(card);
-                break;
-
-            case CardType.Field:
-                // ResolveField(card);
-                break;
-
-            case CardType.Secret:
-                // ResolveSecret(card);
-                break;
-
-            case CardType.Hero:
-                // ResolveHero(card);
                 break;
         }
 
-        HasPerformedAction = true;      // signal that opponent can respond
-        CanRespond = false;             // reset own response
+        HasPerformedAction = true;
+        CanRespond = false;
 
         BattleUIManager.Instance.UpdateHeroUI();
-
         Debug.Log($"{controllerName} played {card.cardData.cardName}");
+
+        // Response window logic
+        if (isPlayer)
+        {
+            // Player plays -> AI responds
+            BattleManager.Instance.StartResponseWindow(BattleManager.Instance.opponent);
+        }
+        else
+        {
+            // AI plays -> Player responds
+            BattleManager.Instance.StartResponseWindow(BattleManager.Instance.player);
+        }
 
         return true;
     }
-
 
     // Attack method - only turn player can attack
     public virtual bool TryAttack(CardRuntime attacker, CardRuntime target)
@@ -159,9 +157,9 @@ public abstract class BaseController : MonoBehaviour
     }
     private void PrepareUnitPlacement(CardRuntime card)
     {
-        if (!isPlayer) // AI will handle separately
+        if (!isPlayer)
         {
-            // AI just puts the first unit in the first free slot
+            // AI logic stays the same
             for (int i = 0; i < fieldSlots.Length; i++)
             {
                 if (fieldSlots[i] == null)
@@ -173,19 +171,33 @@ public abstract class BaseController : MonoBehaviour
             return;
         }
 
-        // Human player: wait for click
+        // Show highlights
         BattleUIManager.Instance.HighlightAvailableSlots(this);
 
-        // Subscribe to slot-click event
+        // Set up slot click
         BattleUIManager.Instance.OnFieldSlotClicked = (slotIndex) =>
         {
-            if (fieldSlots[slotIndex] != null) return; // occupied
+            if (fieldSlots[slotIndex] != null)
+                return;
+
+            hero.SpendMana(card.cardData.cost);
+            hand.Remove(card);
             PlaceUnitInSlot(card, slotIndex);
+
+            HasPerformedAction = true;
+            CanRespond = false;
+
             BattleUIManager.Instance.ClearSlotHighlights();
-            BattleUIManager.Instance.OnFieldSlotClicked = null; // unsubscribe
+            BattleUIManager.Instance.OnFieldSlotClicked = null;
+            BattleUIManager.Instance.UpdateHeroUI();
+
+            Debug.Log($"{controllerName} placed {card.cardData.cardName} in slot {slotIndex}");
+
+            BattleManager.Instance.StartResponseWindow(BattleManager.Instance.opponent);
         };
     }
-    private void PlaceUnitInSlot(CardRuntime card, int slotIndex)
+
+    public void PlaceUnitInSlot(CardRuntime card, int slotIndex)
     {
         fieldSlots[slotIndex] = card;
         card.isInPlay = true;
@@ -195,7 +207,7 @@ public abstract class BaseController : MonoBehaviour
         card.cardUI.transform.SetParent(slotTransform, false);
         card.cardUI.transform.localPosition = Vector3.zero;
 
-        Debug.Log($"{controllerName} placed {card.cardData.cardName} in slot {slotIndex}");
+        OnResponseWindow.ToString();
     }
 
 
@@ -211,4 +223,80 @@ public abstract class BaseController : MonoBehaviour
     //    BattleUIManager.Instance.RefreshHandUI(this);
     //    Debug.Log($"{controllerName} moved {card.cardData.cardName} to graveyard");
     //}
+
+    private System.Collections.IEnumerator DrawCardsRoutine()
+    {
+        isDrawing = true;
+
+        // while there are requests queued, attempt to draw
+        while (pendingDraws > 0)
+        {
+            // safety: if no deck, stop
+            if (deckRuntime == null)
+            {
+                Debug.LogWarning($"{controllerName} has no deck runtime assigned!");
+                pendingDraws = 0;
+                break;
+            }
+
+            // try draw one runtime card
+            CardRuntime drawn = deckRuntime.DrawCard();
+            if (drawn == null)
+            {
+                Debug.Log($"{controllerName} tried to draw but the deck is empty!");
+                pendingDraws = 0;
+                break;
+            }
+
+            // spawn UI and prepare animation
+            // NOTE: SpawnCardUI must return the spawned GameObject (see earlier fix)
+            GameObject cardObj = BattleUIManager.Instance.SpawnCardUI(this, drawn, handParent);
+            if (cardObj == null)
+            {
+                // fallback: if SpawnCardUI returned null, still add to hand and continue
+                hand.Add(drawn);
+                Debug.LogWarning("SpawnCardUI returned null — card added to hand without animation.");
+                pendingDraws--;
+                yield return null;
+                continue;
+            }
+
+            // Ensure RectTransform and CanvasGroup exist
+            var rect = cardObj.GetComponent<RectTransform>();
+            CanvasGroup canvasGroup = cardObj.GetComponent<CanvasGroup>();
+            if (canvasGroup == null) canvasGroup = cardObj.AddComponent<CanvasGroup>();
+
+            // start tiny + invisible
+            rect.localScale = Vector3.zero;
+            canvasGroup.alpha = 0f;
+
+            // animate grow + fade (feel free to tweak duration)
+            float duration = 0.35f;
+            float t = 0f;
+            while (t < duration)
+            {
+                t += Time.deltaTime;
+                float p = Mathf.SmoothStep(0f, 1f, t / duration);
+                rect.localScale = Vector3.one * p;
+                canvasGroup.alpha = p;
+                yield return null;
+            }
+
+            rect.localScale = Vector3.one;
+            canvasGroup.alpha = 1f;
+
+            // now that the UI is visible, add to hand list
+            hand.Add(drawn);
+
+            Debug.Log($"{controllerName} drew {drawn.cardData.cardName}");
+
+            // small delay before next queued draw (tweak as needed)
+            yield return new WaitForSeconds(0.12f);
+
+            // consumed one queued draw
+            pendingDraws--;
+        }
+
+        isDrawing = false;
+    }
 }

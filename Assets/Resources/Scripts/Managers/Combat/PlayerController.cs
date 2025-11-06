@@ -2,35 +2,69 @@ using UnityEngine;
 
 public class PlayerController : BaseController
 {
-    // Called by UI when player clicks a card
+    private CardRuntime selectedCard = null;
+
     public void OnCardClicked(CardRuntime card)
     {
-        if (!hand.Contains(card))
-            return;
-
-        bool played = TryPlayCard(card);
-        if (!played)
-            return;
-
-        // After player plays a card, opponent can respond
-        BattleManager.Instance.opponent.CanRespond = true;
-    }
-
-    // You can add attack logic later:
-    public void OnAttack()
-    {
-        if (!HasAttack)
+        // If already choosing a slot, this acts as a cancel toggle
+        if (selectedCard != null)
         {
-            Debug.Log("Cannot attack right now!");
+            CancelPlacementMode();
             return;
         }
 
-        // Resolve attack here
-        Debug.Log($"{controllerName} attacks!");
+        // Only allow card play if it’s your turn or you can respond
+        if (!BattleManager.Instance.IsPlayerAllowedToAct(this))
+        {
+            Debug.Log("Not your turn or you can’t respond right now.");
+            return;
+        }
 
-        HasAttack = false;
+        // Enter placement mode
+        selectedCard = card;
+        BattleUIManager.Instance.HighlightAvailableSlots(this);
+        BattleUIManager.Instance.SetEndTurnButtonLabel("Cancel");
+        BattleUIManager.Instance.SetEndTurnButtonActive(true);
 
-        // After attacking, opponent can respond with cards
-        BattleManager.Instance.opponent.CanRespond = true;
+        BattleUIManager.Instance.OnFieldSlotClicked = (slotIndex) =>
+        {
+            if (fieldSlots[slotIndex] != null) return;
+
+            // Actually place and spend
+            hero.SpendMana(selectedCard.cardData.cost);
+            hand.Remove(selectedCard);
+            PlaceUnitInSlot(selectedCard, slotIndex);
+            BattleUIManager.Instance.ClearSlotHighlights();
+            BattleUIManager.Instance.OnFieldSlotClicked = null;
+
+            HasPerformedAction = true;
+            CanRespond = false;
+            selectedCard = null;
+
+            BattleUIManager.Instance.SetEndTurnButtonLabel("End Turn");
+            BattleUIManager.Instance.UpdateHeroUI();
+
+            // Notify battle manager to open opponent response
+            BattleManager.Instance.StartResponseWindow(BattleManager.Instance.opponent);
+        };
     }
+
+    public void CancelPlacementMode()
+    {
+        selectedCard = null;
+        BattleUIManager.Instance.ClearSlotHighlights();
+        BattleUIManager.Instance.OnFieldSlotClicked = null;
+        BattleUIManager.Instance.SetEndTurnButtonLabel("End Turn");
+        BattleUIManager.Instance.SetEndTurnButtonActive(true);
+
+        Debug.Log("Cancelled placement mode.");
+    }
+
+    public override void EndTurn()
+    {
+        base.EndTurn();
+        CancelPlacementMode();
+    }
+
+    public bool IsPlacingCard => selectedCard != null;
 }

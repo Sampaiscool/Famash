@@ -12,6 +12,8 @@ public class CardSelectEntry : MonoBehaviour, IPointerClickHandler
     [HideInInspector] public CardSO cardData;
     private int count = 0;
 
+    public GameObject cardInfoPopupPrefab;
+
     public System.Action<CardSO, int> onCountChanged; // (card, newCount)
 
     private void Awake()
@@ -28,7 +30,6 @@ public class CardSelectEntry : MonoBehaviour, IPointerClickHandler
         UpdateCount();
     }
 
-    // Add this method so CreateDeckUI can set initial count
     public void SetCount(int c)
     {
         count = Mathf.Clamp(c, 0, 3);
@@ -66,5 +67,17 @@ public class CardSelectEntry : MonoBehaviour, IPointerClickHandler
             OnLeftClick();
         else if (eventData.button == PointerEventData.InputButton.Right)
             OnRightClick();
+        else if (eventData.button == PointerEventData.InputButton.Middle)
+            ShowCardInfo();
+    }
+
+    private void ShowCardInfo()
+    {
+        if (cardData == null || cardInfoPopupPrefab == null) return;
+
+        var canvas = FindFirstObjectByType<Canvas>();
+        var popupObj = Instantiate(cardInfoPopupPrefab, canvas.transform);
+        var popup = popupObj.GetComponent<CardInfoPopup>();
+        popup.Setup(cardData);
     }
 }

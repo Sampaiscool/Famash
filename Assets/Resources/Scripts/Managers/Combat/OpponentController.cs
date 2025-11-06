@@ -21,7 +21,7 @@ public class OpponentController : BaseController
         {
             yield return new WaitForSeconds(1f);
 
-            // Play a card if possible
+            // Try to find a playable card
             CardRuntime playableCard = null;
             foreach (var c in hand)
             {
@@ -34,22 +34,60 @@ public class OpponentController : BaseController
 
             if (playableCard != null)
             {
+                // AI plays the card
                 TryPlayCard(playableCard);
                 Debug.Log($"{controllerName} played {playableCard.cardData.cardName}");
 
-                // Allow the player to respond to the AI's action
-                BattleManager.Instance.player.CanRespond = true;
-                yield return new WaitForSeconds(0.5f);  // Wait for the player's response
-                BattleManager.Instance.player.CanRespond = false;
+                // Start a proper response window for the player
+                BattleManager.Instance.StartResponseWindow(BattleManager.Instance.player);
+
+                // Wait until the response window is over
+                yield return new WaitUntil(() => BattleManager.Instance.currentResponder == null);
+
+                // Small breather before next action
+                yield return new WaitForSeconds(0.5f);
             }
             else
             {
-                // No playable cards, end turn after a pause
+                // No playable cards, end turn after a small delay
                 yield return new WaitForSeconds(1f);
                 IsTurnDone = true;
             }
         }
     }
+
+    private void OnEnable()
+    {
+        BaseController.OnResponseWindow += HandleResponseWindow;
+    }
+
+    private void OnDisable()
+    {
+        BaseController.OnResponseWindow -= HandleResponseWindow;
+    }
+
+    private IEnumerator HandleResponseWindow(BaseController actor, CardRuntime playedCard)
+    {
+        if (actor == this) yield break; // AI does not respond to itself
+
+        // Check AI hand for playable cards
+        CardRuntime playable = null;
+        foreach (var c in hand)
+        {
+            if (hero.CanAfford(c.cardData))
+            {
+                playable = c;
+                break;
+            }
+        }
+
+        if (playable != null)
+        {
+            yield return new WaitForSeconds(0.5f); // small reaction delay
+            TryPlayCard(playable);
+        }
+    }
+
 }
 
 

@@ -97,14 +97,6 @@ public class CardInGame : MonoBehaviour, IPointerClickHandler
         if (owner.hand.Contains(runtimeCard))
         {
             bool played = owner.TryPlayCard(runtimeCard);
-            if (played)
-            {
-                Debug.Log($"Played {runtimeCard.cardData.cardName}");
-            }
-            else
-            {
-                Debug.Log($"{runtimeCard.cardData.cardName} could not be played!");
-            }
         }
         else
         {
