@@ -22,6 +22,8 @@ public class BattleUIManager : MonoBehaviour
     [Header("Field Slots")]
     public Transform[] playerFieldSlots = new Transform[5];
     public Transform[] opponentFieldSlots = new Transform[5];
+    public Transform[] playerActiveSlots = new Transform[5];
+    public Transform[] opponentActiveSlots = new Transform[5];
 
     [Header("Turn Panels")]
     public Image playerTurnPanel;
@@ -110,6 +112,7 @@ public class BattleUIManager : MonoBehaviour
         foreach (var card in controller.hand)
             SpawnCardUI(controller, card, controller.handParent);
     }
+
     public void UpdateTurnHighlight(BaseController currentTurn)
     {
         // Reset both first
@@ -148,6 +151,20 @@ public class BattleUIManager : MonoBehaviour
                 img.color = Color.red; // occupied
         }
     }
+    public void UpdateActiveSlotsUI()
+    {
+        for (int i = 0; i < BattleManager.Instance.turnPlayer.activeSlots.Length; i++)
+        {
+            var card = BattleManager.Instance.turnPlayer.activeSlots[i];
+            if (card != null && card.cardUI != null)
+            {
+                // Update the UI representation of the active slot with the card
+                Transform slotTransform = GetAvailableFieldSlots(BattleManager.Instance.turnPlayer)[i];
+                card.cardUI.transform.SetParent(slotTransform, false);
+                card.cardUI.transform.localPosition = Vector3.zero;
+            }
+        }
+    }
 
 
     public void OnSlotClicked(int index)
@@ -163,10 +180,13 @@ public class BattleUIManager : MonoBehaviour
             slot.GetComponent<Image>().color = Color.white;
     }
 
-
     public Transform[] GetAvailableFieldSlots(BaseController owner)
     {
         return owner.isPlayer ? playerFieldSlots : opponentFieldSlots;
+    }
+    public Transform[] GetAvailableActiveSlots(BaseController owner)
+    {
+        return owner.isPlayer ? playerActiveSlots : opponentActiveSlots;
     }
 
     public void SetEndTurnButtonActive(bool active)
@@ -174,12 +194,23 @@ public class BattleUIManager : MonoBehaviour
         if (endTurnButton != null)
             endTurnButton.SetActive(active);
     }
-    public void SetEndTurnButtonLabel(string text)
+    public void ShowConfirmAttackButton()
     {
-        var tmp = endTurnButton.GetComponentInChildren<TMPro.TMP_Text>();
-        if (tmp != null)
-            tmp.text = text;
+        SetEndTurnButtonLabel("Confirm Attack");
+        SetEndTurnButtonActive(true);
+    }
+    public void HideConfirmAttackButton()
+    {
+        SetEndTurnButtonActive(false);  // Hides the button after confirming the attack
     }
 
-
+    // Update the button text and functionality
+    public void SetEndTurnButtonLabel(string text)
+    {
+        var tmp = endTurnButton.GetComponentInChildren<TMP_Text>();
+        if (tmp != null)
+        {
+            tmp.text = text;
+        }
+    }
 }

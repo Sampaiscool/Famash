@@ -65,6 +65,7 @@
     <Compile Include="Assets\Resources\Scripts\Enums\ResourceType.cs" />
     <Compile Include="Assets\Resources\Scripts\Managers\GameManager.cs" />
     <Compile Include="Assets\Resources\Scripts\PublicClasses\HeroRuntime.cs" />
+    <Compile Include="Assets\Resources\Scripts\Enums\CardLocation.cs" />
     <Compile Include="Assets\Resources\Scripts\Managers\MenuSceneUiManager.cs" />
     <Compile Include="Assets\Resources\Scripts\Managers\DeckManager.cs" />
     <Compile Include="Assets\Resources\Scripts\Managers\Combat\OpponentController.cs" />
@@ -84,11 +85,13 @@
     <Compile Include="Assets\Resources\Scripts\Data\DeckData.cs" />
     <Compile Include="Assets\Resources\Scripts\Managers\Combat\BattleManager.cs" />
     <Compile Include="Assets\Resources\Scripts\PublicClasses\Card\CardInGame.cs" />
+    <Compile Include="Assets\Resources\Scripts\PublicClasses\Card\CardActionPanel.cs" />
     <Compile Include="Assets\Resources\Scripts\Enums\CardType.cs" />
     <Compile Include="Assets\Resources\Scripts\PublicClasses\Card\CardRuntime.cs" />
     <Compile Include="Assets\Resources\Scripts\Ui\CreateDeckUI.cs" />
     <Compile Include="Assets\Resources\Scripts\Data\RegionSO.cs" />
     <Compile Include="Assets\Resources\Scripts\Managers\MenuManager.cs" />
+    <Compile Include="Assets\Resources\Scripts\Enums\KeywordType.cs" />
     <Compile Include="Assets\Resources\Scripts\Managers\Combat\BattleUIManager.cs" />
     <Compile Include="Assets\Resources\Scripts\PublicClasses\Card\CardSelectEntry.cs" />
   </ItemGroup>

@@ -1,3 +1,4 @@
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -8,7 +9,6 @@ public class CardInGame : MonoBehaviour, IPointerClickHandler
     [Header("Common Elements")]
     public Image artwork;
     public TMP_Text costText;
-    public Button cardButton;
 
     private BaseController owner;
 
@@ -29,11 +29,14 @@ public class CardInGame : MonoBehaviour, IPointerClickHandler
     public TMP_Text heroDamageText;
     public TMP_Text heroLevelText;
 
-    [Header("Detail Popup")]
-    public GameObject cardDetailPrefab;
+    [Header("Detail Popup / Action Panel Prefabs")]
+    public GameObject cardDetailPrefab;       // traditional middle-click info
+    public GameObject cardActionPanelPrefab;  // scrollable action panel
 
     private CardRuntime runtimeCard;
     private Canvas uiCanvas;
+
+    private GameObject currentActionPanel;
 
     public void Bind(CardRuntime card, BaseController ownerController)
     {
@@ -45,13 +48,11 @@ public class CardInGame : MonoBehaviour, IPointerClickHandler
         artwork.sprite = data.artwork;
         costText.text = data.cost.ToString();
 
-        // Hide all type panels first
         unitPanel.SetActive(false);
         spellPanel.SetActive(false);
         fieldPanel.SetActive(false);
         heroPanel.SetActive(false);
 
-        // Then show and fill the one we need
         switch (data.cardType)
         {
             case CardType.Unit:
@@ -59,30 +60,19 @@ public class CardInGame : MonoBehaviour, IPointerClickHandler
                 attackText.text = card.currentAttack.ToString();
                 healthText.text = card.currentHealth.ToString();
                 break;
-
             case CardType.Spell:
-                spellPanel.SetActive(true);
-                break;
-
-            case CardType.Field:
-                fieldPanel.SetActive(true);
-                break;
-
             case CardType.Secret:
                 spellPanel.SetActive(true);
                 break;
-
+            case CardType.Field:
+                fieldPanel.SetActive(true);
+                break;
             case CardType.Hero:
                 heroPanel.SetActive(true);
                 heroHealthText.text = card.currentHealth.ToString();
                 heroLevelText.text = "1";
                 break;
         }
-
-        // Button behavior
-        cardButton.onClick.RemoveAllListeners();
-        cardButton.onClick.AddListener(OnLeftClick);
-
     }
 
     private void OnLeftClick()
@@ -93,37 +83,97 @@ public class CardInGame : MonoBehaviour, IPointerClickHandler
             return;
         }
 
-        // Only allow playing cards that are in the player's hand
+        // Playing from hand
         if (owner.hand.Contains(runtimeCard))
         {
-            bool played = owner.TryPlayCard(runtimeCard);
+            owner.TryPlayCard(runtimeCard);
+            return;
         }
-        else
+
+        // Responding with a card on the field
+        bool isFieldCard = owner.fieldSlots.Any(c => c == runtimeCard);
+
+        if (isFieldCard)
         {
-            // Could be logic for attacking, blocking, etc.
-            Debug.Log($"Clicked {runtimeCard.cardData.cardName} (not in hand)");
+            if (currentActionPanel != null)
+            {
+                Destroy(currentActionPanel); // despawn if already active
+                currentActionPanel = null;
+                return;
+            }
+
+            ShowActionPanel();
+            return;
         }
+
+        Debug.Log($"Clicked {runtimeCard.cardData.cardName} (not in hand)");
     }
+
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (eventData.button == PointerEventData.InputButton.Right)
+        if (eventData.button == PointerEventData.InputButton.Left)
         {
-            ShowDetails();
+            OnLeftClick();
+        }
+        else if (eventData.button == PointerEventData.InputButton.Middle)
+        {
+            ShowCardInfo();
         }
     }
-
-    private void ShowDetails()
+    private void ShowActionPanel()
     {
-        if (cardDetailPrefab == null) return;
+        if (runtimeCard == null || cardActionPanelPrefab == null) return;
 
-        var detail = Instantiate(cardDetailPrefab, transform.position, Quaternion.identity);
-        uiCanvas ??= MenuManager.Instance.FindUiCanvas();
-        detail.transform.SetParent(uiCanvas.transform, false);
+        // Remove existing panel if any
+        if (currentActionPanel != null)
+            Destroy(currentActionPanel);
 
-        var detailUI = detail.GetComponent<CardDetailUI>();
-        detailUI.Bind(runtimeCard);
+        // Ensure canvas
+        uiCanvas ??= FindFirstObjectByType<Canvas>();
+        if (uiCanvas == null) return;
+
+        // Spawn panel as sibling of the card so localPosition works
+        currentActionPanel = Instantiate(cardActionPanelPrefab, transform.parent);
+
+        RectTransform cardRect = GetComponent<RectTransform>();
+        RectTransform panelRect = currentActionPanel.GetComponent<RectTransform>();
+
+        // Place the panel on top of the card
+        float yOffset = cardRect.rect.height / 2 + panelRect.rect.height / 2 + 5f; // 5f is a small margin
+        panelRect.localPosition = cardRect.localPosition + new Vector3(0f, yOffset, 0f);
+
+        // Make sure the scale is correct
+        panelRect.localScale = Vector3.one;
+
+        // Setup panel with the current card
+        CardActionPanel panel = currentActionPanel.GetComponent<CardActionPanel>();
+        panel?.Setup(runtimeCard);
     }
+
+
+
+    private void ShowCardInfo()
+    {
+        if (runtimeCard == null || cardDetailPrefab == null)
+            return;
+
+        var canvas = FindFirstObjectByType<Canvas>();
+        if (canvas == null)
+        {
+            Debug.LogWarning("No Canvas found for card info popup!");
+            return;
+        }
+
+        var popupObj = Instantiate(cardDetailPrefab, canvas.transform);
+        var popup = popupObj.GetComponent<CardInfoPopup>();
+
+        // If you’re using CardDetailUI instead, you can swap this:
+        // var popup = popupObj.GetComponent<CardDetailUI>();
+
+        popup.Setup(runtimeCard.cardData);
+    }
+
 
     public void Refresh()
     {

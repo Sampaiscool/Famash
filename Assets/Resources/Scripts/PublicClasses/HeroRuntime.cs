@@ -20,6 +20,24 @@ public class HeroRuntime
         maxMana = START_MANA;
     }
 
+    public void StartTurn()
+    {
+        // Just refill — no bonus mana here
+        currentMana = maxMana;
+    }
+    public void TakeDamage(int amount)
+    {
+        currentHealth = Mathf.Max(0, currentHealth - amount);
+        BattleUIManager.Instance.UpdateHeroUI();
+    }
+
+    public void EndTurnGainMana()
+    {
+        // Like Runeterra — after each player’s turn, both heroes grow
+        maxMana = Mathf.Min(MAX_MANA_CAP, maxMana + 1);
+        currentMana = maxMana;
+    }
+
     public void GainMana(int amount)
     {
         currentMana = Mathf.Min(maxMana, currentMana + amount);
@@ -33,11 +51,5 @@ public class HeroRuntime
     public bool CanAfford(CardSO card)
     {
         return currentMana >= card.cost;
-    }
-
-    public void StartTurn()
-    {
-        maxMana = Mathf.Min(MAX_MANA_CAP, maxMana + 1);
-        currentMana = maxMana;
     }
 }

@@ -8479,7 +8479,7 @@ MonoBehaviour:
   m_CellSize: {x: 250, y: 300}
   m_Spacing: {x: 10, y: 10}
   m_Constraint: 1
-  m_ConstraintCount: 4
+  m_ConstraintCount: 3
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

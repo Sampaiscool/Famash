@@ -15,20 +15,24 @@ public class CardSO : ScriptableObject
 
     [Header("Gameplay")]
     public int cost;
-    public CardType cardType; // Unit, Spell, Field, Secret, Hero
+    public CardType cardType;
     public int attack;
     public int health;
-    public bool isHeroCard; // Champions in your case
+    public bool isHeroCard;
 
     [Header("Region Ownership")]
-    public RegionSO region; // New system
+    public RegionSO region;
 
-    [Header("Triggers")]
-    public List<CardEffectTrigger> triggers;
+    [Header("Keywords")]
+    public List<KeywordType> keywords = new(); // simple list of flags
+
+    [Header("Effect Triggers")]
+    public List<CardTriggerGroup> triggerGroups = new(); // multiple triggers
 }
 
-public class CardEffectTrigger
+[System.Serializable]
+public class CardTriggerGroup
 {
     public CardTrigger trigger;
-    public EffectSOBase[] effects;
+    public List<EffectSOBase> effects;
 }

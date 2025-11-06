@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
 
 public abstract class BaseController : MonoBehaviour
@@ -12,7 +13,9 @@ public abstract class BaseController : MonoBehaviour
     public DeckRuntime deckRuntime;
     public List<CardRuntime> hand = new();
     public CardRuntime[] fieldSlots = new CardRuntime[5]; // 5 slots on the field
+    public CardRuntime[] activeSlots = new CardRuntime[5];
     public List<CardRuntime> graveyard = new();
+    public List<CardRuntime> preparedAttacks = new List<CardRuntime>();
 
     public bool IsTurnDone { get; set; }
     public bool HasPerformedAction { get; set; }  // any card played or attack
@@ -79,6 +82,12 @@ public abstract class BaseController : MonoBehaviour
         if (card == null || !hero.CanAfford(card.cardData))
             return false;
 
+        // Update the card's location to Hand -> Field when played
+        if (card.location == CardLocation.Hand)
+        {
+            card.location = CardLocation.Field;  // It’s moving to the field
+        }
+
         // For player units: wait for placement instead of instant play
         if (isPlayer && card.cardData.cardType == CardType.Unit)
         {
@@ -125,6 +134,81 @@ public abstract class BaseController : MonoBehaviour
 
         return true;
     }
+    public void PrepareAttack(CardRuntime card)
+    {
+        if (card == null) return;
+
+        int fromIndex = card.slotIndex;
+
+        // Only move if the matching active slot is available
+        if (fromIndex >= 0 && fromIndex < activeSlots.Length)
+        {
+            MoveCardToActiveSlot(card, fromIndex);
+            preparedAttacks.Add(card);
+        }
+        else
+        {
+            Debug.LogWarning($"{card.cardData.cardName} could not find a matching active slot.");
+        }
+
+        if (preparedAttacks.Count > 0)
+            BattleUIManager.Instance.ShowConfirmAttackButton();
+    }
+
+
+    public void ConfirmAllAttacks()
+    {
+        foreach (var card in preparedAttacks)
+        {
+            // Attack logic, assuming it’s targeting the opponent’s cards or hero
+            if (card != null && card.isInPlay)
+            {
+                // Assuming you have a target for each attack, for now, we will assume each attack targets a random opponent card
+                CardRuntime target = GetOppositeOpponentCard(card.slotIndex);
+                if (target != null)
+                {
+                    TryAttack(card, target);
+                }
+                else
+                {
+                    // Target opponent hero if no valid target
+                    TryAttack(card, null);
+                }
+            }
+        }
+
+        // Reset prepared attacks after confirming
+        preparedAttacks.Clear();
+    }
+
+    public CardRuntime GetOppositeOpponentCard(int attackingSlotIndex)
+    {
+        // Check if the attacking slot index is valid
+        if (attackingSlotIndex < 0 || attackingSlotIndex >= fieldSlots.Length)
+        {
+            Debug.LogWarning("Invalid slot index for attack.");
+            return null;
+        }
+
+        // Assuming opponent's field is mirrored to player's field
+        // We look at the corresponding index in the opponent's field
+        CardRuntime target = BattleManager.Instance.player.fieldSlots[attackingSlotIndex];
+
+        // If there's a card in the opponent's corresponding field slot, return it
+        if (target != null)
+        {
+            return target;
+        }
+
+        // If there’s no card in that slot, determine whether to attack the opponent's hero
+        // You could add conditions here to decide whether to attack the hero or another slot
+        Debug.Log($"{controllerName} attack target not found in slot {attackingSlotIndex}. Attacking opponent's hero instead.");
+
+        // Return null or decide if the hero should be attacked directly
+        return null; // You may replace this with the opponent's hero, if you have a reference to it.
+    }
+
+
 
     // Attack method - only turn player can attack
     public virtual bool TryAttack(CardRuntime attacker, CardRuntime target)
@@ -135,26 +219,63 @@ public abstract class BaseController : MonoBehaviour
             return false;
         }
 
-        if (attacker == null || target == null)
+        if (attacker == null)
         {
-            Debug.LogWarning("Invalid attacker or target");
+            Debug.LogWarning("Invalid attacker");
             return false;
         }
 
-        // Deal damage
-        target.TakeDamage(attacker.currentAttack);
-        attacker.isExhausted = true;
-        HasAttack = false;
-        HasPerformedAction = true;
+        if (target != null)
+        {
+            // Deal damage
+            target.TakeDamage(attacker.currentAttack);
+            
+            HasPerformedAction = true;
 
-        CanRespond = false; // after attack, opponent may respond in your system
+            CanRespond = false; // after attack, opponent may respond in your system
 
-        BattleUIManager.Instance.UpdateHeroUI();
+            BattleUIManager.Instance.UpdateHeroUI();
 
-        Debug.Log($"{controllerName}'s {attacker.cardData.cardName} attacked {target.cardData.cardName}");
+            Debug.Log($"{controllerName}'s {attacker.cardData.cardName} attacked {target.cardData.cardName}");
 
-        return true;
+            return true;
+        }
+        else
+        {
+            int attackerDamage = attacker.currentAttack;
+            BattleManager.Instance.otherPlayer.hero.TakeDamage(attackerDamage);
+
+            Debug.Log($"{controllerName}'s {attacker.cardData.cardName} attacked the opponent's hero directly!");
+            return true;
+        }
     }
+    public void ResolvePreparedAttacks(BaseController defender)
+    {
+        for (int i = 0; i < activeSlots.Length; i++)
+        {
+            CardRuntime attacker = activeSlots[i];
+            if (attacker == null) continue;
+
+            CardRuntime blocker = defender.activeSlots[i]; // same index blocks
+            if (blocker != null)
+            {
+                BattleManager.Instance.turnPlayer.TryAttack(attacker, blocker);
+                BattleManager.Instance.otherPlayer.TryAttack(blocker, attacker); // optional counter-hit
+            }
+            else
+            {
+                TryAttack(attacker, null); // direct hit
+            }
+
+            // Return cards to their field slots afterward if desired
+            MoveCardBackToField(attacker, i);
+            defender.MoveCardBackToField(blocker, i);
+            BattleManager.Instance.turnPlayer.HasAttack = false;
+        }
+
+        preparedAttacks.Clear();
+    }
+
     private void PrepareUnitPlacement(CardRuntime card)
     {
         if (!isPlayer)
@@ -184,6 +305,10 @@ public abstract class BaseController : MonoBehaviour
             hand.Remove(card);
             PlaceUnitInSlot(card, slotIndex);
 
+            // Update card location and slot index
+            card.location = CardLocation.Field;
+            card.slotIndex = slotIndex;
+
             HasPerformedAction = true;
             CanRespond = false;
 
@@ -197,10 +322,15 @@ public abstract class BaseController : MonoBehaviour
         };
     }
 
+
     public void PlaceUnitInSlot(CardRuntime card, int slotIndex)
     {
         fieldSlots[slotIndex] = card;
         card.isInPlay = true;
+
+        // Update card’s location and slot index
+        card.location = CardLocation.Field;
+        card.slotIndex = slotIndex;
 
         // Move the UI to the slot
         Transform slotTransform = BattleUIManager.Instance.GetAvailableFieldSlots(this)[slotIndex];
@@ -208,6 +338,111 @@ public abstract class BaseController : MonoBehaviour
         card.cardUI.transform.localPosition = Vector3.zero;
 
         OnResponseWindow.ToString();
+    }
+    public void MoveCardToActiveSlot(CardRuntime card, int slotIndex)
+    {
+        if (card == null)
+        {
+            Debug.LogError("MoveCardToActiveSlot: card is null");
+            return;
+        }
+
+        if (slotIndex < 0 || slotIndex >= activeSlots.Length)
+        {
+            Debug.LogError("Invalid slot index for active slot.");
+            return;
+        }
+
+        // Save old field index so RemoveCardFromFieldSlot can clear it
+        int oldFieldIndex = card.slotIndex;
+
+        // Remove from field array if it was on the field
+        RemoveCardFromFieldSlot(card);
+
+        // Put into active slots array
+        activeSlots[slotIndex] = card;
+
+        // Update card’s location and slot index
+        card.location = CardLocation.Active;
+        card.slotIndex = slotIndex;
+
+        // Move the UI to the active slot transforms (use dedicated active slot parents)
+        var activeSlotTransforms = BattleUIManager.Instance.GetAvailableActiveSlots(this);
+        if (activeSlotTransforms == null || slotIndex >= activeSlotTransforms.Length)
+        {
+            Debug.LogError("No active slot transforms available or index out of range.");
+        }
+        else if (card.cardUI != null)
+        {
+            Transform slotTransform = activeSlotTransforms[slotIndex];
+            card.cardUI.transform.SetParent(slotTransform, false);
+            card.cardUI.transform.localPosition = Vector3.zero;
+        }
+        else
+        {
+            Debug.LogWarning("MoveCardToActiveSlot: card.cardUI is null, cannot move visual.");
+        }
+
+        // Update hero / field UI state if needed
+        BattleUIManager.Instance.UpdateHeroUI();
+    }
+
+    private void RemoveCardFromFieldSlot(CardRuntime card)
+    {
+        if (card == null) return;
+
+        // If card.slotIndex was valid and the fieldSlots holds the card, clear it
+        int idx = card.slotIndex;
+        if (idx >= 0 && idx < fieldSlots.Length && fieldSlots[idx] == card)
+        {
+            fieldSlots[idx] = null;
+            Debug.Log($"{card.cardData.cardName} removed from field slot {idx}");
+        }
+
+        // Clear any lingering field flags (don't clear slotIndex — caller will set new one)
+        // card.slotIndex = -1; // caller updates slotIndex when placing into active
+    }
+    public void MoveCardBackToField(CardRuntime card, int fromActiveIndex)
+    {
+        if (card == null)
+            return;
+
+        // Find the first empty field slot
+        int fieldIndex = fromActiveIndex;
+
+        if (fieldIndex == -1)
+        {
+            Debug.LogWarning("No available field slot to return card to!");
+            return;
+        }
+
+        // Clear from active slot array
+        if (fromActiveIndex >= 0 && fromActiveIndex < activeSlots.Length && activeSlots[fromActiveIndex] == card)
+            activeSlots[fromActiveIndex] = null;
+
+        // Assign to field slot
+        fieldSlots[fieldIndex] = card;
+
+        // Update data
+        card.location = CardLocation.Field;
+        card.slotIndex = fieldIndex;
+
+        // Move the visual back to the field UI
+        var fieldSlotTransforms = BattleUIManager.Instance.GetAvailableFieldSlots(this);
+        if (fieldSlotTransforms == null || fieldIndex >= fieldSlotTransforms.Length)
+        {
+            Debug.LogError("No field slot transforms available or index out of range.");
+            return;
+        }
+
+        if (card.cardUI != null)
+        {
+            Transform slotTransform = fieldSlotTransforms[fieldIndex];
+            card.cardUI.transform.SetParent(slotTransform, false);
+            card.cardUI.transform.localPosition = Vector3.zero;
+        }
+
+        Debug.Log($"{card.cardData.cardName} returned to field slot {fieldIndex}");
     }
 
 
