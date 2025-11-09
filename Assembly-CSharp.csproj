@@ -64,6 +64,7 @@
     <Compile Include="Assets\Resources\Scripts\PublicClasses\DeckRuntime.cs" />
     <Compile Include="Assets\Resources\Scripts\Enums\ResourceType.cs" />
     <Compile Include="Assets\Resources\Scripts\Managers\GameManager.cs" />
+    <Compile Include="Assets\Resources\Scripts\Ui\GraveyardPanel.cs" />
     <Compile Include="Assets\Resources\Scripts\PublicClasses\HeroRuntime.cs" />
     <Compile Include="Assets\Resources\Scripts\Enums\CardLocation.cs" />
     <Compile Include="Assets\Resources\Scripts\Managers\MenuSceneUiManager.cs" />

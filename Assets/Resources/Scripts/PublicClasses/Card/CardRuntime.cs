@@ -17,6 +17,7 @@ public class CardRuntime
 
     [System.NonSerialized] public GameObject cardUI;
 
+
     // New properties to track card's location and slot
     public CardLocation location = CardLocation.Hand;  // Default location is hand
     public int slotIndex = -1;  // -1 indicates no slot, for hand or graveyard
@@ -35,17 +36,19 @@ public class CardRuntime
         foreach (var group in source.triggerGroups)
             activeEffects.AddRange(group.effects);
     }
-
     public bool HasKeyword(KeywordType type) => activeKeywords.Contains(type);
 
     public void TakeDamage(int amount)
     {
         currentHealth -= amount;
+
         if (currentHealth <= 0)
         {
-            currentHealth = 0;
-            isDead = true;
+            Debug.Log($"{cardData.cardName} has died!");
+            //BaseController owner = BattleManager.Instance.GetControllerOfCard(this);
+            //owner?.MoveToGraveyard(this);
         }
+        
     }
 
     public void Trigger(CardTrigger trigger)
@@ -55,8 +58,12 @@ public class CardRuntime
             if (group.trigger == trigger)
             {
                 foreach (var e in group.effects)
-                    e?.OnPlay(this); // you’ll rename to proper event later
+                    e?.OnPlay(this);
             }
         }
+    }
+    public void UpdateUiStats()
+    {
+
     }
 }

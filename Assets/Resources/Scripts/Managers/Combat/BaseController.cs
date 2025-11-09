@@ -15,7 +15,11 @@ public abstract class BaseController : MonoBehaviour
     public CardRuntime[] fieldSlots = new CardRuntime[5]; // 5 slots on the field
     public CardRuntime[] activeSlots = new CardRuntime[5];
     public List<CardRuntime> graveyard = new();
+
     public List<CardRuntime> preparedAttacks = new List<CardRuntime>();
+    public List<CardRuntime> preparedBlocks = new List<CardRuntime>();
+
+
 
     public bool IsTurnDone { get; set; }
     public bool HasPerformedAction { get; set; }  // any card played or attack
@@ -227,54 +231,90 @@ public abstract class BaseController : MonoBehaviour
 
         if (target != null)
         {
-            // Deal damage
+            // Simultaneous damage exchange
             target.TakeDamage(attacker.currentAttack);
-            
-            HasPerformedAction = true;
-
-            CanRespond = false; // after attack, opponent may respond in your system
-
-            BattleUIManager.Instance.UpdateHeroUI();
+            attacker.TakeDamage(target.currentAttack);
 
             Debug.Log($"{controllerName}'s {attacker.cardData.cardName} attacked {target.cardData.cardName}");
+
+            // Remove destroyed cards
+            if (attacker.currentHealth <= 0)
+            {
+                Debug.Log($"{attacker.cardData.cardName} was destroyed!");
+                MoveToGraveyard(attacker);
+            }
+            if (target.currentHealth <= 0)
+            {
+                Debug.Log($"{target.cardData.cardName} was destroyed!");
+                BattleManager.Instance.otherPlayer.MoveToGraveyard(target);
+            }
+
+            HasPerformedAction = true;
+            BattleUIManager.Instance.UpdateHeroUI();
 
             return true;
         }
         else
         {
+            // Direct hit to enemy hero
             int attackerDamage = attacker.currentAttack;
             BattleManager.Instance.otherPlayer.hero.TakeDamage(attackerDamage);
-
             Debug.Log($"{controllerName}'s {attacker.cardData.cardName} attacked the opponent's hero directly!");
             return true;
         }
     }
+
     public void ResolvePreparedAttacks(BaseController defender)
     {
+        if (preparedAttacks.Count == 0)
+            return;
+
+        Debug.Log($"{controllerName} begins resolving attacks!");
+
         for (int i = 0; i < activeSlots.Length; i++)
         {
             CardRuntime attacker = activeSlots[i];
-            if (attacker == null) continue;
+            if (attacker == null || !preparedAttacks.Contains(attacker))
+                continue;
 
-            CardRuntime blocker = defender.activeSlots[i]; // same index blocks
+            CardRuntime blocker = defender.activeSlots[i];
+
             if (blocker != null)
             {
-                BattleManager.Instance.turnPlayer.TryAttack(attacker, blocker);
-                BattleManager.Instance.otherPlayer.TryAttack(blocker, attacker); // optional counter-hit
+                // Clash between attacker and blocker
+                TryAttack(attacker, blocker);
             }
             else
             {
-                TryAttack(attacker, null); // direct hit
+                // No blocker — direct hit
+                TryAttack(attacker, null);
             }
 
-            // Return cards to their field slots afterward if desired
-            MoveCardBackToField(attacker, i);
-            defender.MoveCardBackToField(blocker, i);
-            BattleManager.Instance.turnPlayer.HasAttack = false;
+            // Wait a short moment for clarity if you animate later
+            // (You can add: yield return new WaitForSeconds(0.3f); if coroutine-based)
+        }
+
+        // Clean-up phase — return survivors to their field slots
+        for (int i = 0; i < activeSlots.Length; i++)
+        {
+            CardRuntime attacker = activeSlots[i];
+            if (attacker != null && attacker.currentHealth > 0)
+                MoveCardBackToField(attacker, i);
+        }
+
+        for (int i = 0; i < defender.activeSlots.Length; i++)
+        {
+            CardRuntime blocker = defender.activeSlots[i];
+            if (blocker != null && blocker.currentHealth > 0)
+                defender.MoveCardBackToField(blocker, i);
         }
 
         preparedAttacks.Clear();
+        HasAttack = false;
+
+        Debug.Log($"{controllerName} finished resolving attacks.");
     }
+
 
     private void PrepareUnitPlacement(CardRuntime card)
     {
@@ -446,18 +486,46 @@ public abstract class BaseController : MonoBehaviour
     }
 
 
-    //public virtual void MoveToGraveyard(CardRuntime card)
-    //{
-    //    if (field.Contains(card))
-    //        field.Remove(card);
-    //    else if (hand.Contains(card))
-    //        hand.Remove(card);
+    public virtual void MoveToGraveyard(CardRuntime card)
+    {
+        if (card == null) return;
 
-    //    graveyard.Add(card);
+        // Remove from any zone that holds it
+        for (int i = 0; i < fieldSlots.Length; i++)
+        {
+            if (fieldSlots[i] == card)
+            {
+                fieldSlots[i] = null;
+                break;
+            }
+        }
 
-    //    BattleUIManager.Instance.RefreshHandUI(this);
-    //    Debug.Log($"{controllerName} moved {card.cardData.cardName} to graveyard");
-    //}
+        for (int i = 0; i < activeSlots.Length; i++)
+        {
+            if (activeSlots[i] == card)
+            {
+                activeSlots[i] = null;
+                break;
+            }
+        }
+
+        if (hand.Contains(card))
+            hand.Remove(card);
+
+        // Add to graveyard
+        graveyard.Add(card);
+        card.isInPlay = false;
+        card.location = CardLocation.Graveyard;
+
+        // Optionally hide or disable the card's visual on board
+        if (card.cardUI != null)
+        {
+            card.cardUI.gameObject.SetActive(false);
+        }
+
+        BattleUIManager.Instance.UpdateHeroUI();
+        Debug.Log($"{controllerName} moved {card.cardData.cardName} to graveyard");
+    }
 
     private System.Collections.IEnumerator DrawCardsRoutine()
     {

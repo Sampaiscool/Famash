@@ -41,6 +41,10 @@ public class BattleUIManager : MonoBehaviour
     [Header("Prefabs")]
     public GameObject cardPrefab;
 
+    [Header("Graveyard UI")]
+    public GameObject graveyardPanelPrefab;
+
+
     private PlayerController player;
     private OpponentController opponent;
 
@@ -213,4 +217,31 @@ public class BattleUIManager : MonoBehaviour
             tmp.text = text;
         }
     }
+    public void OnGraveyardButtonClicked(BaseController owner)
+    {
+        // Try to find an existing panel
+        GraveyardPanel existing = FindFirstObjectByType<GraveyardPanel>();
+
+        if (existing != null)
+        {
+            // If it exists, destroy it (close)
+            Destroy(existing.gameObject);
+        }
+        else
+        {
+            // Otherwise, open a new one
+            Canvas canvas = FindFirstObjectByType<Canvas>();
+            if (canvas == null)
+            {
+                Debug.LogWarning("No Canvas found for GraveyardPanel!");
+                return;
+            }
+
+            GraveyardPanel panel = Instantiate(graveyardPanelPrefab, canvas.transform)
+                .GetComponent<GraveyardPanel>();
+
+            panel.Setup(owner);
+        }
+    }
+
 }

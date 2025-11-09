@@ -9,19 +9,18 @@ public class OpponentController : BaseController
         HasAttack = true;
         HasPerformedAction = false;
 
-        // Refresh and gain mana for the AI at the start of their turn
-        base.StartTurn(drawCard);  // Call base StartTurn() to refresh mana
+        base.StartTurn(drawCard);  // refresh mana, etc.
 
         StartCoroutine(AIPlayLoop());
     }
 
     private IEnumerator AIPlayLoop()
     {
+        // Play phase
         while (!IsTurnDone)
         {
             yield return new WaitForSeconds(1f);
 
-            // Try to find a playable card
             CardRuntime playableCard = null;
             foreach (var c in hand)
             {
@@ -34,25 +33,71 @@ public class OpponentController : BaseController
 
             if (playableCard != null)
             {
-                // AI plays the card
                 TryPlayCard(playableCard);
                 Debug.Log($"{controllerName} played {playableCard.cardData.cardName}");
 
-                // Start a proper response window for the player
+                // Player gets response window
                 BattleManager.Instance.StartResponseWindow(BattleManager.Instance.player);
 
-                // Wait until the response window is over
+                // Wait for responses
                 yield return new WaitUntil(() => BattleManager.Instance.currentResponder == null);
 
-                // Small breather before next action
                 yield return new WaitForSeconds(0.5f);
             }
             else
             {
-                // No playable cards, end turn after a small delay
-                yield return new WaitForSeconds(1f);
-                IsTurnDone = true;
+                // No more plays, continue to attack phase
+                yield return new WaitForSeconds(0.75f);
+                break;
             }
+        }
+
+        // Attack phase (if any attackers available)
+        yield return StartCoroutine(AIAttackPhase());
+
+        // End turn after a short delay
+        yield return new WaitForSeconds(1f);
+        IsTurnDone = true;
+    }
+
+    private IEnumerator AIAttackPhase()
+    {
+        HasAttack = true;
+
+        Debug.Log($"{controllerName} is preparing attacks...");
+
+        bool preparedAny = false;
+
+        // Go through all field slots and prepare attack for each unit
+        for (int i = 0; i < fieldSlots.Length; i++)
+        {
+            CardRuntime unit = fieldSlots[i];
+            if (unit != null && HasAttack == true)
+            {
+                MoveCardToActiveSlot(unit, i);
+                BattleManager.Instance.PrepareAttack(unit);
+                preparedAny = true;
+                yield return new WaitForSeconds(0.25f); // slight delay for pacing
+            }
+        }
+
+        if (preparedAny)
+        {
+            yield return new WaitForSeconds(0.75f);
+            Debug.Log($"{controllerName} confirms attacks!");
+
+            // Start the player’s response window before attacks resolve
+            BattleManager.Instance.StartResponseWindow(BattleManager.Instance.player);
+
+            // Wait until player finishes responding
+            yield return new WaitUntil(() => BattleManager.Instance.currentResponder == null);
+
+            // Confirm and resolve the attacks
+            BattleManager.Instance.ConfirmAttack();
+        }
+        else
+        {
+            Debug.Log($"{controllerName} has no attackers.");
         }
     }
 
@@ -68,9 +113,8 @@ public class OpponentController : BaseController
 
     private IEnumerator HandleResponseWindow(BaseController actor, CardRuntime playedCard)
     {
-        if (actor == this) yield break; // AI does not respond to itself
+        if (actor == this) yield break; // don't respond to own plays
 
-        // Check AI hand for playable cards
         CardRuntime playable = null;
         foreach (var c in hand)
         {
@@ -83,11 +127,8 @@ public class OpponentController : BaseController
 
         if (playable != null)
         {
-            yield return new WaitForSeconds(0.5f); // small reaction delay
+            yield return new WaitForSeconds(0.5f);
             TryPlayCard(playable);
         }
     }
-
 }
-
-

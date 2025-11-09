@@ -29,8 +29,6 @@ public class CardActionPanel : MonoBehaviour
         bool isResponsePhase = BattleManager.Instance.currentResponder != null &&
                        BattleManager.Instance.currentResponder == BattleManager.Instance.otherPlayer;
 
-        Debug.Log($"Player has attacK? {canAttack}");
-
         // Allow preparing attack only if the card is in play and it's the turn player's turn
         if (card.isInPlay && isTurnPlayer && canAttack)
             AddAction("Prepare Attack", OnPrepareAttack);
@@ -131,52 +129,36 @@ public class CardActionPanel : MonoBehaviour
 
         int slotIndex = currentCard.slotIndex;
 
-        // Only block if there’s an enemy attacker in that same lane
-        if (BattleManager.Instance.turnPlayer.activeSlots[slotIndex] != null)
-        {
-            // Move this card to the active slot to block
-            BattleManager.Instance.currentResponder.MoveCardToActiveSlot(currentCard, slotIndex);
+        BaseController attacker = BattleManager.Instance.turnPlayer;
+        BaseController defender = BattleManager.Instance.currentResponder;
 
-            Debug.Log($"{currentCard.cardData.cardName} blocks in slot {slotIndex}");
+        if (attacker.activeSlots == null || slotIndex < 0 || slotIndex >= attacker.activeSlots.Length)
+        {
+            Debug.Log("Invalid lane index for block.");
+            Destroy(gameObject);
+            return;
         }
-        else
+
+        CardRuntime attackingCard = attacker.activeSlots[slotIndex];
+        if (attackingCard == null)
         {
             Debug.Log("No attacker in this lane to block!");
+            Destroy(gameObject);
+            return;
         }
+
+        // Move defender into active slot
+        defender.MoveCardToActiveSlot(currentCard, slotIndex);
+
+        // Track that this card is blocking
+        if (!defender.preparedBlocks.Contains(currentCard))
+            defender.preparedBlocks.Add(currentCard);
+
+        // Change the End Turn button to say "Confirm Blockers"
+        BattleUIManager.Instance.SetEndTurnButtonLabel("Confirm Blockers");
+
+        Debug.Log($"{defender.controllerName}'s {currentCard.cardData.cardName} is blocking {attacker.controllerName}'s {attackingCard.cardData.cardName} in lane {slotIndex}.");
 
         Destroy(gameObject);
     }
-
-
-    // New method to handle placing the card in the active slot
-    void OnPlaceInActiveSlot(CardRuntime card)
-    {
-        // Ensure the card is not already in play and can be placed
-        if (card != null && !card.isInPlay)
-        {
-            int availableSlot = -1;
-
-            // Find the first available active slot (depending on whether it's player or opponent)
-            for (int i = 0; i < BattleManager.Instance.turnPlayer.activeSlots.Length; i++)
-            {
-                if (BattleManager.Instance.turnPlayer.activeSlots[i] == null)  // Slot is available
-                {
-                    availableSlot = i;
-                    break;
-                }
-            }
-
-            if (availableSlot != -1)
-            {
-                // Now place the card into the selected active slot
-                BattleManager.Instance.turnPlayer.MoveCardToActiveSlot(card, availableSlot);
-                Debug.Log($"{card.cardData.cardName} placed in active slot {availableSlot}");
-            }
-            else
-            {
-                Debug.Log("No available active slots to place the card.");
-            }
-        }
-    }
-
 }
