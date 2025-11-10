@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -27,7 +28,8 @@ public abstract class BaseController : MonoBehaviour
     public bool HasAttack { get; set; }           // turn player attack allowed
 
     public delegate IEnumerator ResponseWindowDelegate(BaseController actor, CardRuntime playedCard);
-    public static event ResponseWindowDelegate OnResponseWindow;
+
+    public static event Action<BaseController, CardRuntime> OnResponseWindow;
 
     [HideInInspector] public bool isPlayer;
     [HideInInspector] public Transform handParent;
@@ -81,22 +83,18 @@ public abstract class BaseController : MonoBehaviour
     }
 
 
-    public virtual bool TryPlayCard(CardRuntime card)
+    public virtual bool TryPlayCard(CardRuntime card, bool openResponseWindow = true)
     {
         if (card == null || !hero.CanAfford(card.cardData))
             return false;
 
-        // Update the card's location to Hand -> Field when played
         if (card.location == CardLocation.Hand)
-        {
-            card.location = CardLocation.Field;  // It’s moving to the field
-        }
+            card.location = CardLocation.Field;
 
-        // For player units: wait for placement instead of instant play
         if (isPlayer && card.cardData.cardType == CardType.Unit)
         {
             PrepareUnitPlacement(card);
-            return false; // Wait for placement
+            return false;
         }
 
         hero.SpendMana(card.cardData.cost);
@@ -106,13 +104,11 @@ public abstract class BaseController : MonoBehaviour
             case CardType.Unit:
                 hand.Remove(card);
                 for (int i = 0; i < fieldSlots.Length; i++)
-                {
                     if (fieldSlots[i] == null)
                     {
                         PlaceUnitInSlot(card, i);
                         break;
                     }
-                }
                 break;
             case CardType.Spell:
                 break;
@@ -120,24 +116,26 @@ public abstract class BaseController : MonoBehaviour
 
         HasPerformedAction = true;
         CanRespond = false;
-
         BattleUIManager.Instance.UpdateHeroUI();
-        Debug.Log($"{controllerName} played {card.cardData.cardName}");
 
-        // Response window logic
-        if (isPlayer)
+        // Only open a response window if requested
+        if (openResponseWindow)
         {
-            // Player plays -> AI responds
-            BattleManager.Instance.StartResponseWindow(BattleManager.Instance.opponent);
-        }
-        else
-        {
-            // AI plays -> Player responds
-            BattleManager.Instance.StartResponseWindow(BattleManager.Instance.player);
+            if (isPlayer)
+            {
+                Debug.Log("AI Response Window!");
+                BattleManager.Instance.StartResponseWindow(BattleManager.Instance.opponent, card);
+            }
+            else
+            {
+                Debug.Log("Human Response Window!");
+                BattleManager.Instance.StartResponseWindow(BattleManager.Instance.player, card);
+            } 
         }
 
         return true;
     }
+
     public void PrepareAttack(CardRuntime card)
     {
         if (card == null) return;
@@ -241,12 +239,10 @@ public abstract class BaseController : MonoBehaviour
             if (attacker.currentHealth <= 0)
             {
                 Debug.Log($"{attacker.cardData.cardName} was destroyed!");
-                MoveToGraveyard(attacker);
             }
             if (target.currentHealth <= 0)
             {
                 Debug.Log($"{target.cardData.cardName} was destroyed!");
-                BattleManager.Instance.otherPlayer.MoveToGraveyard(target);
             }
 
             HasPerformedAction = true;
@@ -356,9 +352,7 @@ public abstract class BaseController : MonoBehaviour
             BattleUIManager.Instance.OnFieldSlotClicked = null;
             BattleUIManager.Instance.UpdateHeroUI();
 
-            Debug.Log($"{controllerName} placed {card.cardData.cardName} in slot {slotIndex}");
-
-            BattleManager.Instance.StartResponseWindow(BattleManager.Instance.opponent);
+            BattleManager.Instance.StartResponseWindow(BattleManager.Instance.opponent, card);
         };
     }
 
@@ -591,8 +585,6 @@ public abstract class BaseController : MonoBehaviour
             // now that the UI is visible, add to hand list
             hand.Add(drawn);
 
-            Debug.Log($"{controllerName} drew {drawn.cardData.cardName}");
-
             // small delay before next queued draw (tweak as needed)
             yield return new WaitForSeconds(0.12f);
 
@@ -601,5 +593,13 @@ public abstract class BaseController : MonoBehaviour
         }
 
         isDrawing = false;
+    }
+
+    /// <summary>
+    /// Called by BattleManager to notify all listeners that a response window has begun.
+    /// </summary>
+    public static void TriggerResponseWindow(BaseController responder, CardRuntime playedCard = null)
+    {
+        OnResponseWindow?.Invoke(responder, playedCard);
     }
 }

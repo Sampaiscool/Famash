@@ -112,12 +112,11 @@ public class BattleManager : MonoBehaviour
         if (waitingForResponse && currentResponder == player)
         {
             // If player has placed blockers, confirm them instead of ending response
-            if (player.preparedBlocks.Count > 0)
+            if (opponent.preparedAttacks.Count > 0 || player.preparedBlocks.Count > 0)
             {
                 ConfirmBlockers();
                 return;
             }
-
             // Otherwise, just end the response
             EndResponseWindow();
             return;
@@ -172,7 +171,7 @@ public class BattleManager : MonoBehaviour
         BattleUIManager.Instance.HideConfirmAttackButton();
 
         // Open the response window for the defender
-        StartResponseWindow(defender);
+        StartResponseWindow(defender, null);
 
         // After response window ends, continue attack resolution
         StartCoroutine(ResolveBattleAfterResponse(attacker, defender));
@@ -182,35 +181,57 @@ public class BattleManager : MonoBehaviour
         BaseController attacker = turnPlayer;
         BaseController defender = currentResponder;
 
-        if (defender == null || defender.preparedBlocks.Count == 0)
+        if (defender == null)
         {
-            Debug.Log("No blockers to confirm.");
+            Debug.LogWarning("No current responder, cannot confirm blockers.");
             return;
         }
 
+        if (defender.preparedBlocks.Count == 0)
+        {
+            Debug.Log($"{defender.controllerName} has no blockers. Proceeding with attack resolution.");
+
+            // Hide the Confirm Blockers button
+            BattleUIManager.Instance.SetEndTurnButtonLabel("End Turn");
+            BattleUIManager.Instance.SetEndTurnButtonActive(false);
+
+            // End the response window so combat can continue
+            EndResponseWindow();
+
+            // Resolve combat with zero blockers
+            attacker.ResolvePreparedAttacks(defender);
+            return;
+        }
+
+        // Normal case: defender has blockers
         Debug.Log($"{defender.controllerName} confirmed their blockers.");
 
         // Hide the Confirm Blockers button
         BattleUIManager.Instance.SetEndTurnButtonLabel("End Turn");
         BattleUIManager.Instance.SetEndTurnButtonActive(false);
 
-        // End the response window now that blockers are confirmed
+        // End the response window
         EndResponseWindow();
 
-        // Resolve combat
+        // Resolve combat with blockers
         attacker.ResolvePreparedAttacks(defender);
 
         // Clear blocks for next phase
         defender.preparedBlocks.Clear();
     }
 
-    public void StartResponseWindow(BaseController responder)
+
+    public void StartResponseWindow(BaseController responder, CardRuntime playedCard = null)
     {
         currentResponder = responder;
         waitingForResponse = true;
 
         // Update highlight — show who’s acting now
         BattleUIManager.Instance.UpdateTurnHighlight(responder);
+
+        // FIRE the event so listeners (AI) can react immediately
+        BaseController.TriggerResponseWindow(responder, playedCard);
+
 
         if (responder.isPlayer)
         {
@@ -253,45 +274,46 @@ public class BattleManager : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f);
 
-        // Try to play one card if affordable
-        CardRuntime cardToPlay = null;
-        foreach (var c in ai.hand)
+        bool isAttackResponse = turnPlayer.preparedAttacks.Count > 0;
+
+        if (isAttackResponse)
         {
-            if (ai.hero.CanAfford(c.cardData))
+            // Defender AI should block
+            Debug.Log("AI entering block phase...");
+            if (ai is OpponentController opponentController)
             {
-                cardToPlay = c;
-                break;
+                yield return opponentController.StartCoroutine("AIAutoBlock");
             }
-        }
-
-        if (cardToPlay != null)
-        {
-            ai.TryPlayCard(cardToPlay);
-            yield return new WaitForSeconds(0.5f);
-        }
-
-        // Determine if the current responder phase was triggered by an attack
-        bool wasAttackResponse = turnPlayer.preparedAttacks.Count > 0;
-
-        // If it was an attack response, close and resolve combat
-        // Otherwise, just end the response and return control to the turn player
-        if (wasAttackResponse)
-        {
-            EndResponseWindow();
         }
         else
         {
-            // No attack happening — just end response and restore turn flow
-            waitingForResponse = false;
-            currentResponder = null;
+            // Otherwise, play only ONE affordable card as a normal response
+            CardRuntime cardToPlay = null;
+            foreach (var c in ai.hand)
+            {
+                if (ai.hero.CanAfford(c.cardData))
+                {
+                    cardToPlay = c;
+                    break;
+                }
+            }
 
-            // Highlight goes back to the turn player
-            BattleUIManager.Instance.UpdateTurnHighlight(turnPlayer);
-            BattleUIManager.Instance.SetEndTurnButtonLabel("End Turn");
-            BattleUIManager.Instance.SetEndTurnButtonActive(turnPlayer.isPlayer);
+            if (cardToPlay != null)
+            {
+                ai.TryPlayCard(cardToPlay);
 
-            Debug.Log("AI responded to a normal play. Turn continues for player.");
+                // Wait for the player to respond before continuing
+                StartResponseWindow(player, cardToPlay);
+                yield return new WaitUntil(() => currentResponder == null);
+            }
+
+            // Wait a short moment to simulate "thinking", then immediately pass
+            Debug.Log($"{ai.controllerName} passes after one response.");
+            yield return new WaitForSeconds(0.5f);
         }
+
+        // End the current response phase (AI only gets one move)
+        EndResponseWindow();
     }
 
 }

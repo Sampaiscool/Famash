@@ -16,9 +16,11 @@ public class CardSO : ScriptableObject
     [Header("Gameplay")]
     public int cost;
     public CardType cardType;
+    public SpellType spellType;
+    public SpellSpeed spellSpeed;
     public int attack;
     public int health;
-    public bool isHeroCard;
+    public bool isDoobie;
 
     [Header("Region Ownership")]
     public RegionSO region;

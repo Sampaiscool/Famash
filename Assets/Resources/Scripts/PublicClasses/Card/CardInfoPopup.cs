@@ -49,7 +49,6 @@ public class CardInfoPopup : MonoBehaviour, IPointerClickHandler
                 break;
 
             case CardType.Spell:
-            case CardType.Secret:
                 effectText.text = card.description;
                 break;
 

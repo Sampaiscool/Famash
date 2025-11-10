@@ -47,6 +47,13 @@ public class CardInGame : MonoBehaviour, IPointerClickHandler
 
         artwork.sprite = data.artwork;
         costText.text = data.cost.ToString();
+        runtimeCard.owner = ownerController;
+
+        if (runtimeCard != null)
+            runtimeCard.OnStatsChanged -= Refresh;
+
+        runtimeCard = card;
+        runtimeCard.OnStatsChanged += Refresh;
 
         unitPanel.SetActive(false);
         spellPanel.SetActive(false);
@@ -56,21 +63,22 @@ public class CardInGame : MonoBehaviour, IPointerClickHandler
         switch (data.cardType)
         {
             case CardType.Unit:
-                unitPanel.SetActive(true);
-                attackText.text = card.currentAttack.ToString();
-                healthText.text = card.currentHealth.ToString();
+                if (data.isDoobie)
+                {
+                    heroPanel.SetActive(true);
+                    heroHealthText.text = card.currentHealth.ToString();
+                    heroDamageText.text = card.currentAttack.ToString();
+                    heroLevelText.text = "1";
+                }
+                else
+                {
+                    unitPanel.SetActive(true);
+                    attackText.text = card.currentAttack.ToString();
+                    healthText.text = card.currentHealth.ToString();
+                }
                 break;
             case CardType.Spell:
-            case CardType.Secret:
                 spellPanel.SetActive(true);
-                break;
-            case CardType.Field:
-                fieldPanel.SetActive(true);
-                break;
-            case CardType.Hero:
-                heroPanel.SetActive(true);
-                heroHealthText.text = card.currentHealth.ToString();
-                heroLevelText.text = "1";
                 break;
         }
     }
@@ -182,12 +190,21 @@ public class CardInGame : MonoBehaviour, IPointerClickHandler
 
         if (data.cardType == CardType.Unit)
         {
-            attackText.text = runtimeCard.currentAttack.ToString();
-            healthText.text = runtimeCard.currentHealth.ToString();
+            if (data.isDoobie)
+            {
+                heroDamageText.text = runtimeCard.currentAttack.ToString();
+                heroHealthText.text = runtimeCard.currentHealth.ToString();
+            }
+            else
+            {
+                attackText.text = runtimeCard.currentAttack.ToString();
+                healthText.text = runtimeCard.currentHealth.ToString();
+            }
         }
-        else if (data.cardType == CardType.Hero)
-        {
-            heroHealthText.text = runtimeCard.currentHealth.ToString();
-        }
+    }
+    private void OnDestroy()
+    {
+        if (runtimeCard != null)
+            runtimeCard.OnStatsChanged -= Refresh;
     }
 }

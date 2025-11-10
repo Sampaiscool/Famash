@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac933d3f2cf941c488493d1d1bd8522e, type: 3}
+  m_Name: Roshka
+  m_EditorClassIdentifier: Assembly-CSharp::CardSO
+  cardId: doobie_roshka
+  cardName: Roshka
+  description: The roshka be rollin'
+  artwork: {fileID: -1962431868195219022, guid: 839e8a015f564fd439ecc7464b7c80e9, type: 3}
+  frame: {fileID: 0}
+  cost: 4
+  cardType: 0
+  spellType: 0
+  spellSpeed: 0
+  attack: 1
+  health: 5
+  isDoobie: 1
+  region: {fileID: 11400000, guid: 1980c659f73d76b4b94187cf6baadac4, type: 2}
+  keywords: 
+  triggerGroups: []

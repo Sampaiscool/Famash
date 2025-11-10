@@ -40,13 +40,11 @@ public class DeckManager : MonoBehaviour
     private void LoadAllCards()
     {
         allCards = new List<CardSO>(Resources.LoadAll<CardSO>("Cards"));
-        Debug.Log($"Loaded {allCards.Count} cards from Resources/Cards");
     }
 
     private void LoadAllRegions()
     {
         allRegions = new List<RegionSO>(Resources.LoadAll<RegionSO>("Regions"));
-        Debug.Log($"Loaded {allRegions.Count} regions from Resources/Regions");
     }
 
     #region Persistence

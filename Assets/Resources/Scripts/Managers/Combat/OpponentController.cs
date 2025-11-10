@@ -1,8 +1,10 @@
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 
 public class OpponentController : BaseController
 {
+    private bool hasRespondedThisWindow = false;
     public override void StartTurn(bool drawCard = true)
     {
         IsTurnDone = false;
@@ -16,46 +18,22 @@ public class OpponentController : BaseController
 
     private IEnumerator AIPlayLoop()
     {
-        // Play phase
         while (!IsTurnDone)
         {
             yield return new WaitForSeconds(1f);
 
-            CardRuntime playableCard = null;
-            foreach (var c in hand)
-            {
-                if (hero.CanAfford(c.cardData))
-                {
-                    playableCard = c;
-                    break;
-                }
-            }
+            var playableCard = hand.FirstOrDefault(c => hero.CanAfford(c.cardData));
+            if (playableCard == null) break;
 
-            if (playableCard != null)
-            {
-                TryPlayCard(playableCard);
-                Debug.Log($"{controllerName} played {playableCard.cardData.cardName}");
+            TryPlayCard(playableCard, true); // don’t open response window here
+                                              // explicitly open response only once, controlled by BattleManager
+            BattleManager.Instance.StartResponseWindow(BattleManager.Instance.player, playableCard);
+            yield return new WaitUntil(() => BattleManager.Instance.currentResponder == null);
 
-                // Player gets response window
-                BattleManager.Instance.StartResponseWindow(BattleManager.Instance.player);
-
-                // Wait for responses
-                yield return new WaitUntil(() => BattleManager.Instance.currentResponder == null);
-
-                yield return new WaitForSeconds(0.5f);
-            }
-            else
-            {
-                // No more plays, continue to attack phase
-                yield return new WaitForSeconds(0.75f);
-                break;
-            }
+            yield return new WaitForSeconds(0.25f);
         }
 
-        // Attack phase (if any attackers available)
         yield return StartCoroutine(AIAttackPhase());
-
-        // End turn after a short delay
         yield return new WaitForSeconds(1f);
         IsTurnDone = true;
     }
@@ -87,7 +65,7 @@ public class OpponentController : BaseController
             Debug.Log($"{controllerName} confirms attacks!");
 
             // Start the player’s response window before attacks resolve
-            BattleManager.Instance.StartResponseWindow(BattleManager.Instance.player);
+            BattleManager.Instance.StartResponseWindow(BattleManager.Instance.player, null);
 
             // Wait until player finishes responding
             yield return new WaitUntil(() => BattleManager.Instance.currentResponder == null);
@@ -100,35 +78,84 @@ public class OpponentController : BaseController
             Debug.Log($"{controllerName} has no attackers.");
         }
     }
+    private IEnumerator AIAutoBlock()
+    {
+        var attacker = BattleManager.Instance.turnPlayer;
+        var defender = this;
+
+        // Small delay for pacing
+        yield return new WaitForSeconds(0.5f);
+
+        bool blockedAny = false;
+
+        for (int i = 0; i < attacker.activeSlots.Length; i++)
+        {
+            var attackingCard = attacker.activeSlots[i];
+            if (attackingCard == null) continue;
+
+            // Try to find a unit on the defender’s field in the same slot
+            var potentialBlocker = defender.fieldSlots[i];
+            if (potentialBlocker != null)
+            {
+                defender.MoveCardToActiveSlot(potentialBlocker, i);
+                defender.preparedBlocks.Add(potentialBlocker);
+
+                Debug.Log($"{controllerName} blocks {attacker.controllerName}'s {attackingCard.cardData.cardName} with {potentialBlocker.cardData.cardName} in lane {i}.");
+
+                blockedAny = true;
+                yield return new WaitForSeconds(0.3f);
+            }
+        }
+
+        if (blockedAny)
+        {
+            Debug.Log($"{controllerName} finished assigning blockers.");
+        }
+        else
+        {
+            Debug.Log($"{controllerName} had no available blockers.");
+        }
+
+        // Close the response window so combat can continue
+        BattleManager.Instance.EndResponseWindow();
+    }
+
 
     private void OnEnable()
     {
-        BaseController.OnResponseWindow += HandleResponseWindow;
+        BaseController.OnResponseWindow += OnResponseWindowHandler;
     }
 
     private void OnDisable()
     {
-        BaseController.OnResponseWindow -= HandleResponseWindow;
+        BaseController.OnResponseWindow -= OnResponseWindowHandler;
+    }
+    private void OnResponseWindowHandler(BaseController actor, CardRuntime playedCard)
+    {
+        StartCoroutine(HandleResponseWindow(actor, playedCard));
     }
 
     private IEnumerator HandleResponseWindow(BaseController actor, CardRuntime playedCard)
     {
-        if (actor == this) yield break; // don't respond to own plays
+        if (actor == this) yield break;
+        if (hasRespondedThisWindow) yield break;
+        hasRespondedThisWindow = true;
 
-        CardRuntime playable = null;
-        foreach (var c in hand)
+        if (BattleManager.Instance.currentResponder == this)
         {
-            if (hero.CanAfford(c.cardData))
+            yield return StartCoroutine(AIAutoBlock());
+        }
+        else
+        {
+            var playable = hand.FirstOrDefault(c => hero.CanAfford(c.cardData));
+            if (playable != null)
             {
-                playable = c;
-                break;
+                yield return new WaitForSeconds(0.5f);
+                TryPlayCard(playable);
             }
         }
 
-        if (playable != null)
-        {
-            yield return new WaitForSeconds(0.5f);
-            TryPlayCard(playable);
-        }
+        hasRespondedThisWindow = false;
     }
+
 }

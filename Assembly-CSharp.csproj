@@ -68,12 +68,14 @@
     <Compile Include="Assets\Resources\Scripts\PublicClasses\HeroRuntime.cs" />
     <Compile Include="Assets\Resources\Scripts\Enums\CardLocation.cs" />
     <Compile Include="Assets\Resources\Scripts\Managers\MenuSceneUiManager.cs" />
+    <Compile Include="Assets\Resources\Scripts\Enums\SpellType.cs" />
     <Compile Include="Assets\Resources\Scripts\Managers\DeckManager.cs" />
     <Compile Include="Assets\Resources\Scripts\Managers\Combat\OpponentController.cs" />
     <Compile Include="Assets\Resources\Scripts\Managers\Combat\PlayerController.cs" />
     <Compile Include="Assets\Resources\Scripts\PublicClasses\Card\CardDetailUI.cs" />
     <Compile Include="Assets\Resources\Scripts\Data\CardSO.cs" />
     <Compile Include="Assets\Resources\Scripts\Managers\Combat\BaseController.cs" />
+    <Compile Include="Assets\Resources\Scripts\Enums\SpellSpeed.cs" />
     <Compile Include="Assets\Resources\Scripts\Ui\DecksScrollUI.cs" />
     <Compile Include="Assets\Resources\Scripts\Managers\Combat\BattleLoader.cs" />
     <Compile Include="Assets\Resources\Scripts\PublicClasses\Card\CardInfoPopup.cs" />
