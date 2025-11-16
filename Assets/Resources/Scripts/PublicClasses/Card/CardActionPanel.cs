@@ -37,7 +37,7 @@ public class CardActionPanel : MonoBehaviour
         for (int i = 0; i < card.activeEffects.Count; i++)
         {
             int index = i; // capture for closure
-            AddAction($"Activate Effect {i + 1}: {card.activeEffects[i].effectName}", () =>
+            AddAction($"Activate {i + 1}", () =>
             {
                 OnActivate(index);
             });
@@ -117,8 +117,7 @@ public class CardActionPanel : MonoBehaviour
     {
         if (currentCard != null)
         {
-            // Activate the effect based on index
-            currentCard.activeEffects[effectIndex]?.OnPlay(currentCard);
+            //currentCard.activeEffects[effectIndex]?.OnPlay(currentCard);
             Debug.Log($"{currentCard.cardData.cardName} activated effect {effectIndex + 1}");
         }
         Destroy(gameObject);

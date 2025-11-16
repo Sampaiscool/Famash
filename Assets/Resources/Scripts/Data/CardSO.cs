@@ -36,5 +36,14 @@ public class CardSO : ScriptableObject
 public class CardTriggerGroup
 {
     public CardTrigger trigger;
-    public List<EffectSOBase> effects;
+
+    // Now each effect has its own parameters for this card
+    public List<EffectInstance> effects;
+}
+
+[System.Serializable]
+public class EffectInstance
+{
+    public EffectSOBase effect;
+    public EffectParams parameters;
 }

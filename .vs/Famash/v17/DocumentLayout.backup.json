@@ -7,12 +7,60 @@
       "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\managers\\combat\\basecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\managers\\combat\\opponentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\managers\\combat\\opponentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\cardlogic\\effectsobase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\cardlogic\\effectsobase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\publicclasses\\card\\cardruntime.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\publicclasses\\card\\cardruntime.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|c:\\users\\semva\\projects_unity\\famash\\assets\\resources\\scripts\\publicclasses\\card\\cardactionpanel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\publicclasses\\card\\cardactionpanel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\cardlogic\\effects\\dealdamageeffect.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\cardlogic\\effects\\dealdamageeffect.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\cardlogic\\effects\\giveattackeffect.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\cardlogic\\effects\\giveattackeffect.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\data\\cardso.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\data\\cardso.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\publicclasses\\heroruntime.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\publicclasses\\heroruntime.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\ui\\createdeckui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\ui\\createdeckui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\ui\\deckentryui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\ui\\deckentryui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\data\\deckdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\data\\deckdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\publicclasses\\card\\cardingame.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\publicclasses\\card\\cardingame.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\managers\\deckmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\managers\\deckmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\managers\\gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\managers\\gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\managers\\combat\\opponentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\managers\\combat\\opponentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\managers\\combat\\battlemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -23,32 +71,12 @@
       "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\managers\\combat\\battleloader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\publicclasses\\card\\cardingame.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\publicclasses\\card\\cardingame.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\publicclasses\\heroruntime.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\publicclasses\\heroruntime.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\managers\\combat\\playercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\managers\\combat\\playercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\publicclasses\\card\\cardactionpanel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\publicclasses\\card\\cardactionpanel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\data\\cardso.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\data\\cardso.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\publicclasses\\card\\cardinfopopup.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\publicclasses\\card\\cardinfopopup.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\publicclasses\\card\\cardruntime.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\publicclasses\\card\\cardruntime.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\publicclasses\\card\\cardselectentry.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -67,10 +95,6 @@
       "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\managers\\menusceneuimanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\ui\\createdeckui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\ui\\createdeckui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\ui\\defaultui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\ui\\defaultui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -83,24 +107,12 @@
       "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\publicclasses\\card\\cardui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\cardlogic\\effectsobase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\cardlogic\\effectsobase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\enums\\cardtrigger.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\enums\\cardtrigger.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\enums\\keywordtype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\enums\\keywordtype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\data\\deckdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\data\\deckdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\ui\\deckentryui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\ui\\deckentryui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\ui\\decksscrollui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -113,10 +125,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\data\\regionso.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\data\\regionso.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|C:\\Users\\semva\\Projects_Unity\\Famash\\assets\\resources\\scripts\\managers\\gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5C9A2C82-9DD2-CD70-A605-3D39DCE13579}|Assembly-CSharp.csproj|solutionrelative:assets\\resources\\scripts\\managers\\gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -126,22 +134,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 9,
+          "SelectedChildIndex": 11,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "HeroRuntime.cs",
-              "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\PublicClasses\\HeroRuntime.cs",
-              "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\PublicClasses\\HeroRuntime.cs",
-              "ToolTip": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\PublicClasses\\HeroRuntime.cs",
-              "RelativeToolTip": "Assets\\Resources\\Scripts\\PublicClasses\\HeroRuntime.cs",
-              "ViewState": "AgIAACEAAAAAAAAAAAAewDIAAAAQAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-04T12:39:35.387Z",
-              "IsPinned": true,
-              "EditorCaption": ""
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
@@ -160,33 +154,68 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 7,
+              "Title": "HeroRuntime.cs",
+              "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\PublicClasses\\HeroRuntime.cs",
+              "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\PublicClasses\\HeroRuntime.cs",
+              "ToolTip": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\PublicClasses\\HeroRuntime.cs",
+              "RelativeToolTip": "Assets\\Resources\\Scripts\\PublicClasses\\HeroRuntime.cs",
+              "ViewState": "AgIAACEAAAAAAAAAAIA2wDIAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-04T12:39:35.387Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "DealDamageEffect.cs",
+              "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\CardLogic\\EffectS\\DealDamageEffect.cs",
+              "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\CardLogic\\EffectS\\DealDamageEffect.cs",
+              "ToolTip": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\CardLogic\\EffectS\\DealDamageEffect.cs",
+              "RelativeToolTip": "Assets\\Resources\\Scripts\\CardLogic\\EffectS\\DealDamageEffect.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-15T22:55:25.512Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "GiveAttackEffect.cs",
+              "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\CardLogic\\EffectS\\GiveAttackEffect.cs",
+              "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\CardLogic\\EffectS\\GiveAttackEffect.cs",
+              "ToolTip": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\CardLogic\\EffectS\\GiveAttackEffect.cs",
+              "RelativeToolTip": "Assets\\Resources\\Scripts\\CardLogic\\EffectS\\GiveAttackEffect.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-15T22:54:32.19Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "CardActionPanel.cs",
               "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\PublicClasses\\Card\\CardActionPanel.cs",
               "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\PublicClasses\\Card\\CardActionPanel.cs",
               "ToolTip": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\PublicClasses\\Card\\CardActionPanel.cs",
               "RelativeToolTip": "Assets\\Resources\\Scripts\\PublicClasses\\Card\\CardActionPanel.cs",
-              "ViewState": "AgIAAHwAAAAAAAAAAAAowJkAAAA7AAAAAAAAAA==",
+              "ViewState": "AgIAABAAAAAAAAAAAAArwCcAAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-11-06T14:25:32.685Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 11,
               "Title": "CardInGame.cs",
               "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\PublicClasses\\Card\\CardInGame.cs",
               "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\PublicClasses\\Card\\CardInGame.cs",
               "ToolTip": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\PublicClasses\\Card\\CardInGame.cs",
               "RelativeToolTip": "Assets\\Resources\\Scripts\\PublicClasses\\Card\\CardInGame.cs",
-              "ViewState": "AgIAAEsAAAAAAAAAAAAYwFkAAAA1AAAAAAAAAA==",
+              "ViewState": "AgIAAJ4AAAAAAAAAAAAuwJkAAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-04T16:15:15.544Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-04T16:15:15.544Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 20,
               "Title": "BattleUIManager.cs",
               "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Managers\\Combat\\BattleUIManager.cs",
               "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\Managers\\Combat\\BattleUIManager.cs",
@@ -198,7 +227,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 16,
               "Title": "BattleLoader.cs",
               "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Managers\\Combat\\BattleLoader.cs",
               "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\Managers\\Combat\\BattleLoader.cs",
@@ -206,8 +235,7 @@
               "RelativeToolTip": "Assets\\Resources\\Scripts\\Managers\\Combat\\BattleLoader.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-04T12:45:50.586Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-04T12:45:50.586Z"
             },
             {
               "$type": "Document",
@@ -217,14 +245,14 @@
               "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\Managers\\Combat\\BaseController.cs",
               "ToolTip": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Managers\\Combat\\BaseController.cs",
               "RelativeToolTip": "Assets\\Resources\\Scripts\\Managers\\Combat\\BaseController.cs",
-              "ViewState": "AgIAAE4BAAAAAAAAAAAvwGABAAA0AAAAAAAAAA==",
+              "ViewState": "AgIAAFcAAAAAAAAAAAAIwHQAAAAoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-11-04T13:05:13.468Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 15,
               "Title": "BattleManager.cs",
               "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Managers\\Combat\\BattleManager.cs",
               "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\Managers\\Combat\\BattleManager.cs",
@@ -232,12 +260,11 @@
               "RelativeToolTip": "Assets\\Resources\\Scripts\\Managers\\Combat\\BattleManager.cs",
               "ViewState": "AgIAAMYAAAAAAAAAAAAqwHgAAAAdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-04T12:32:38.997Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-04T12:32:38.997Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 14,
               "Title": "OpponentController.cs",
               "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Managers\\Combat\\OpponentController.cs",
               "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\Managers\\Combat\\OpponentController.cs",
@@ -245,12 +272,11 @@
               "RelativeToolTip": "Assets\\Resources\\Scripts\\Managers\\Combat\\OpponentController.cs",
               "ViewState": "AgIAAAcAAAAAAAAAAAA0wBsAAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-04T12:34:11.692Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-04T12:34:11.692Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 21,
               "Title": "DeckRuntime.cs",
               "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\PublicClasses\\DeckRuntime.cs",
               "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\PublicClasses\\DeckRuntime.cs",
@@ -262,7 +288,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 27,
+              "DocumentIndex": 30,
               "Title": "RegionSO.cs",
               "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Data\\RegionSO.cs",
               "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\Data\\RegionSO.cs",
@@ -274,7 +300,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 18,
               "Title": "CardInfoPopup.cs",
               "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\PublicClasses\\Card\\CardInfoPopup.cs",
               "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\PublicClasses\\Card\\CardInfoPopup.cs",
@@ -286,7 +312,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
+              "DocumentIndex": 27,
               "Title": "KeywordType.cs",
               "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Enums\\KeywordType.cs",
               "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\Enums\\KeywordType.cs",
@@ -298,7 +324,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 23,
               "Title": "DefaultUi.cs",
               "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Ui\\DefaultUi.cs",
               "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\Ui\\DefaultUi.cs",
@@ -310,7 +336,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 17,
               "Title": "PlayerController.cs",
               "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Managers\\Combat\\PlayerController.cs",
               "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\Managers\\Combat\\PlayerController.cs",
@@ -318,12 +344,11 @@
               "RelativeToolTip": "Assets\\Resources\\Scripts\\Managers\\Combat\\PlayerController.cs",
               "ViewState": "AgIAAAUAAAAAAAAAAAAnwDMAAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-04T12:33:14.964Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-04T12:33:14.964Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 26,
               "Title": "CardTrigger.cs",
               "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Enums\\CardTrigger.cs",
               "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\Enums\\CardTrigger.cs",
@@ -335,7 +360,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 19,
               "Title": "CardSelectEntry.cs",
               "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\PublicClasses\\Card\\CardSelectEntry.cs",
               "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\PublicClasses\\Card\\CardSelectEntry.cs",
@@ -347,7 +372,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 24,
               "Title": "GameConfig.cs",
               "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\PublicClasses\\GameConfig.cs",
               "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\PublicClasses\\GameConfig.cs",
@@ -359,7 +384,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 25,
               "Title": "CardUI.cs",
               "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\PublicClasses\\Card\\CardUI.cs",
               "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\PublicClasses\\Card\\CardUI.cs",
@@ -371,31 +396,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
-              "Title": "EffectSOBase.cs",
-              "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\CardLogic\\EffectSOBase.cs",
-              "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\CardLogic\\EffectSOBase.cs",
-              "ToolTip": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\CardLogic\\EffectSOBase.cs",
-              "RelativeToolTip": "Assets\\Resources\\Scripts\\CardLogic\\EffectSOBase.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-03T22:49:34.056Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 2,
               "Title": "CardRuntime.cs",
               "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\PublicClasses\\Card\\CardRuntime.cs",
               "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\PublicClasses\\Card\\CardRuntime.cs",
               "ToolTip": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\PublicClasses\\Card\\CardRuntime.cs",
               "RelativeToolTip": "Assets\\Resources\\Scripts\\PublicClasses\\Card\\CardRuntime.cs",
-              "ViewState": "AgIAAB8AAAAAAAAAAAAQwDIAAAA2AAAAAAAAAA==",
+              "ViewState": "AgIAAD0AAAAAAAAAAAAvwFoAAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-04T00:31:57.649Z"
+              "WhenOpened": "2025-11-04T00:31:57.649Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 22,
               "Title": "MenuSceneUiManager.cs",
               "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Managers\\MenuSceneUiManager.cs",
               "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\Managers\\MenuSceneUiManager.cs",
@@ -407,7 +421,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 28,
+              "DocumentIndex": 13,
               "Title": "GameManager.cs",
               "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Managers\\GameManager.cs",
               "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\Managers\\GameManager.cs",
@@ -419,7 +433,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 26,
+              "DocumentIndex": 29,
               "Title": "MenuManager.cs",
               "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Managers\\MenuManager.cs",
               "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\Managers\\MenuManager.cs",
@@ -431,19 +445,19 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 8,
               "Title": "CreateDeckUI.cs",
               "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Ui\\CreateDeckUI.cs",
               "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\Ui\\CreateDeckUI.cs",
               "ToolTip": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Ui\\CreateDeckUI.cs",
               "RelativeToolTip": "Assets\\Resources\\Scripts\\Ui\\CreateDeckUI.cs",
-              "ViewState": "AgIAADcAAAAAAAAAAAAnwA0AAAAvAAAAAAAAAA==",
+              "ViewState": "AgIAADYAAAAAAAAAAAAowFEAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-11-03T22:24:37.983Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 25,
+              "DocumentIndex": 28,
               "Title": "DecksScrollUI.cs",
               "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Ui\\DecksScrollUI.cs",
               "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\Ui\\DecksScrollUI.cs",
@@ -455,32 +469,31 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 24,
+              "DocumentIndex": 9,
               "Title": "DeckEntryUI.cs",
               "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Ui\\DeckEntryUI.cs",
               "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\Ui\\DeckEntryUI.cs",
               "ToolTip": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Ui\\DeckEntryUI.cs",
               "RelativeToolTip": "Assets\\Resources\\Scripts\\Ui\\DeckEntryUI.cs",
-              "ViewState": "AgIAACkAAAAAAAAAAAAwwEEAAAAqAAAAAAAAAA==",
+              "ViewState": "AgIAACkAAAAAAAAAAAA/wEEAAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-11-03T22:22:36.838Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 12,
               "Title": "DeckManager.cs",
               "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Managers\\DeckManager.cs",
               "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\Managers\\DeckManager.cs",
               "ToolTip": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Managers\\DeckManager.cs",
               "RelativeToolTip": "Assets\\Resources\\Scripts\\Managers\\DeckManager.cs",
-              "ViewState": "AgIAAFAAAAAAAAAAAAArwGIAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAABgAAAAAAAAAAAAYwGcAAAA9AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-03T22:15:45.809Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-03T22:15:45.809Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 23,
+              "DocumentIndex": 10,
               "Title": "DeckData.cs",
               "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Data\\DeckData.cs",
               "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\Data\\DeckData.cs",
@@ -492,16 +505,28 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 1,
+              "Title": "EffectSOBase.cs",
+              "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\CardLogic\\EffectSOBase.cs",
+              "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\CardLogic\\EffectSOBase.cs",
+              "ToolTip": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\CardLogic\\EffectSOBase.cs",
+              "RelativeToolTip": "Assets\\Resources\\Scripts\\CardLogic\\EffectSOBase.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-03T22:49:34.056Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
               "Title": "CardSO.cs",
               "DocumentMoniker": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Data\\CardSO.cs",
               "RelativeDocumentMoniker": "Assets\\Resources\\Scripts\\Data\\CardSO.cs",
               "ToolTip": "C:\\Users\\semva\\Projects_Unity\\Famash\\Assets\\Resources\\Scripts\\Data\\CardSO.cs",
               "RelativeToolTip": "Assets\\Resources\\Scripts\\Data\\CardSO.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAVAAAAAAAAAA==",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAowC8AAAAjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-03T22:11:26.08Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-03T22:11:26.08Z"
             }
           ]
         }

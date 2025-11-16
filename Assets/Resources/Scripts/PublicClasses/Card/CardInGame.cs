@@ -176,9 +176,6 @@ public class CardInGame : MonoBehaviour, IPointerClickHandler
         var popupObj = Instantiate(cardDetailPrefab, canvas.transform);
         var popup = popupObj.GetComponent<CardInfoPopup>();
 
-        // If you’re using CardDetailUI instead, you can swap this:
-        // var popup = popupObj.GetComponent<CardDetailUI>();
-
         popup.Setup(runtimeCard.cardData);
     }
 

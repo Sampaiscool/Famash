@@ -13,7 +13,7 @@ public class CardRuntime
     public bool isDead;
 
     public List<KeywordType> activeKeywords = new();
-    public List<EffectSOBase> activeEffects = new();
+    public List<EffectInstance> activeEffects = new();
 
     [System.NonSerialized] public GameObject cardUI;
     [System.NonSerialized] public BaseController owner;
@@ -32,11 +32,31 @@ public class CardRuntime
         isInPlay = false;
         isDead = false;
 
-        // copy base keywords and effects
+        // Copy base keywords
         activeKeywords.AddRange(source.keywords);
+
+        // Copy effect instances per trigger group
         foreach (var group in source.triggerGroups)
-            activeEffects.AddRange(group.effects);
+        {
+            // Make a deep copy of the effect instances for this card runtime
+            foreach (var instance in group.effects)
+            {
+                var instanceCopy = new EffectInstance
+                {
+                    effect = instance.effect,
+                    parameters = new EffectParams
+                    {
+                        amount1 = instance.parameters.amount1,
+                        amount2 = instance.parameters.amount2,
+                        amount3 = instance.parameters.amount3,
+                        cost = instance.parameters.cost
+                    }
+                };
+                activeEffects.Add(instanceCopy);
+            }
+        }
     }
+
     public void ModifyStats(int attackChange, int healthChange)
     {
         currentAttack += attackChange;
@@ -66,11 +86,15 @@ public class CardRuntime
         {
             if (group.trigger == trigger)
             {
-                foreach (var e in group.effects)
-                    e?.OnPlay(this);
+                foreach (var instance in group.effects)
+                {
+                    instance.effect?.Apply(this, instance.parameters);
+                }
             }
         }
     }
+
+
     public void UpdateUiStats()
     {
 

@@ -60,7 +60,7 @@ public abstract class BaseController : MonoBehaviour
         HasPerformedAction = false;
 
         // Gain mana (refresh and increase max mana)
-        hero.StartTurn();  // This ensures both player and AI's mana are refreshed
+        hero.StartTurn();  // This ensures both player and AI's mana are refreshed  
 
         BattleUIManager.Instance.UpdateHeroUI();
     }
@@ -113,6 +113,9 @@ public abstract class BaseController : MonoBehaviour
             case CardType.Spell:
                 break;
         }
+
+        // Trigger any "On Play" effects
+        card.Trigger(CardTrigger.OnPlay);
 
         HasPerformedAction = true;
         CanRespond = false;

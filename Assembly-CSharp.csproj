@@ -63,6 +63,8 @@
   <ItemGroup>
     <Compile Include="Assets\Resources\Scripts\PublicClasses\DeckRuntime.cs" />
     <Compile Include="Assets\Resources\Scripts\Enums\ResourceType.cs" />
+    <Compile Include="Assets\Resources\Scripts\CardLogic\EffectS\GiveAttackEffect.cs" />
+    <Compile Include="Assets\Resources\Scripts\Enums\EffectParams.cs" />
     <Compile Include="Assets\Resources\Scripts\Managers\GameManager.cs" />
     <Compile Include="Assets\Resources\Scripts\Ui\GraveyardPanel.cs" />
     <Compile Include="Assets\Resources\Scripts\PublicClasses\HeroRuntime.cs" />
@@ -89,6 +91,7 @@
     <Compile Include="Assets\Resources\Scripts\Managers\Combat\BattleManager.cs" />
     <Compile Include="Assets\Resources\Scripts\PublicClasses\Card\CardInGame.cs" />
     <Compile Include="Assets\Resources\Scripts\PublicClasses\Card\CardActionPanel.cs" />
+    <Compile Include="Assets\Resources\Scripts\CardLogic\EffectS\DealDamageEffect.cs" />
     <Compile Include="Assets\Resources\Scripts\Enums\CardType.cs" />
     <Compile Include="Assets\Resources\Scripts\PublicClasses\Card\CardRuntime.cs" />
     <Compile Include="Assets\Resources\Scripts\Ui\CreateDeckUI.cs" />

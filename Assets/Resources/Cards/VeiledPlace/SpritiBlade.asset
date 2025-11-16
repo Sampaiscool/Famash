@@ -19,9 +19,19 @@ MonoBehaviour:
   frame: {fileID: 0}
   cost: 1
   cardType: 0
+  spellType: 0
+  spellSpeed: 0
   attack: 1
   health: 1
-  isHeroCard: 0
+  isDoobie: 0
   region: {fileID: 11400000, guid: 1980c659f73d76b4b94187cf6baadac4, type: 2}
   keywords: 
-  triggerGroups: []
+  triggerGroups:
+  - trigger: 0
+    effects:
+    - effect: {fileID: 11400000, guid: c708a1fd02ce08d40877033713a062ae, type: 2}
+      parameters:
+        amount1: 5
+        amount2: 0
+        amount3: 0
+        cost: 0
