@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Linq;
 using UnityEngine;
 
 public class BattleManager : MonoBehaviour
@@ -226,12 +227,7 @@ public class BattleManager : MonoBehaviour
         currentResponder = responder;
         waitingForResponse = true;
 
-        // Update highlight — show who’s acting now
         BattleUIManager.Instance.UpdateTurnHighlight(responder);
-
-        // FIRE the event so listeners (AI) can react immediately
-        BaseController.TriggerResponseWindow(responder, playedCard);
-
 
         if (responder.isPlayer)
         {
@@ -240,9 +236,11 @@ public class BattleManager : MonoBehaviour
         }
         else
         {
+            // Only AI acts here
             StartCoroutine(AIResponseLoop(responder));
         }
     }
+
 
     public void EndResponseWindow()
     {
@@ -274,46 +272,32 @@ public class BattleManager : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f);
 
+        // AI is the responder → decide to block or play 1 card
+        if (BattleManager.Instance.currentResponder != ai)
+            yield break;
+
         bool isAttackResponse = turnPlayer.preparedAttacks.Count > 0;
 
         if (isAttackResponse)
         {
-            // Defender AI should block
-            Debug.Log("AI entering block phase...");
-            if (ai is OpponentController opponentController)
-            {
-                yield return opponentController.StartCoroutine("AIAutoBlock");
-            }
+            if (ai is OpponentController oc)
+                yield return oc.StartCoroutine("AIAutoBlock");
         }
         else
         {
-            // Otherwise, play only ONE affordable card as a normal response
-            CardRuntime cardToPlay = null;
-            foreach (var c in ai.hand)
+            var playable = ai.hand.FirstOrDefault(c => ai.hero.CanAfford(c.cardData));
+            if (playable != null)
             {
-                if (ai.hero.CanAfford(c.cardData))
-                {
-                    cardToPlay = c;
-                    break;
-                }
+                ai.TryPlayCard(playable);
+
+                // DON'T start new windows here
+                // Let BattleManager handle the window system
             }
-
-            if (cardToPlay != null)
-            {
-                ai.TryPlayCard(cardToPlay);
-
-                // Wait for the player to respond before continuing
-                StartResponseWindow(player, cardToPlay);
-                yield return new WaitUntil(() => currentResponder == null);
-            }
-
-            // Wait a short moment to simulate "thinking", then immediately pass
-            Debug.Log($"{ai.controllerName} passes after one response.");
-            yield return new WaitForSeconds(0.5f);
         }
 
-        // End the current response phase (AI only gets one move)
-        EndResponseWindow();
+        yield return new WaitForSeconds(0.4f);
+
+        BattleManager.Instance.EndResponseWindow();
     }
 
 }

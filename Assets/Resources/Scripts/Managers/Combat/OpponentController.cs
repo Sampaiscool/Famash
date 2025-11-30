@@ -25,8 +25,7 @@ public class OpponentController : BaseController
             var playableCard = hand.FirstOrDefault(c => hero.CanAfford(c.cardData));
             if (playableCard == null) break;
 
-            TryPlayCard(playableCard, true); // don’t open response window here
-                                              // explicitly open response only once, controlled by BattleManager
+            TryPlayCard(playableCard, true);
             BattleManager.Instance.StartResponseWindow(BattleManager.Instance.player, playableCard);
             yield return new WaitUntil(() => BattleManager.Instance.currentResponder == null);
 

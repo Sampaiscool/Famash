@@ -124,7 +124,7 @@ public class CardInGame : MonoBehaviour, IPointerClickHandler
         {
             OnLeftClick();
         }
-        else if (eventData.button == PointerEventData.InputButton.Middle)
+        else if (eventData.button == PointerEventData.InputButton.Right)
         {
             ShowCardInfo();
         }

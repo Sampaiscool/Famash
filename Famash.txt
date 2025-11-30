@@ -5,7 +5,11 @@ From menu to Journey with a new deck:
 	2. click "Create new Deck"
 	3. in the form fill out the data
 		-Name of the Deck
-		-Doobie
-		-Cards
-		-Deck Cover
+		-Doobie of the deck
+		-Cards in the deck
+	4. click "Save"
+	5. Click on the deck and then "Select"
+	6. Click "Home"
+	7. Click "Journey"
+	
 

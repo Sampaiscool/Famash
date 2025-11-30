@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CardSO
   cardId: unit_spirit_blade
   cardName: Spirit Blade
-  description: i am a card mhh
+  description: If this card is played; Deal 1 damage to the opponent.
   artwork: {fileID: 7212229007783142180, guid: 2cd50152395fcd24bad8fa59535690b1, type: 3}
   frame: {fileID: 0}
   cost: 1
@@ -31,7 +31,7 @@ MonoBehaviour:
     effects:
     - effect: {fileID: 11400000, guid: c708a1fd02ce08d40877033713a062ae, type: 2}
       parameters:
-        amount1: 5
+        amount1: 1
         amount2: 0
         amount3: 0
         cost: 0

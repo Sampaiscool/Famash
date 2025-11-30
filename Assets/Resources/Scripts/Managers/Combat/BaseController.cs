@@ -82,7 +82,12 @@ public abstract class BaseController : MonoBehaviour
             StartCoroutine(DrawCardsRoutine());
     }
 
-
+    /// <summary>
+    /// Tries to play a card from the hand
+    /// </summary>
+    /// <param name="card">Card thats getting player</param>
+    /// <param name="openResponseWindow">Wheter the player should get a response window</param>
+    /// <returns>If the card got played</returns>
     public virtual bool TryPlayCard(CardRuntime card, bool openResponseWindow = true)
     {
         if (card == null || !hero.CanAfford(card.cardData))
@@ -91,53 +96,54 @@ public abstract class BaseController : MonoBehaviour
         if (card.location == CardLocation.Hand)
             card.location = CardLocation.Field;
 
+        // PLAYER UNIT = use placement system
         if (isPlayer && card.cardData.cardType == CardType.Unit)
         {
-            PrepareUnitPlacement(card);
-            return false;
+            PrepareUnitPlacement(card, openResponseWindow);
+            return true;       // <-- IMPORTANT!
         }
 
+        // AI UNIT or any SPELL
         hero.SpendMana(card.cardData.cost);
 
         switch (card.cardData.cardType)
         {
             case CardType.Unit:
-                hand.Remove(card);
-                for (int i = 0; i < fieldSlots.Length; i++)
-                    if (fieldSlots[i] == null)
-                    {
-                        PlaceUnitInSlot(card, i);
-                        break;
-                    }
-                break;
+                {
+                    hand.Remove(card);
+
+                    for (int i = 0; i < fieldSlots.Length; i++)
+                        if (fieldSlots[i] == null)
+                        {
+                            PlaceUnitInSlot(card, i);
+                            break;
+                        }
+
+                    break;
+                }
+
             case CardType.Spell:
                 break;
         }
 
-        // Trigger any "On Play" effects
+        // OnPlay now ALWAYS triggers
         card.Trigger(CardTrigger.OnPlay);
 
         HasPerformedAction = true;
         CanRespond = false;
         BattleUIManager.Instance.UpdateHeroUI();
 
-        // Only open a response window if requested
         if (openResponseWindow)
         {
             if (isPlayer)
-            {
-                Debug.Log("AI Response Window!");
                 BattleManager.Instance.StartResponseWindow(BattleManager.Instance.opponent, card);
-            }
             else
-            {
-                Debug.Log("Human Response Window!");
                 BattleManager.Instance.StartResponseWindow(BattleManager.Instance.player, card);
-            } 
         }
 
         return true;
     }
+
 
     public void PrepareAttack(CardRuntime card)
     {
@@ -315,38 +321,40 @@ public abstract class BaseController : MonoBehaviour
     }
 
 
-    private void PrepareUnitPlacement(CardRuntime card)
+    private void PrepareUnitPlacement(CardRuntime card, bool openResponseWindow)
     {
         if (!isPlayer)
         {
-            // AI logic stays the same
+            // AI logic unchanged
             for (int i = 0; i < fieldSlots.Length; i++)
-            {
                 if (fieldSlots[i] == null)
                 {
                     PlaceUnitInSlot(card, i);
                     break;
                 }
-            }
+
             return;
         }
 
-        // Show highlights
+        // Player: show placement UI
         BattleUIManager.Instance.HighlightAvailableSlots(this);
 
-        // Set up slot click
         BattleUIManager.Instance.OnFieldSlotClicked = (slotIndex) =>
         {
             if (fieldSlots[slotIndex] != null)
                 return;
 
+            // Spend mana now
             hero.SpendMana(card.cardData.cost);
+
             hand.Remove(card);
             PlaceUnitInSlot(card, slotIndex);
 
-            // Update card location and slot index
             card.location = CardLocation.Field;
             card.slotIndex = slotIndex;
+
+            // NOW trigger OnPlay
+            card.Trigger(CardTrigger.OnPlay);
 
             HasPerformedAction = true;
             CanRespond = false;
@@ -355,9 +363,12 @@ public abstract class BaseController : MonoBehaviour
             BattleUIManager.Instance.OnFieldSlotClicked = null;
             BattleUIManager.Instance.UpdateHeroUI();
 
-            BattleManager.Instance.StartResponseWindow(BattleManager.Instance.opponent, card);
+            // NOW open window
+            if (openResponseWindow)
+                BattleManager.Instance.StartResponseWindow(BattleManager.Instance.opponent, card);
         };
     }
+
 
 
     public void PlaceUnitInSlot(CardRuntime card, int slotIndex)

@@ -82,12 +82,14 @@ public class CardRuntime
 
     public void Trigger(CardTrigger trigger)
     {
+        Debug.Log("Trigger aplied");
         foreach (var group in cardData.triggerGroups)
         {
             if (group.trigger == trigger)
             {
                 foreach (var instance in group.effects)
                 {
+                    Debug.Log($"Triggering effect {instance.effect.effectName} for card {cardData.cardName} on trigger {trigger}");
                     instance.effect?.Apply(this, instance.parameters);
                 }
             }
