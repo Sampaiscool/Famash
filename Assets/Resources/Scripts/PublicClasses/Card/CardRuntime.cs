@@ -13,7 +13,10 @@ public class CardRuntime
     public bool isDead;
 
     public List<KeywordType> activeKeywords = new();
-    public List<EffectInstance> activeEffects = new();
+    public List<RuntimeEffect> runtimeEffects = new();
+
+    public HashSet<int> usedActivatedEffects = new();
+
 
     [System.NonSerialized] public GameObject cardUI;
     [System.NonSerialized] public BaseController owner;
@@ -38,10 +41,9 @@ public class CardRuntime
         // Copy effect instances per trigger group
         foreach (var group in source.triggerGroups)
         {
-            // Make a deep copy of the effect instances for this card runtime
             foreach (var instance in group.effects)
             {
-                var instanceCopy = new EffectInstance
+                runtimeEffects.Add(new RuntimeEffect
                 {
                     effect = instance.effect,
                     parameters = new EffectParams
@@ -49,19 +51,37 @@ public class CardRuntime
                         amount1 = instance.parameters.amount1,
                         amount2 = instance.parameters.amount2,
                         amount3 = instance.parameters.amount3,
-                        cost = instance.parameters.cost
-                    }
-                };
-                activeEffects.Add(instanceCopy);
+                        cost = instance.parameters.cost,
+                    },
+                    trigger = group.trigger,
+                    isOncePerTurn = instance.isOncePerTurn,
+                    hasBeenUsedThisTurn = false
+                });
             }
         }
     }
 
-    public void ModifyStats(int attackChange, int healthChange)
+    public void ModifyStats(int attackChange, int healthChange, bool isOverheal = false)
     {
         currentAttack += attackChange;
-        currentHealth += healthChange;
+
+        if (healthChange > 0)
+            HealCard(healthChange, isOverheal);
+
         OnStatsChanged?.Invoke();
+    }
+    private void HealCard(int amount, bool isOverheal)
+    {
+        if (isOverheal)
+        {
+            currentHealth += amount;
+        }
+        else
+        {
+            currentHealth += amount;
+            if (currentHealth > cardData.health)
+                currentHealth = cardData.health;
+        }
     }
     public bool HasKeyword(KeywordType type) => activeKeywords.Contains(type);
 
@@ -82,19 +102,21 @@ public class CardRuntime
 
     public void Trigger(CardTrigger trigger)
     {
-        Debug.Log("Trigger aplied");
-        foreach (var group in cardData.triggerGroups)
+        foreach (var runtime in runtimeEffects)
         {
-            if (group.trigger == trigger)
-            {
-                foreach (var instance in group.effects)
-                {
-                    Debug.Log($"Triggering effect {instance.effect.effectName} for card {cardData.cardName} on trigger {trigger}");
-                    instance.effect?.Apply(this, instance.parameters);
-                }
-            }
+            if (runtime.trigger != trigger)
+                continue;
+
+            if (runtime.isOncePerTurn && runtime.hasBeenUsedThisTurn)
+                continue;
+
+            runtime.effect?.Apply(this, runtime.parameters);
+
+            if (runtime.isOncePerTurn)
+                runtime.hasBeenUsedThisTurn = true;
         }
     }
+
 
 
     public void UpdateUiStats()

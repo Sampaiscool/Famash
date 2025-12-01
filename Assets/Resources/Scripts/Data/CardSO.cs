@@ -46,4 +46,5 @@ public class EffectInstance
 {
     public EffectSOBase effect;
     public EffectParams parameters;
+    public bool isOncePerTurn;
 }

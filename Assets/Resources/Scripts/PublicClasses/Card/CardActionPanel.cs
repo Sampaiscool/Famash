@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -34,14 +35,34 @@ public class CardActionPanel : MonoBehaviour
             AddAction("Prepare Attack", OnPrepareAttack);
 
         // Add active effects
-        for (int i = 0; i < card.activeEffects.Count; i++)
+        var activateEffects = new List<(EffectInstance effect, int index)>();
+
+        for (int i = 0; i < card.cardData.triggerGroups.Count; i++)
         {
-            int index = i; // capture for closure
-            AddAction($"Activate {i + 1}", () =>
+            var group = card.cardData.triggerGroups[i];
+
+            if (group.trigger == CardTrigger.OnActivate)
             {
-                OnActivate(index);
-            });
+                foreach (var effect in group.effects)
+                {
+                    activateEffects.Add((effect, i));
+                }
+            }
         }
+
+        foreach (var re in card.runtimeEffects)
+        {
+            if (re.trigger == CardTrigger.OnActivate &&
+                !(re.isOncePerTurn && re.hasBeenUsedThisTurn))
+            {
+                AddAction(
+                    "Activate Effect",
+                    () => OnActivate(re)
+                );
+            }
+        }
+
+
 
         if (isResponsePhase && card.isInPlay && BattleManager.Instance.turnPlayer.preparedAttacks.Count > 0)
             AddAction("Block", OnBlock);
@@ -113,15 +134,16 @@ public class CardActionPanel : MonoBehaviour
     }
 
 
-    void OnActivate(int effectIndex)
+    void OnActivate(RuntimeEffect runtime)
     {
-        if (currentCard != null)
-        {
-            //currentCard.activeEffects[effectIndex]?.OnPlay(currentCard);
-            Debug.Log($"{currentCard.cardData.cardName} activated effect {effectIndex + 1}");
-        }
+        runtime.effect?.Apply(currentCard, runtime.parameters);
+
+        if (runtime.isOncePerTurn)
+            runtime.hasBeenUsedThisTurn = true;
+
         Destroy(gameObject);
     }
+
     void OnBlock()
     {
         if (currentCard == null) return;

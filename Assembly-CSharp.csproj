@@ -66,6 +66,7 @@
     <Compile Include="Assets\Resources\Scripts\CardLogic\EffectS\GiveAttackEffect.cs" />
     <Compile Include="Assets\Resources\Scripts\Enums\EffectParams.cs" />
     <Compile Include="Assets\Resources\Scripts\Managers\GameManager.cs" />
+    <Compile Include="Assets\Resources\Scripts\CardLogic\EffectS\GiveHealthEffect.cs" />
     <Compile Include="Assets\Resources\Scripts\Ui\GraveyardPanel.cs" />
     <Compile Include="Assets\Resources\Scripts\PublicClasses\HeroRuntime.cs" />
     <Compile Include="Assets\Resources\Scripts\Enums\CardLocation.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="Assets\Resources\Scripts\PublicClasses\Card\CardUI.cs" />
     <Compile Include="Assets\Resources\Scripts\PublicClasses\GameConfig.cs" />
     <Compile Include="Assets\Resources\Scripts\Enums\CardTrigger.cs" />
+    <Compile Include="Assets\Resources\Scripts\CardLogic\EffectS\HealUnitEffect.cs" />
     <Compile Include="Assets\Resources\Scripts\Ui\DeckEntryUI.cs" />
     <Compile Include="Assets\Resources\Scripts\Data\DeckData.cs" />
     <Compile Include="Assets\Resources\Scripts\Managers\Combat\BattleManager.cs" />
@@ -100,6 +102,7 @@
     <Compile Include="Assets\Resources\Scripts\Enums\KeywordType.cs" />
     <Compile Include="Assets\Resources\Scripts\Managers\Combat\BattleUIManager.cs" />
     <Compile Include="Assets\Resources\Scripts\PublicClasses\Card\CardSelectEntry.cs" />
+    <Compile Include="Assets\Resources\Scripts\PublicClasses\EffectRuntime.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

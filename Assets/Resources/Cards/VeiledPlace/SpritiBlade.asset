@@ -31,7 +31,7 @@ MonoBehaviour:
     effects:
     - effect: {fileID: 11400000, guid: c708a1fd02ce08d40877033713a062ae, type: 2}
       parameters:
-        amount1: 1
+        amount1: 5
         amount2: 0
         amount3: 0
         cost: 0

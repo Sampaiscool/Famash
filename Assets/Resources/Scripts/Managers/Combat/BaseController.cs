@@ -63,6 +63,15 @@ public abstract class BaseController : MonoBehaviour
         hero.StartTurn();  // This ensures both player and AI's mana are refreshed  
 
         BattleUIManager.Instance.UpdateHeroUI();
+
+        foreach (var card in fieldSlots)
+        {
+            if (card == null || card.runtimeEffects == null)
+                continue;
+
+            foreach (var effect in card.runtimeEffects)
+                effect.hasBeenUsedThisTurn = false;
+        }
     }
 
     public virtual void EndTurn()
