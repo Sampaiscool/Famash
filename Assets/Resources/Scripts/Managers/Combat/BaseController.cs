@@ -109,10 +109,10 @@ public abstract class BaseController : MonoBehaviour
         if (isPlayer && card.cardData.cardType == CardType.Unit)
         {
             PrepareUnitPlacement(card, openResponseWindow);
-            return true;       // <-- IMPORTANT!
+            return true;
         }
 
-        // AI UNIT or any SPELL
+        // Spend mana for spells/AI unit placement
         hero.SpendMana(card.cardData.cost);
 
         switch (card.cardData.cardType)
@@ -120,38 +120,40 @@ public abstract class BaseController : MonoBehaviour
             case CardType.Unit:
                 {
                     hand.Remove(card);
-
                     for (int i = 0; i < fieldSlots.Length; i++)
                         if (fieldSlots[i] == null)
                         {
                             PlaceUnitInSlot(card, i);
+                            card.location = CardLocation.Field;
+                            card.slotIndex = i;
                             break;
                         }
-
                     break;
                 }
 
             case CardType.Spell:
-                break;
+                {
+                    // Spells: remove from hand and then trigger OnPlay (which queues runtime effects)
+                    hand.Remove(card);
+                    break;
+                }
         }
 
-        // OnPlay now ALWAYS triggers
         card.Trigger(CardTrigger.OnPlay);
+
+        // Give the other player a response window **only if no stack exists yet**
+        if (!SpellStackManager.Instance.HasPendingStack)
+        {
+            BattleManager.Instance.NotifyActionTaken(card.owner);
+        }
 
         HasPerformedAction = true;
         CanRespond = false;
         BattleUIManager.Instance.UpdateHeroUI();
 
-        if (openResponseWindow)
-        {
-            if (isPlayer)
-                BattleManager.Instance.StartResponseWindow(BattleManager.Instance.opponent, card);
-            else
-                BattleManager.Instance.StartResponseWindow(BattleManager.Instance.player, card);
-        }
-
         return true;
     }
+
 
 
     public void PrepareAttack(CardRuntime card)
@@ -209,9 +211,6 @@ public abstract class BaseController : MonoBehaviour
             Debug.LogWarning("Invalid slot index for attack.");
             return null;
         }
-
-        // Assuming opponent's field is mirrored to player's field
-        // We look at the corresponding index in the opponent's field
         CardRuntime target = BattleManager.Instance.player.fieldSlots[attackingSlotIndex];
 
         // If there's a card in the opponent's corresponding field slot, return it
@@ -219,16 +218,10 @@ public abstract class BaseController : MonoBehaviour
         {
             return target;
         }
-
-        // If there’s no card in that slot, determine whether to attack the opponent's hero
-        // You could add conditions here to decide whether to attack the hero or another slot
         Debug.Log($"{controllerName} attack target not found in slot {attackingSlotIndex}. Attacking opponent's hero instead.");
 
-        // Return null or decide if the hero should be attacked directly
-        return null; // You may replace this with the opponent's hero, if you have a reference to it.
+        return null;
     }
-
-
 
     // Attack method - only turn player can attack
     public virtual bool TryAttack(CardRuntime attacker, CardRuntime target)
@@ -330,15 +323,21 @@ public abstract class BaseController : MonoBehaviour
     }
 
 
+    // inside BaseController (or wherever PrepareUnitPlacement lives)
     private void PrepareUnitPlacement(CardRuntime card, bool openResponseWindow)
     {
         if (!isPlayer)
         {
-            // AI logic unchanged
+            // AI auto-place
             for (int i = 0; i < fieldSlots.Length; i++)
                 if (fieldSlots[i] == null)
                 {
                     PlaceUnitInSlot(card, i);
+                    card.location = CardLocation.Field;
+                    card.slotIndex = i;
+
+                    card.Trigger(CardTrigger.OnPlay);
+
                     break;
                 }
 
@@ -350,19 +349,16 @@ public abstract class BaseController : MonoBehaviour
 
         BattleUIManager.Instance.OnFieldSlotClicked = (slotIndex) =>
         {
-            if (fieldSlots[slotIndex] != null)
-                return;
+            if (fieldSlots[slotIndex] != null) return;
 
-            // Spend mana now
             hero.SpendMana(card.cardData.cost);
-
             hand.Remove(card);
             PlaceUnitInSlot(card, slotIndex);
 
             card.location = CardLocation.Field;
             card.slotIndex = slotIndex;
 
-            // NOW trigger OnPlay
+            // Trigger OnPlay -> adds to stack
             card.Trigger(CardTrigger.OnPlay);
 
             HasPerformedAction = true;
@@ -371,12 +367,9 @@ public abstract class BaseController : MonoBehaviour
             BattleUIManager.Instance.ClearSlotHighlights();
             BattleUIManager.Instance.OnFieldSlotClicked = null;
             BattleUIManager.Instance.UpdateHeroUI();
-
-            // NOW open window
-            if (openResponseWindow)
-                BattleManager.Instance.StartResponseWindow(BattleManager.Instance.opponent, card);
         };
     }
+
 
 
 
@@ -384,18 +377,21 @@ public abstract class BaseController : MonoBehaviour
     {
         fieldSlots[slotIndex] = card;
         card.isInPlay = true;
-
-        // Update card’s location and slot index
         card.location = CardLocation.Field;
         card.slotIndex = slotIndex;
 
-        // Move the UI to the slot
+        // Move the UI
         Transform slotTransform = BattleUIManager.Instance.GetAvailableFieldSlots(this)[slotIndex];
         card.cardUI.transform.SetParent(slotTransform, false);
         card.cardUI.transform.localPosition = Vector3.zero;
 
-        OnResponseWindow.ToString();
+        // Notify battle manager: other player can respond
+        if (BattleManager.Instance.priorityState == BattleManager.PriorityState.NormalTurn)
+        {
+            BattleManager.Instance.NotifyActionTaken(this);
+        }
     }
+
     public void MoveCardToActiveSlot(CardRuntime card, int slotIndex)
     {
         if (card == null)

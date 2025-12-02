@@ -2,12 +2,11 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static Unity.Collections.AllocatorManager;
 
 public class CardActionPanel : MonoBehaviour
 {
-    public RectTransform contentParent; // ScrollView content
-    public GameObject actionButtonPrefab; // prefab with Button + Text
+    public RectTransform contentParent;
+    public GameObject actionButtonPrefab;
 
     private CardRuntime currentCard;
     private BattleUIManager uiManager;
@@ -21,165 +20,93 @@ public class CardActionPanel : MonoBehaviour
     {
         currentCard = card;
 
-        // Clear old buttons
         foreach (Transform t in contentParent)
             Destroy(t.gameObject);
 
-        bool isTurnPlayer = BattleManager.Instance.currentResponder == null && BattleManager.Instance.turnPlayer.HasAttack;
-        bool canAttack = BattleManager.Instance.turnPlayer.HasAttack;
-        bool isResponsePhase = BattleManager.Instance.currentResponder != null &&
-                       BattleManager.Instance.currentResponder == BattleManager.Instance.otherPlayer;
+        var bm = BattleManager.Instance;
+        bool hasPriority = bm.priorityOwner == bm.turnPlayer || !SpellStackManager.Instance.HasPendingStack;
+        bool isResponsePhase = SpellStackManager.Instance.HasPendingStack && bm.priorityOwner != bm.turnPlayer;
+        bool canAttack = bm.turnPlayer.HasAttack && hasPriority;
 
-        // Allow preparing attack only if the card is in play and it's the turn player's turn
-        if (card.isInPlay && isTurnPlayer && canAttack)
+        if (card.isInPlay && canAttack)
             AddAction("Prepare Attack", OnPrepareAttack);
 
-        // Add active effects
-        var activateEffects = new List<(EffectInstance effect, int index)>();
-
-        for (int i = 0; i < card.cardData.triggerGroups.Count; i++)
+        for (int i = 0; i < card.runtimeEffects.Count; i++)
         {
-            var group = card.cardData.triggerGroups[i];
+            var re = card.runtimeEffects[i];
+            if (re.trigger != CardTrigger.OnActivate) continue;
+            if (re.isOncePerTurn && re.hasBeenUsedThisTurn) continue;
+            re.effectOwner = card.owner;
+            if (re.needsTarget && !HasValidTargets(re)) continue;
 
-            if (group.trigger == CardTrigger.OnActivate)
-            {
-                foreach (var effect in group.effects)
-                {
-                    activateEffects.Add((effect, i));
-                }
-            }
+            int idx = i;
+            AddAction("Activate Effect", () => OnActivate(idx));
         }
 
-        foreach (var re in card.runtimeEffects)
-        {
-            if (re.trigger == CardTrigger.OnActivate &&
-                !(re.isOncePerTurn && re.hasBeenUsedThisTurn))
-            {
-                AddAction(
-                    "Activate Effect",
-                    () => OnActivate(re)
-                );
-            }
-        }
-
-
-
-        if (isResponsePhase && card.isInPlay && BattleManager.Instance.turnPlayer.preparedAttacks.Count > 0)
+        if (card.isInPlay && isResponsePhase && bm.turnPlayer.preparedAttacks.Count > 0)
             AddAction("Block", OnBlock);
     }
 
     private void AddAction(string label, UnityEngine.Events.UnityAction callback)
     {
-        if (actionButtonPrefab == null)
-        {
-            Debug.LogError("CardActionPanel: actionButtonPrefab is not assigned!");
-            return;
-        }
-
-        if (contentParent == null)
-        {
-            Debug.LogError("CardActionPanel: contentParent is not assigned!");
-            return;
-        }
-
         GameObject btnObj = Instantiate(actionButtonPrefab, contentParent);
         var btn = btnObj.GetComponent<Button>();
         var txt = btnObj.GetComponentInChildren<TMP_Text>();
-
-        if (btn == null)
-        {
-            Debug.LogError("CardActionPanel: Button component missing on prefab!");
-            return;
-        }
-        if (txt == null)
-        {
-            Debug.LogError("CardActionPanel: Text component missing on prefab!");
-            return;
-        }
-
-        if (txt != null) txt.text = label;
+        txt.text = label;
         btn.onClick.AddListener(callback);
     }
 
-    void OnPrepareAttack()
+    private void OnPrepareAttack()
     {
-        if (currentCard != null)
+        if (currentCard == null || currentCard.location != CardLocation.Field) { Destroy(gameObject); return; }
+
+        int slotIndex = currentCard.slotIndex;
+        if (slotIndex != -1)
         {
-            // First, check if the card is on the field
-            if (currentCard.location == CardLocation.Field)
-            {
-                // Find the correct slot for the card in the active slots
-                int slotIndex = currentCard.slotIndex;
-
-                if (slotIndex != -1)
-                {
-                    // Move the card from the field to the active slot
-                    BattleManager.Instance.turnPlayer.MoveCardToActiveSlot(currentCard, slotIndex);
-
-                    // Now prepare for attack
-                    BattleManager.Instance.PrepareAttack(currentCard);
-                    Debug.Log($"{currentCard.cardData.cardName} prepared for attack and placed in active slot {slotIndex}");
-                }
-                else
-                {
-                    Debug.Log("No available active slots for the card.");
-                }
-            }
-            else
-            {
-                Debug.Log("Card is not in play on the field.");
-            }
+            BattleManager.Instance.turnPlayer.MoveCardToActiveSlot(currentCard, slotIndex);
+            BattleManager.Instance.PrepareAttack(currentCard);
         }
+
         Destroy(gameObject);
     }
 
-
-    void OnActivate(RuntimeEffect runtime)
+    private void OnActivate(int effectIndex)
     {
-        runtime.effect?.Apply(currentCard, runtime.parameters);
+        var effect = currentCard.runtimeEffects[effectIndex];
+        effect.effectOwner = currentCard.owner;
 
-        if (runtime.isOncePerTurn)
-            runtime.hasBeenUsedThisTurn = true;
+        // Add effect to stack instead of directly applying
+        SpellStackManager.Instance.AddToStack(currentCard, effect);
 
         Destroy(gameObject);
     }
 
-    void OnBlock()
+    private void OnBlock()
     {
         if (currentCard == null) return;
 
         int slotIndex = currentCard.slotIndex;
+        var attacker = BattleManager.Instance.turnPlayer;
+        var defender = BattleManager.Instance.otherPlayer;
 
-        BaseController attacker = BattleManager.Instance.turnPlayer;
-        BaseController defender = BattleManager.Instance.currentResponder;
-
-        if (attacker.activeSlots == null || slotIndex < 0 || slotIndex >= attacker.activeSlots.Length)
-        {
-            Debug.Log("Invalid lane index for block.");
-            Destroy(gameObject);
-            return;
-        }
+        if (slotIndex < 0 || slotIndex >= attacker.activeSlots.Length) { Destroy(gameObject); return; }
 
         CardRuntime attackingCard = attacker.activeSlots[slotIndex];
-        if (attackingCard == null)
-        {
-            Debug.Log("No attacker in this lane to block!");
-            Destroy(gameObject);
-            return;
-        }
+        if (attackingCard == null) { Destroy(gameObject); return; }
 
-        // Move defender into active slot
         defender.MoveCardToActiveSlot(currentCard, slotIndex);
-
-        // Track that this card is blocking
         if (!defender.preparedBlocks.Contains(currentCard))
             defender.preparedBlocks.Add(currentCard);
 
-        // Change the End Turn button to say "Confirm Blockers"
         BattleUIManager.Instance.SetEndTurnButtonLabel("Confirm Blockers");
-
-        Debug.Log($"{defender.controllerName}'s {currentCard.cardData.cardName} is blocking {attacker.controllerName}'s {attackingCard.cardData.cardName} in lane {slotIndex}.");
-
         Destroy(gameObject);
+    }
+
+    private bool HasValidTargets(RuntimeEffect effect)
+    {
+        foreach (var cardUI in FindObjectsByType<CardInGame>(FindObjectsInactive.Exclude, FindObjectsSortMode.None))
+            if (cardUI.runtimeCard != null && effect.IsValidTarget(cardUI.runtimeCard))
+                return true;
+        return false;
     }
 }

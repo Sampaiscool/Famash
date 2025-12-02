@@ -33,7 +33,7 @@ public class CardInGame : MonoBehaviour, IPointerClickHandler
     public GameObject cardDetailPrefab;       // traditional middle-click info
     public GameObject cardActionPanelPrefab;  // scrollable action panel
 
-    private CardRuntime runtimeCard;
+    public CardRuntime runtimeCard;
     private Canvas uiCanvas;
 
     private GameObject currentActionPanel;
@@ -89,6 +89,14 @@ public class CardInGame : MonoBehaviour, IPointerClickHandler
         {
             Debug.LogWarning("Card clicked without owner or runtimeCard!");
             return;
+        }
+
+        var ui = BattleUIManager.Instance;
+
+        if (ui.OnCardClickedTargetMode != null)
+        {
+            ui.OnCardClickedTargetMode(runtimeCard);
+            return; // stop normal clicks!
         }
 
         // Playing from hand

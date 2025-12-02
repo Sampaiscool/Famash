@@ -4,5 +4,6 @@ public enum CardLocation
     Hand,
     Field,
     Active,
-    Graveyard
+    Graveyard,
+    None,
 }

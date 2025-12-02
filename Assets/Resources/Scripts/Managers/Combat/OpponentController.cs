@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class OpponentController : BaseController
 {
-    private bool hasRespondedThisWindow = false;
+    private bool hasRespondedThisPriority = false;
+
     public override void StartTurn(bool drawCard = true)
     {
         IsTurnDone = false;
@@ -20,105 +21,111 @@ public class OpponentController : BaseController
     {
         while (!IsTurnDone)
         {
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.3f);
 
+            // Wait until AI has priority
+            if (BattleManager.Instance.priorityOwner != this)
+            {
+                yield return null;
+                continue;
+            }
+
+            // --- Phase 1: Respond to stack if it exists ---
+            if (SpellStackManager.Instance.HasPendingStack)
+            {
+                Debug.Log($"{controllerName} responding to stack...");
+                // Respond or pass
+                var playableStack = hand.FirstOrDefault(c => hero.CanAfford(c.cardData));
+                if (playableStack != null)
+                    TryPlayCard(playableStack, openResponseWindow: true);
+
+                BattleManager.Instance.HandlePass(this);
+                yield return new WaitForSeconds(0.3f);
+                continue;
+            }
+
+            // --- Phase 2: Play cards during normal turn priority ---
             var playableCard = hand.FirstOrDefault(c => hero.CanAfford(c.cardData));
-            if (playableCard == null) break;
+            if (playableCard != null)
+            {
+                TryPlayCard(playableCard, openResponseWindow: true);
 
-            TryPlayCard(playableCard, true);
-            BattleManager.Instance.StartResponseWindow(BattleManager.Instance.player, playableCard);
-            yield return new WaitUntil(() => BattleManager.Instance.currentResponder == null);
+                // Notify BattleManager so the other player can respond
+                BattleManager.Instance.NotifyActionTaken(this);
+                yield return new WaitForSeconds(0.3f);
+                continue;
+            }
 
-            yield return new WaitForSeconds(0.25f);
+            // --- Phase 3: Prepare attacks if normal turn ---
+            if (BattleManager.Instance.priorityState == BattleManager.PriorityState.NormalTurn && HasAttack)
+            {
+                yield return StartCoroutine(AIAttackPhase());
+                IsTurnDone = true; // AI finishes turn after attacks
+                yield break;
+            }
+
+            // --- Phase 4: No actions, pass priority ---
+            BattleManager.Instance.HandlePass(this);
+            yield return new WaitForSeconds(0.2f);
         }
-
-        yield return StartCoroutine(AIAttackPhase());
-        yield return new WaitForSeconds(1f);
-        IsTurnDone = true;
     }
+
 
     private IEnumerator AIAttackPhase()
     {
         HasAttack = true;
 
-        Debug.Log($"{controllerName} is preparing attacks...");
-
-        bool preparedAny = false;
-
-        // Go through all field slots and prepare attack for each unit
+        // Move units to active slots
         for (int i = 0; i < fieldSlots.Length; i++)
         {
-            CardRuntime unit = fieldSlots[i];
-            if (unit != null && HasAttack == true)
+            var unit = fieldSlots[i];
+            if (unit != null)
             {
                 MoveCardToActiveSlot(unit, i);
                 BattleManager.Instance.PrepareAttack(unit);
-                preparedAny = true;
-                yield return new WaitForSeconds(0.25f); // slight delay for pacing
+                yield return new WaitForSeconds(0.25f);
             }
         }
 
-        if (preparedAny)
-        {
-            yield return new WaitForSeconds(0.75f);
-            Debug.Log($"{controllerName} confirms attacks!");
+        // Open priority window for opponent to respond
+        BattleManager.Instance.priorityState = BattleManager.PriorityState.PriorityWindow;
+        BattleManager.Instance.GivePriorityTo(BattleManager.Instance.player);
 
-            // Start the player’s response window before attacks resolve
-            BattleManager.Instance.StartResponseWindow(BattleManager.Instance.player, null);
+        // Wait until the priority window ends (two passes or stack resolves)
+        yield return new WaitUntil(() => BattleManager.Instance.priorityState == BattleManager.PriorityState.NormalTurn);
 
-            // Wait until player finishes responding
-            yield return new WaitUntil(() => BattleManager.Instance.currentResponder == null);
+        // Now resolve attacks immediately
+        ResolvePreparedAttacks(BattleManager.Instance.player);
 
-            // Confirm and resolve the attacks
-            BattleManager.Instance.ConfirmAttack();
-        }
-        else
-        {
-            Debug.Log($"{controllerName} has no attackers.");
-        }
+        HasAttack = false;
     }
+
     private IEnumerator AIAutoBlock()
     {
-        var attacker = BattleManager.Instance.turnPlayer;
-        var defender = this;
-
-        // Small delay for pacing
+        // Only auto block if AI has priority in a blocker response phase
         yield return new WaitForSeconds(0.5f);
 
-        bool blockedAny = false;
+        var attacker = BattleManager.Instance.turnPlayer;
 
         for (int i = 0; i < attacker.activeSlots.Length; i++)
         {
             var attackingCard = attacker.activeSlots[i];
             if (attackingCard == null) continue;
 
-            // Try to find a unit on the defender’s field in the same slot
-            var potentialBlocker = defender.fieldSlots[i];
+            var potentialBlocker = fieldSlots[i];
             if (potentialBlocker != null)
             {
-                defender.MoveCardToActiveSlot(potentialBlocker, i);
-                defender.preparedBlocks.Add(potentialBlocker);
+                MoveCardToActiveSlot(potentialBlocker, i);
+                if (!preparedBlocks.Contains(potentialBlocker))
+                    preparedBlocks.Add(potentialBlocker);
 
-                Debug.Log($"{controllerName} blocks {attacker.controllerName}'s {attackingCard.cardData.cardName} with {potentialBlocker.cardData.cardName} in lane {i}.");
-
-                blockedAny = true;
-                yield return new WaitForSeconds(0.3f);
+                yield return new WaitForSeconds(0.25f);
             }
         }
 
-        if (blockedAny)
-        {
-            Debug.Log($"{controllerName} finished assigning blockers.");
-        }
-        else
-        {
-            Debug.Log($"{controllerName} had no available blockers.");
-        }
-
-        // Close the response window so combat can continue
-        BattleManager.Instance.EndResponseWindow();
+        // After auto-blocking, pass priority
+        BattleManager.Instance.HandlePass(this);
     }
-
 
     private void OnEnable()
     {
@@ -129,23 +136,28 @@ public class OpponentController : BaseController
     {
         BaseController.OnResponseWindow -= OnResponseWindowHandler;
     }
+
     private void OnResponseWindowHandler(BaseController actor, CardRuntime playedCard)
     {
+        // legacy event: if you're still using OnResponseWindow event, let it trigger AI handling
+        // but prefer the priority system paths above.
         StartCoroutine(HandleResponseWindow(actor, playedCard));
     }
 
     private IEnumerator HandleResponseWindow(BaseController actor, CardRuntime playedCard)
     {
         if (actor == this) yield break;
-        if (hasRespondedThisWindow) yield break;
-        hasRespondedThisWindow = true;
+        if (hasRespondedThisPriority) yield break;
+        hasRespondedThisPriority = true;
 
-        if (BattleManager.Instance.currentResponder == this)
+        if (BattleManager.Instance.priorityOwner == this)
         {
+            // If AI has priority, maybe block
             yield return StartCoroutine(AIAutoBlock());
         }
         else
         {
+            // If AI can act (has playable), play something quick
             var playable = hand.FirstOrDefault(c => hero.CanAfford(c.cardData));
             if (playable != null)
             {
@@ -154,7 +166,6 @@ public class OpponentController : BaseController
             }
         }
 
-        hasRespondedThisWindow = false;
+        hasRespondedThisPriority = false;
     }
-
 }

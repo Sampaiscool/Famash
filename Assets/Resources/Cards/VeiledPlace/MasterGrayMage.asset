@@ -14,14 +14,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CardSO
   cardId: unit_master_gray_mage
   cardName: Master Gray Mage
-  description: is he real??!
+  description: '[*] Once per turn; Give this card +1 HP'
   artwork: {fileID: 8661251347803364236, guid: 1b0455afc48bc544db7cfafd04d32a31, type: 3}
   frame: {fileID: 0}
   cost: 1
   cardType: 0
+  spellType: 0
+  spellSpeed: 0
   attack: 0
   health: 1
-  isHeroCard: 0
+  isDoobie: 0
   region: {fileID: 11400000, guid: 1980c659f73d76b4b94187cf6baadac4, type: 2}
   keywords: 
-  triggerGroups: []
+  triggerGroups:
+  - trigger: 1
+    effects:
+    - effect: {fileID: 11400000, guid: 452c45dfd6302184e84c204520e26018, type: 2}
+      parameters:
+        amount1: 1
+        amount2: 0
+        amount3: 0
+        cost: 0
+      isOncePerTurn: 1

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,6 +9,8 @@ public class BattleUIManager : MonoBehaviour
     public static BattleUIManager Instance { get; private set; }
 
     public System.Action<int> OnFieldSlotClicked;
+    public System.Action<CardRuntime> OnCardClickedTargetMode;
+
 
     [Header("Player UI")]
     public TMP_Text playerHealthText;
@@ -25,6 +29,10 @@ public class BattleUIManager : MonoBehaviour
     public Transform[] playerActiveSlots = new Transform[5];
     public Transform[] opponentActiveSlots = new Transform[5];
 
+    [Header("Stack UI")]
+    public GameObject stackPanel;
+    public Transform stackContent;
+
     [Header("Turn Panels")]
     public Image playerTurnPanel;
     public Image opponentTurnPanel;
@@ -37,9 +45,9 @@ public class BattleUIManager : MonoBehaviour
     public float fadeDuration = 0.3f; // seconds
     private Coroutine panelFadeRoutine;
 
-
     [Header("Prefabs")]
     public GameObject cardPrefab;
+    public GameObject stackEntryPrefab;
 
     [Header("Graveyard UI")]
     public GameObject graveyardPanelPrefab;
@@ -140,6 +148,38 @@ public class BattleUIManager : MonoBehaviour
         }
     }
 
+    public void HighlightTargets(RuntimeEffect effect)
+    {
+        var allCards = FindObjectsByType<CardInGame>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+
+        foreach (var cardUI in allCards)
+        {
+            if (cardUI.runtimeCard == null)
+                continue;
+
+            if (effect.IsValidTarget(cardUI.runtimeCard))
+                cardUI.artwork.color = Color.yellow;
+            else
+                cardUI.artwork.color = Color.gray;
+        }
+    }
+
+    public void ClearTargetHighlights()
+    {
+        var allCards = FindObjectsByType<CardInGame>(
+            FindObjectsInactive.Exclude,
+            FindObjectsSortMode.None
+        );
+
+        foreach (var cardUI in allCards)
+        {
+            if (cardUI == null) continue;
+
+            cardUI.artwork.color = Color.white;
+        }
+    }
+
+
     public void HighlightAvailableSlots(BaseController owner)
     {
         Transform[] slots = owner.isPlayer ? playerFieldSlots : opponentFieldSlots;
@@ -155,6 +195,81 @@ public class BattleUIManager : MonoBehaviour
                 img.color = Color.red; // occupied
         }
     }
+    // In BattleUIManager
+    public void StartTargetSelection(CardRuntime activator, RuntimeEffect effect, System.Action<CardRuntime> callback)
+    {
+        Debug.Log("Targeting mode started.");
+
+        HighlightTargets(effect);
+
+        // Assign a click handler
+        OnCardClickedTargetMode = (CardRuntime clicked) =>
+        {
+            if (!effect.IsValidTarget(clicked))
+                return;
+
+            ClearTargetHighlights();
+            OnCardClickedTargetMode = null;
+
+            callback(clicked);
+        };
+    }
+
+
+    public bool IsValidTarget(EffectInstance inst, CardRuntime target)
+    {
+        BaseController owner = inst.effectOwner;
+        if (owner == null)
+        {
+            Debug.LogWarning("Effect owner not set on effect instance!");
+            return false;
+        }
+
+        // 1. Card type
+        if (inst.targetType != CardType.None &&
+            target.cardData.cardType != inst.targetType)
+            return false;
+
+        // 2. Ownership
+        if (inst.targetEnemy && target.owner == owner)
+            return false; // enemy = not your own
+
+        if (inst.targetAlly && target.owner != owner)
+            return false; // ally = must be your own
+
+        // 3. Location — allow if allowedLocation is None, otherwise match
+        if (!inst.allowedLocations.Contains(target.location))
+            return false;
+
+
+        return true;
+    }
+    public void UpdateStackUI(IEnumerable<StackEntry> stack)
+    {
+        stackPanel.SetActive(true);
+
+        // Clear old entries
+        foreach (Transform child in stackContent)
+            Destroy(child.gameObject);
+
+        // Add new entries, top at bottom
+        foreach (var entry in stack.Reverse())
+        {
+            GameObject obj = Instantiate(stackEntryPrefab, stackContent);
+
+            var ui = obj.GetComponent<StackEntryUI>();
+            if (ui != null)
+                ui.Bind(entry);
+            else
+                Debug.LogWarning("StackEntryPrefab is missing StackEntryUI component!");
+        }
+    }
+    public void HideStackUI()
+    {
+        stackPanel.SetActive(false);
+    }
+
+
     public void UpdateActiveSlotsUI()
     {
         for (int i = 0; i < BattleManager.Instance.turnPlayer.activeSlots.Length; i++)
@@ -169,7 +284,6 @@ public class BattleUIManager : MonoBehaviour
             }
         }
     }
-
 
     public void OnSlotClicked(int index)
     {

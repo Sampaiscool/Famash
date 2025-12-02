@@ -52,13 +52,24 @@ public class CardRuntime
                         amount2 = instance.parameters.amount2,
                         amount3 = instance.parameters.amount3,
                         cost = instance.parameters.cost,
+                        // Also copy target if it exists
+                        target = instance.parameters.target
                     },
                     trigger = group.trigger,
+                    spellSpeed = instance.spellSpeed,
                     isOncePerTurn = instance.isOncePerTurn,
-                    hasBeenUsedThisTurn = false
+                    hasBeenUsedThisTurn = false,
+
+                    // TARGETING INFO
+                    needsTarget = instance.needsTarget,
+                    targetType = instance.targetType,
+                    targetEnemy = instance.targetEnemy,
+                    targetAlly = instance.targetAlly,
+                    allowedLocations = new List<CardLocation>(instance.allowedLocations)
                 });
             }
         }
+
     }
 
     public void ModifyStats(int attackChange, int healthChange, bool isOverheal = false)
@@ -102,21 +113,50 @@ public class CardRuntime
 
     public void Trigger(CardTrigger trigger)
     {
-        foreach (var runtime in runtimeEffects)
+        foreach (var re in runtimeEffects)
         {
-            if (runtime.trigger != trigger)
+            if (re.trigger != trigger) continue;
+
+            // Skip once-per-turn
+            if (re.isOncePerTurn && re.hasBeenUsedThisTurn)
                 continue;
 
-            if (runtime.isOncePerTurn && runtime.hasBeenUsedThisTurn)
-                continue;
-
-            runtime.effect?.Apply(this, runtime.parameters);
-
-            if (runtime.isOncePerTurn)
-                runtime.hasBeenUsedThisTurn = true;
+            // If the effect needs a target -> start target selection
+            if (re.needsTarget)
+            {
+                BattleUIManager.Instance.StartTargetSelection(this, re, target =>
+                {
+                    re.parameters.target = target;
+                    SpellStackManager.Instance.AddToStack(this, re);
+                });
+            }
+            else
+            {
+                // No target? Straight on the stack
+                SpellStackManager.Instance.AddToStack(this, re);
+            }
         }
     }
 
+    public EffectInstance GetActivateEffect(int effectIndex)
+    {
+        int counter = 0;
+
+        foreach (var group in cardData.triggerGroups)
+        {
+            if (group.trigger == CardTrigger.OnActivate)
+            {
+                foreach (var eff in group.effects)
+                {
+                    if (counter == effectIndex)
+                        return eff;
+
+                    counter++;
+                }
+            }
+        }
+        return null;
+    }
 
 
     public void UpdateUiStats()

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Famash/Effects/DealDamage")]
+[CreateAssetMenu(menuName = "Famash/Effects/DealDamage/Hero")]
 public class DealDamageEffect : EffectSOBase
 {
     public override void Apply(CardRuntime card, EffectParams parameters)

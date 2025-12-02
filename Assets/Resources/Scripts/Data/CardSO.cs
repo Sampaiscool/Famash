@@ -26,18 +26,16 @@ public class CardSO : ScriptableObject
     public RegionSO region;
 
     [Header("Keywords")]
-    public List<KeywordType> keywords = new(); // simple list of flags
+    public List<KeywordType> keywords = new();
 
     [Header("Effect Triggers")]
-    public List<CardTriggerGroup> triggerGroups = new(); // multiple triggers
+    public List<CardTriggerGroup> triggerGroups = new();
 }
 
 [System.Serializable]
 public class CardTriggerGroup
 {
     public CardTrigger trigger;
-
-    // Now each effect has its own parameters for this card
     public List<EffectInstance> effects;
 }
 
@@ -46,5 +44,22 @@ public class EffectInstance
 {
     public EffectSOBase effect;
     public EffectParams parameters;
+
     public bool isOncePerTurn;
+
+    public bool needsTarget = false;
+
+    public CardType targetType = CardType.None;
+
+    public bool targetEnemy = false;
+    public bool targetAlly = false;
+
+    public List<CardLocation> allowedLocations = new() { CardLocation.Field };
+
+    public SpellSpeed spellSpeed = SpellSpeed.None;
+
+    [System.NonSerialized] public BaseController effectOwner;
 }
+
+
+

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CardSO
   cardId: unit_flowing_blade
   cardName: Flowing Blade
-  description: yes description
+  description: '[*] Once per turn target 1 unit; Deal 3 damage to it. '
   artwork: {fileID: -6668742276498972910, guid: 9f375888044ab8d4a92d294a3d4c4c32, type: 3}
   frame: {fileID: 0}
   cost: 2
@@ -26,4 +26,19 @@ MonoBehaviour:
   isDoobie: 0
   region: {fileID: 11400000, guid: 1980c659f73d76b4b94187cf6baadac4, type: 2}
   keywords: 
-  triggerGroups: []
+  triggerGroups:
+  - trigger: 1
+    effects:
+    - effect: {fileID: 11400000, guid: 151b494f1ecfb7442ab822495bf5a52b, type: 2}
+      parameters:
+        amount1: 3
+        amount2: 0
+        amount3: 0
+        cost: 0
+      isOncePerTurn: 1
+      needsTarget: 1
+      targetType: 0
+      targetEnemy: 1
+      targetAlly: 0
+      allowedLocations: 0200000003000000
+      spellSpeed: 0

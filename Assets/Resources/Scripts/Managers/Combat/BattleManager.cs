@@ -14,11 +14,24 @@ public class BattleManager : MonoBehaviour
 
     public bool firstTurn = true;
 
-    private bool waitingForResponse = false;
-    public BaseController currentResponder;
+    // ---------------------------
+    // New Runeterra priority state
+    // ---------------------------
+    public enum PriorityState
+    {
+        NormalTurn,     // Attacker can attack OR act
+        PriorityWindow  // Both play responses only
+    }
+
+    public PriorityState priorityState = PriorityState.NormalTurn;
+    public BaseController priorityOwner; // Who currently holds priority
+    public bool lastPassFromTurnPlayer = false;
 
     void Awake() => Instance = this;
 
+    // ---------------------------
+    // Setup phase
+    // ---------------------------
     public void SetupBattle()
     {
         turnPlayer = player;
@@ -29,29 +42,37 @@ public class BattleManager : MonoBehaviour
 
         for (int i = 0; i < player.fieldSlots.Length; i++)
             player.fieldSlots[i] = null;
+
         for (int i = 0; i < opponent.fieldSlots.Length; i++)
             opponent.fieldSlots[i] = null;
 
         for (int i = 0; i < player.activeSlots.Length; i++)
             player.activeSlots[i] = null;
+
         for (int i = 0; i < opponent.activeSlots.Length; i++)
             opponent.activeSlots[i] = null;
+
+        // Turn player starts with priority
+        priorityOwner = turnPlayer;
 
         StartCoroutine(GameLoop());
     }
 
+
+    // ---------------------------
+    // Basic Turn Loop
+    // ---------------------------
     IEnumerator GameLoop()
     {
         while (true)
         {
-            // Highlight whose turn it is
             BattleUIManager.Instance.UpdateTurnHighlight(turnPlayer);
 
             yield return StartCoroutine(TakeTurn(turnPlayer));
 
-            var temp = turnPlayer;
+            var tmp = turnPlayer;
             turnPlayer = otherPlayer;
-            otherPlayer = temp;
+            otherPlayer = tmp;
 
             firstTurn = false;
         }
@@ -60,7 +81,7 @@ public class BattleManager : MonoBehaviour
     IEnumerator TakeTurn(BaseController active)
     {
         if (!firstTurn)
-            turnPlayer.DrawCards(1);
+            active.DrawCards(1);
 
         StartTurn(active);
         yield return new WaitUntil(() => active.IsTurnDone);
@@ -69,235 +90,217 @@ public class BattleManager : MonoBehaviour
 
     void StartTurn(BaseController controller)
     {
-        bool isTurnPlayer = (controller == turnPlayer);
+        controller.hero.StartTurn();
 
-        // Both players refill every turn
         player.hero.StartTurn();
         opponent.hero.StartTurn();
 
         controller.StartTurn(!firstTurn);
-        BattleUIManager.Instance.SetEndTurnButtonActive(controller.isPlayer);
-        BattleUIManager.Instance.UpdateTurnHighlight(controller);
-        BattleUIManager.Instance.UpdateHeroUI();
-    }
 
+        priorityState = PriorityState.NormalTurn;
+        priorityOwner = controller;
+        lastPassFromTurnPlayer = false;
+
+        BattleUIManager.Instance.UpdateHeroUI();
+        BattleUIManager.Instance.SetEndTurnButtonActive(controller.isPlayer);
+    }
 
     void EndTurn(BaseController controller)
     {
-        // Current turn ends
         controller.EndTurn();
 
-        // Both heroes gain 1 max mana and refill — Runeterra style
         player.hero.EndTurnGainMana();
         opponent.hero.EndTurnGainMana();
 
-        // Update UI after mana change
         BattleUIManager.Instance.UpdateHeroUI();
-
-        // Hide the End Turn button (until next turn starts)
         BattleUIManager.Instance.SetEndTurnButtonActive(false);
     }
 
-
-    // Player clicks End Turn button
+    // ---------------------------
+    // PASSING & PRIORITY
+    // ---------------------------
     public void OnEndTurnButtonClicked()
     {
-        // 1️ Cancel placement mode
-        if (player.IsPlacingCard)
+        HandlePass(player);
+    }
+
+    public void HandlePass(BaseController passer)
+    {
+        // Can only pass if you have priority
+        if (passer != priorityOwner)
+            return;
+
+        bool passerIsTurnPlayer = (passer == turnPlayer);
+
+        // NormalTurn pass by turnPlayer = end turn
+        if (priorityState == PriorityState.NormalTurn && passerIsTurnPlayer)
         {
-            player.CancelPlacementMode();
+            passer.IsTurnDone = true;
             return;
         }
 
-        // 2️ If currently in response window and player is the responder
-        if (waitingForResponse && currentResponder == player)
+        // We are in PriorityWindow (responding)
+        if (lastPassFromTurnPlayer != passerIsTurnPlayer)
         {
-            // If player has placed blockers, confirm them instead of ending response
-            if (opponent.preparedAttacks.Count > 0 || player.preparedBlocks.Count > 0)
-            {
-                ConfirmBlockers();
-                return;
-            }
-            // Otherwise, just end the response
-            EndResponseWindow();
+            // Not consecutive → give priority to other
+            lastPassFromTurnPlayer = passerIsTurnPlayer;
+            BaseController next = (passer == player) ? opponent : player;
+            GivePriorityTo(next);
             return;
         }
 
-        // 3️ Normal attack/turn logic
-        if (turnPlayer == player)
+        // ---------------------------
+        // Two passes in a row!
+        // ---------------------------
+        if (SpellStackManager.Instance.HasPendingStack)
         {
-            if (player.preparedAttacks.Count > 0 || opponent.preparedAttacks.Count > 0)
-            {
-                ConfirmAttack();
-            }
-            else
-            {
-                player.IsTurnDone = true;
-            }
-        }
-    }
-
-    public void PrepareAttack(CardRuntime card)
-    {
-        if (turnPlayer == player)
-        {
-            player.PrepareAttack(card);  // Prepare attack for the player
-        }
-        else
-        {
-            opponent.PrepareAttack(card);  // Prepare attack for the opponent
+            SpellStackManager.Instance.ResolveStack();
         }
 
-        // Show the Confirm Attack button if attacks are prepared
-        if (player.preparedAttacks.Count > 0 || opponent.preparedAttacks.Count > 0)
-        {
-            BattleUIManager.Instance.ShowConfirmAttackButton();
-        }
-    }
+        // Return to normal turn control
+        priorityState = PriorityState.NormalTurn;
+        priorityOwner = turnPlayer;
+        lastPassFromTurnPlayer = false;
 
-    public void ConfirmAttack()
-    {
-        BaseController attacker = turnPlayer;
-        BaseController defender = otherPlayer;
-
-        if (attacker == null || defender == null) return;
-
-        if (attacker.preparedAttacks.Count == 0)
-        {
-            Debug.Log("No attacks prepared!");
-            return;
-        }
-
-        // Hide confirm attack button during response
-        BattleUIManager.Instance.HideConfirmAttackButton();
-
-        // Open the response window for the defender
-        StartResponseWindow(defender, null);
-
-        // After response window ends, continue attack resolution
-        StartCoroutine(ResolveBattleAfterResponse(attacker, defender));
-    }
-    public void ConfirmBlockers()
-    {
-        BaseController attacker = turnPlayer;
-        BaseController defender = currentResponder;
-
-        if (defender == null)
-        {
-            Debug.LogWarning("No current responder, cannot confirm blockers.");
-            return;
-        }
-
-        if (defender.preparedBlocks.Count == 0)
-        {
-            Debug.Log($"{defender.controllerName} has no blockers. Proceeding with attack resolution.");
-
-            // Hide the Confirm Blockers button
-            BattleUIManager.Instance.SetEndTurnButtonLabel("End Turn");
-            BattleUIManager.Instance.SetEndTurnButtonActive(false);
-
-            // End the response window so combat can continue
-            EndResponseWindow();
-
-            // Resolve combat with zero blockers
-            attacker.ResolvePreparedAttacks(defender);
-            return;
-        }
-
-        // Normal case: defender has blockers
-        Debug.Log($"{defender.controllerName} confirmed their blockers.");
-
-        // Hide the Confirm Blockers button
-        BattleUIManager.Instance.SetEndTurnButtonLabel("End Turn");
-        BattleUIManager.Instance.SetEndTurnButtonActive(false);
-
-        // End the response window
-        EndResponseWindow();
-
-        // Resolve combat with blockers
-        attacker.ResolvePreparedAttacks(defender);
-
-        // Clear blocks for next phase
-        defender.preparedBlocks.Clear();
-    }
-
-
-    public void StartResponseWindow(BaseController responder, CardRuntime playedCard = null)
-    {
-        currentResponder = responder;
-        waitingForResponse = true;
-
-        BattleUIManager.Instance.UpdateTurnHighlight(responder);
-
-        if (responder.isPlayer)
-        {
-            BattleUIManager.Instance.SetEndTurnButtonActive(true);
-            BattleUIManager.Instance.SetEndTurnButtonLabel("Pass");
-        }
-        else
-        {
-            // Only AI acts here
-            StartCoroutine(AIResponseLoop(responder));
-        }
-    }
-
-
-    public void EndResponseWindow()
-    {
-        waitingForResponse = false;
-        currentResponder = null;
-
-        // Return highlight to the current turn player
         BattleUIManager.Instance.UpdateTurnHighlight(turnPlayer);
-
         BattleUIManager.Instance.SetEndTurnButtonLabel("End Turn");
         BattleUIManager.Instance.SetEndTurnButtonActive(turnPlayer.isPlayer);
     }
 
-    public bool IsPlayerAllowedToAct(PlayerController pc)
+    public void GivePriorityTo(BaseController next)
     {
-        return (turnPlayer == pc && !waitingForResponse) ||
-               (waitingForResponse && currentResponder == pc);
-    }
-    private IEnumerator ResolveBattleAfterResponse(BaseController attacker, BaseController defender)
-    {
-        // Wait until response window closes (defender passes)
-        yield return new WaitUntil(() => !waitingForResponse);
+        priorityOwner = next;
+        BattleUIManager.Instance.UpdateTurnHighlight(next);
 
-        // Now resolve the battle
+        if (next.isPlayer)
+        {
+            BattleUIManager.Instance.SetEndTurnButtonLabel("Pass");
+            BattleUIManager.Instance.SetEndTurnButtonActive(true);
+        }
+        else
+        {
+            // AI now has priority -> start its response coroutine
+            StartPriorityResponseIfAI(next);
+        }
+    }
+
+
+    // ---------------------------
+    // Called whenever a spell/summon/ability is added to the stack
+    // ---------------------------
+    public void NotifyActionTaken(BaseController actor)
+    {
+        priorityState = PriorityState.PriorityWindow;
+
+        BaseController next = (actor == player) ? opponent : player;
+        GivePriorityTo(next);
+
+        lastPassFromTurnPlayer = false;
+    }
+
+
+    // ---------------------
+    // Attacking & Blocking 
+    // ---------------------
+    public void PrepareAttack(CardRuntime card)
+    {
+        if (priorityState == PriorityState.PriorityWindow)
+            return; // Cannot attack inside the response cycle
+
+        if (turnPlayer == player)
+            player.PrepareAttack(card);
+        else
+            opponent.PrepareAttack(card);
+
+        if (player.preparedAttacks.Count > 0 || opponent.preparedAttacks.Count > 0)
+            BattleUIManager.Instance.ShowConfirmAttackButton();
+    }
+
+    public void ConfirmAttack()
+    {
+        var attacker = turnPlayer;
+        var defender = otherPlayer;
+
+        if (attacker.preparedAttacks.Count == 0)
+            return;
+
+        BattleUIManager.Instance.HideConfirmAttackButton();
+
+        // Enter priority window for blocker/responses
+        priorityState = PriorityState.PriorityWindow;
+        GivePriorityTo(defender);
+
+        StartCoroutine(ResolveBattleAfterResponses(attacker, defender));
+    }
+    public bool IsPlayerAllowedToAct(BaseController actor)
+    {
+        // Cannot act if the stack is currently resolving
+        if (SpellStackManager.Instance.stackIsResolving)
+            return false;
+
+        // Normal turn: actor has priority if they are the current priority owner
+        if (priorityOwner == actor)
+            return true;
+
+        // Response: if stack exists, only the actor with priority may respond
+        if (SpellStackManager.Instance.HasPendingStack && priorityOwner == actor)
+            return true;
+
+        return false;
+    }
+
+
+    IEnumerator ResolveBattleAfterResponses(BaseController attacker, BaseController defender)
+    {
+        // Wait until priorityWindow ends -> two passes
+        yield return new WaitUntil(() =>
+            priorityState == PriorityState.NormalTurn
+        );
+
         attacker.ResolvePreparedAttacks(defender);
+    }
+
+    public void ConfirmBlockers()
+    {
+        // Called by the player during priority window
+        // They designate blockers, then pass to continue
+
+        HandlePass(priorityOwner);
+    }
+
+
+    // ---------------------------
+    // AI Response
+    // ---------------------------
+    public void StartPriorityResponseIfAI(BaseController controller)
+    {
+        if (!controller.isPlayer)
+            StartCoroutine(AIResponseLoop(controller));
     }
 
     private IEnumerator AIResponseLoop(BaseController ai)
     {
         yield return new WaitForSeconds(0.5f);
 
-        // AI is the responder → decide to block or play 1 card
-        if (BattleManager.Instance.currentResponder != ai)
+        if (BattleManager.Instance.priorityOwner != ai)
             yield break;
 
-        bool isAttackResponse = turnPlayer.preparedAttacks.Count > 0;
-
-        if (isAttackResponse)
+        // If stack exists, AI responds to stack
+        if (SpellStackManager.Instance.HasPendingStack)
         {
-            if (ai is OpponentController oc)
-                yield return oc.StartCoroutine("AIAutoBlock");
-        }
-        else
-        {
-            var playable = ai.hand.FirstOrDefault(c => ai.hero.CanAfford(c.cardData));
-            if (playable != null)
-            {
-                ai.TryPlayCard(playable);
-
-                // DON'T start new windows here
-                // Let BattleManager handle the window system
-            }
+            Debug.Log($"{ai.controllerName} passes on stack.");
+            BattleManager.Instance.HandlePass(ai);
+            yield break;
         }
 
-        yield return new WaitForSeconds(0.4f);
+        // Otherwise, play a summon if possible
+        var summonable = ai.hand.FirstOrDefault(c => c.cardData.cardType == CardType.Unit && ai.hero.CanAfford(c.cardData));
+        if (summonable != null)
+            ai.TryPlayCard(summonable, openResponseWindow: false);
 
-        BattleManager.Instance.EndResponseWindow();
+        yield return new WaitForSeconds(0.3f);
+
+        BattleManager.Instance.HandlePass(ai);
     }
 
 }

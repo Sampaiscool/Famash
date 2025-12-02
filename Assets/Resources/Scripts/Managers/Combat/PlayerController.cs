@@ -4,6 +4,7 @@ public class PlayerController : BaseController
 {
     private CardRuntime selectedCard = null;
 
+    // Called by CardInGame when the player clicks a card
     public void OnCardClicked(CardRuntime card)
     {
         // If already choosing a slot, this acts as a cancel toggle
@@ -13,40 +14,30 @@ public class PlayerController : BaseController
             return;
         }
 
-        // Only allow card play if it’s your turn or you can respond
+        // Only allow card play if it's your priority to act
         if (!BattleManager.Instance.IsPlayerAllowedToAct(this))
         {
-            Debug.Log("Not your turn or you can’t respond right now.");
+            Debug.Log("Not your priority to act right now.");
             return;
         }
 
-        // Enter placement mode
-        selectedCard = card;
-        BattleUIManager.Instance.HighlightAvailableSlots(this);
-        BattleUIManager.Instance.SetEndTurnButtonLabel("Cancel");
-        BattleUIManager.Instance.SetEndTurnButtonActive(true);
-
-        BattleUIManager.Instance.OnFieldSlotClicked = (slotIndex) =>
+        // If it's a unit in hand, enter placement mode
+        if (hand.Contains(card) && card.cardData.cardType == CardType.Unit)
         {
-            if (fieldSlots[slotIndex] != null) return;
+            selectedCard = card;
+            BattleUIManager.Instance.HighlightAvailableSlots(this);
+            // BattleManager will adjust end-turn button label via GivePriorityTo/HandlePass.
+            return;
+        }
 
-            // Actually place and spend
-            hero.SpendMana(selectedCard.cardData.cost);
-            hand.Remove(selectedCard);
-            PlaceUnitInSlot(selectedCard, slotIndex);
-            BattleUIManager.Instance.ClearSlotHighlights();
-            BattleUIManager.Instance.OnFieldSlotClicked = null;
-
-            HasPerformedAction = true;
-            CanRespond = false;
-            selectedCard = null;
-
-            BattleUIManager.Instance.SetEndTurnButtonLabel("End Turn");
-            BattleUIManager.Instance.UpdateHeroUI();
-
-            // Notify battle manager to open opponent response
-            BattleManager.Instance.StartResponseWindow(BattleManager.Instance.opponent);
-        };
+        // Otherwise, try to play card (spells, etc)
+        if (hand.Contains(card))
+        {
+            TryPlayCard(card, true);
+            // TryPlayCard will call card.Trigger(OnPlay) which will add effects to the stack
+            // and BattleManager.NotifyActionTaken() should be called by SpellStackManager.AddToStack
+            // so we don't call StartResponseWindow here anymore.
+        }
     }
 
     public void CancelPlacementMode()
@@ -67,4 +58,18 @@ public class PlayerController : BaseController
     }
 
     public bool IsPlacingCard => selectedCard != null;
+
+    // This should be set from the UI when the player clicks a highlighted slot.
+    // We keep the logic in base PrepareUnitPlacement but provide a helper here to confirm placement.
+    public void ConfirmPlacementToSlot(int slotIndex)
+    {
+        if (selectedCard == null) return;
+        // Delegate to BaseController's placement handler (we assume it uses the standard PrepareUnitPlacement logic).
+        // If you use the lambda approach in PrepareUnitPlacement, you'll have to wire OnFieldSlotClicked to call this.
+        // For safety, call the PrepareUnitPlacement's slot handler here if needed:
+        if (BattleUIManager.Instance.OnFieldSlotClicked != null)
+            BattleUIManager.Instance.OnFieldSlotClicked(slotIndex);
+
+        selectedCard = null;
+    }
 }
